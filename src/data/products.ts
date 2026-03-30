@@ -207,7 +207,7 @@ export const products: Product[] = [
     description: "Carregador universal USB-C com conexão magnética para pods. Carregamento rápido e seguro.",
     price: 29.90,
     promoPrice: 19.90,
-    images: ["/placeholder.svg"],
+    images: [productCharger],
     categoryId: "4",
     variations: [],
     tags: ["promo"],
