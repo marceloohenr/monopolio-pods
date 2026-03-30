@@ -133,7 +133,7 @@ export const products: Product[] = [
     description: "Pod descartável premium com mesh coil para sabor mais puro e intenso. 5000 puffs de puro prazer.",
     price: 64.90,
     promoPrice: 49.90,
-    images: ["/placeholder.svg"],
+    images: [productPod3],
     categoryId: "1",
     variations: [
       { id: "v1", name: "Triple Berry", inStock: true },
