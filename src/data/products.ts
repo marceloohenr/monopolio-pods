@@ -115,7 +115,7 @@ export const products: Product[] = [
     description: "O famoso Elfbar com 5000 puffs, design compacto e recarga USB-C. Perfeito para o dia a dia.",
     price: 59.90,
     promoPrice: undefined,
-    images: ["/placeholder.svg"],
+    images: [productPod2],
     categoryId: "1",
     variations: [
       { id: "v1", name: "Blue Razz Ice", inStock: true },
