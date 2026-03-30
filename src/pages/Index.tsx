@@ -1,16 +1,53 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Header } from "@/components/Header";
+import { BannerCarousel } from "@/components/BannerCarousel";
+import { CategoryNav } from "@/components/CategoryNav";
+import { ProductGrid } from "@/components/ProductGrid";
+import { getFeaturedProducts, getProductsByTag } from "@/data/products";
+import { MessageCircle } from "lucide-react";
+import { WHATSAPP_NUMBER } from "@/data/products";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const featured = getFeaturedProducts();
+  const promos = getProductsByTag("promo");
+  const newProducts = getProductsByTag("new");
+  const bestsellers = getProductsByTag("bestseller");
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="container max-w-6xl mx-auto space-y-8 py-6">
+        <BannerCarousel />
+        <CategoryNav />
+        
+        {bestsellers.length > 0 && (
+          <ProductGrid products={bestsellers} title="🔥 Mais Procurados" subtitle="Os favoritos dos nossos clientes" />
+        )}
+
+        {promos.length > 0 && (
+          <ProductGrid products={promos} title="💰 Ofertas" subtitle="Preços imperdíveis por tempo limitado" />
+        )}
+
+        {newProducts.length > 0 && (
+          <ProductGrid products={newProducts} title="✨ Lançamentos" subtitle="Acabou de chegar" />
+        )}
+
+        {featured.length > 0 && (
+          <ProductGrid products={featured} title="⭐ Destaques" subtitle="Seleção especial para você" />
+        )}
+      </main>
+
+      {/* WhatsApp FAB */}
+      <a
+        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 bg-whatsapp text-whatsapp-foreground p-4 rounded-full shadow-lg animate-pulse-glow hover:scale-110 transition-transform"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </a>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
