@@ -188,7 +188,7 @@ export const products: Product[] = [
     description: "Essência salt nicotine 35mg em diversos sabores. Compatível com pods recarregáveis.",
     price: 39.90,
     promoPrice: undefined,
-    images: ["/placeholder.svg"],
+    images: [productJuice],
     categoryId: "3",
     variations: [
       { id: "v1", name: "Tobacco", inStock: true },
