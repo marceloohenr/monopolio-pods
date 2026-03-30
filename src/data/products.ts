@@ -95,7 +95,7 @@ export const products: Product[] = [
     description: "Pod descartável com 10.000 puffs, bateria recarregável e design premium. Sabores intensos e vapor consistente do início ao fim.",
     price: 89.90,
     promoPrice: 69.90,
-    images: ["/placeholder.svg"],
+    images: [productPod1],
     categoryId: "1",
     variations: [
       { id: "v1", name: "Morango Ice", inStock: true },
