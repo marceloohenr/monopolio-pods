@@ -221,7 +221,7 @@ export const products: Product[] = [
     description: "Pod com design único estilo isqueiro, 6000 puffs e flavor boost technology.",
     price: 74.90,
     promoPrice: 59.90,
-    images: ["/placeholder.svg"],
+    images: [productPod8],
     categoryId: "1",
     variations: [
       { id: "v1", name: "Double Apple", inStock: true },
