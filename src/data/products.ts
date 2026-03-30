@@ -1,3 +1,12 @@
+import productPod1 from "@/assets/product-pod-1.jpg";
+import productPod2 from "@/assets/product-pod-2.jpg";
+import productPod3 from "@/assets/product-pod-3.jpg";
+import productPod4 from "@/assets/product-pod-4.jpg";
+import productPod5 from "@/assets/product-pod-5.jpg";
+import productJuice from "@/assets/product-juice.jpg";
+import productCharger from "@/assets/product-charger.jpg";
+import productPod8 from "@/assets/product-pod-8.jpg";
+
 export interface ProductVariation {
   id: string;
   name: string;
