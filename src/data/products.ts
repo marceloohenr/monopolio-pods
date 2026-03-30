@@ -152,7 +152,7 @@ export const products: Product[] = [
     description: "8000 puffs com tela LED indicadora de bateria e líquido. Design ergonômico e sabores exclusivos.",
     price: 79.90,
     promoPrice: undefined,
-    images: ["/placeholder.svg"],
+    images: [productPod4],
     categoryId: "1",
     variations: [
       { id: "v1", name: "Lush Ice", inStock: true },
