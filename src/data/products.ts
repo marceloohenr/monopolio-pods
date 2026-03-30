@@ -170,7 +170,7 @@ export const products: Product[] = [
     description: "Kit pod recarregável com potência ajustável e coils substituíveis. Ideal para quem quer personalização.",
     price: 149.90,
     promoPrice: 129.90,
-    images: ["/placeholder.svg"],
+    images: [productPod5],
     categoryId: "2",
     variations: [
       { id: "v1", name: "Preto", inStock: true },
