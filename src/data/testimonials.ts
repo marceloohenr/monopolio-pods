@@ -14,7 +14,7 @@ export const defaultTestimonials: Testimonial[] = [
     id: "1",
     name: "Rafael M.",
     text: "Chegou rápido e o sabor veio certinho. Atendimento muito bom no WhatsApp.",
-    proofLink: "https://wa.me/5581999999991",
+    proofLink: "https://wa.me/5581987258754",
   },
   {
     id: "2",
@@ -26,7 +26,7 @@ export const defaultTestimonials: Testimonial[] = [
     id: "3",
     name: "Caio P.",
     text: "Pedido simples, entrega sem enrolação e produto original.",
-    proofLink: "https://wa.me/5581999999992",
+    proofLink: "https://wa.me/5581987258754",
   },
 ];
 

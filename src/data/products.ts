@@ -79,8 +79,8 @@ export interface StorePolicy {
 
 export const STORE_NAME = "Monopólio Pods";
 export const STORE_TAGLINE = "Ignite x Elfbar x Oxbar";
-export const WHATSAPP_NUMBER = "5581992421131";
-export const WHATSAPP_DISPLAY = "(81) 99242-1131";
+export const WHATSAPP_NUMBER = "5581987258754";
+export const WHATSAPP_DISPLAY = "(81) 98725-8754";
 export const AGE_NOTICE = "Proibida a venda para menores de 18 anos.";
 
 export const categories: Category[] = [
