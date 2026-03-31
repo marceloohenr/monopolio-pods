@@ -455,7 +455,7 @@ export const products: Product[] = [
     price: 130,
     images: [elfbarBc15kImage],
     categoryId: "2",
-    variations: [{ id: "bc15k-1", name: "Consultar sabores", inStock: true }],
+    variations: [{ id: "bc15k-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo"],
     featured: false,
     createdAt: "2026-03-31",
@@ -476,11 +476,18 @@ export const products: Product[] = [
     slug: "elfbar-gh23k-23000-puffs",
     brand: "Elfbar",
     puffs: 23000,
-    description: "Modelo Elfbar GH23K com longa autonomia e recarga.",
-    price: 150,
+    description: "Modelo Elfbar GH23K com longa autonomia, recarga e sabores variados.",
+    price: 145,
     images: [elfbarGh23kImage],
     categoryId: "2",
-    variations: [{ id: "gh23k-1", name: "Consultar sabores", inStock: true }],
+    variations: [
+      { id: "gh23k-1", name: "Pessego Manga Melancia", inStock: true },
+      { id: "gh23k-2", name: "Uva Ice", inStock: true },
+      { id: "gh23k-3", name: "Menta Ice", inStock: true },
+      { id: "gh23k-4", name: "Morango Banana", inStock: true },
+      { id: "gh23k-5", name: "Kiwi Dragon Fruit", inStock: true },
+      { id: "gh23k-6", name: "Abacaxi Ameixa Limao Menta", inStock: true },
+    ],
     tags: ["novo"],
     featured: false,
     createdAt: "2026-03-31",
@@ -505,7 +512,7 @@ export const products: Product[] = [
     price: 195,
     images: [elfbar40kTrioImage],
     categoryId: "2",
-    variations: [{ id: "40ktrio-1", name: "Consultar sabores", inStock: true }],
+    variations: [{ id: "40ktrio-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: true,
     createdAt: "2026-03-31",
@@ -530,7 +537,7 @@ export const products: Product[] = [
     price: 198,
     images: [elfbar40kIceKingImage],
     categoryId: "2",
-    variations: [{ id: "40kice-1", name: "Consultar sabores", inStock: true }],
+    variations: [{ id: "40kice-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: false,
     createdAt: "2026-03-31",
@@ -555,7 +562,7 @@ export const products: Product[] = [
     price: 210,
     images: [elfbar45kProImage],
     categoryId: "2",
-    variations: [{ id: "45kpro-1", name: "Consultar sabores", inStock: true }],
+    variations: [{ id: "45kpro-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: false,
     createdAt: "2026-03-31",
@@ -580,7 +587,7 @@ export const products: Product[] = [
     price: 185,
     images: [productPod8Image],
     categoryId: "3",
-    variations: [{ id: "ox35k-1", name: "Consultar sabores", inStock: true }],
+    variations: [{ id: "ox35k-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo"],
     featured: false,
     createdAt: "2026-03-31",
@@ -605,7 +612,7 @@ export const products: Product[] = [
     price: 220,
     images: [productPod1Image],
     categoryId: "3",
-    variations: [{ id: "ox50k-1", name: "Consultar sabores", inStock: true }],
+    variations: [{ id: "ox50k-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: true,
     createdAt: "2026-03-31",
@@ -624,6 +631,10 @@ export const products: Product[] = [
 
 export function getProductsByTag(tag: string): Product[] {
   return products.filter((product) => product.tags.includes(tag));
+}
+
+export function hasAvailableVariations(product: Product): boolean {
+  return product.variations.some((variation) => variation.inStock);
 }
 
 export function getProductsByCategory(categorySlug: string): Product[] {

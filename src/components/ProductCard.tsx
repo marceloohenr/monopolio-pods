@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, ShoppingBag } from "lucide-react";
-import { Product, formatPrice, formatPuffs } from "@/data/products";
+import { Product, formatPrice, formatPuffs, hasAvailableVariations } from "@/data/products";
 import { ProductImageStage } from "@/components/ProductImageStage";
 import { ProductPurchaseDialog } from "@/components/ProductPurchaseDialog";
 import { Button } from "@/components/ui/button";
@@ -14,13 +14,16 @@ export function ProductCard({ product }: ProductCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const unitPrice = product.promoPrice ?? product.price;
+  const hasAvailableFlavors = hasAvailableVariations(product);
 
   const handleFlavorClick = (flavor: string) => {
+    if (!hasAvailableFlavors) return;
     setSelectedFlavor(flavor);
     setIsDialogOpen(true);
   };
 
   const handleOpenPurchaseDialog = () => {
+    if (!hasAvailableFlavors) return;
     setSelectedFlavor("");
     setIsDialogOpen(true);
   };
@@ -76,10 +79,17 @@ export function ProductCard({ product }: ProductCardProps) {
           <Button
             type="button"
             className="h-11 w-full rounded-2xl text-sm"
+            disabled={!hasAvailableFlavors}
             onClick={handleOpenPurchaseDialog}
           >
-            <ShoppingBag className="h-4 w-4" />
-            Finalizar pedido
+            {hasAvailableFlavors ? (
+              <>
+                <ShoppingBag className="h-4 w-4" />
+                Finalizar pedido
+              </>
+            ) : (
+              "Indisponivel no momento"
+            )}
           </Button>
         </div>
       </article>

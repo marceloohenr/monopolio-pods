@@ -15,6 +15,7 @@ import {
   formatPrice,
   formatPuffs,
   getProductBySlug,
+  hasAvailableVariations,
   products,
 } from "@/data/products";
 
@@ -49,6 +50,8 @@ const ProductPage = () => {
   const related = products
     .filter((item) => item.categoryId === product.categoryId && item.id !== product.id)
     .slice(0, 3);
+  const hasAvailableFlavors = hasAvailableVariations(product);
+  const availableFlavorCount = product.variations.filter((variation) => variation.inStock).length;
   const unitPrice = product.promoPrice ?? product.price;
   const subtotal = unitPrice * quantity;
   const deliveryItems = [
@@ -112,7 +115,7 @@ const ProductPage = () => {
                 {formatPuffs(product.puffs)}
               </Badge>
               <Badge variant="outline" className="rounded-full border-border/60 bg-background/60 text-foreground">
-                {product.variations.length} sabores
+                {hasAvailableFlavors ? `${availableFlavorCount} sabores` : "Sem sabores ativos"}
               </Badge>
             </div>
 
@@ -142,7 +145,9 @@ const ProductPage = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm font-semibold text-foreground">Sabores</p>
-                <span className="text-xs text-muted-foreground">{selectedVariation || "Escolha um sabor"}</span>
+                <span className="text-xs text-muted-foreground">
+                  {selectedVariation || (hasAvailableFlavors ? "Escolha um sabor" : "Indisponivel no momento")}
+                </span>
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -171,6 +176,7 @@ const ProductPage = () => {
               <div className="glass flex items-center rounded-full px-1">
                 <button
                   type="button"
+                  disabled={!hasAvailableFlavors}
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="p-2 text-muted-foreground transition hover:text-foreground"
                 >
@@ -179,6 +185,7 @@ const ProductPage = () => {
                 <span className="w-8 text-center text-sm font-semibold text-foreground">{quantity}</span>
                 <button
                   type="button"
+                  disabled={!hasAvailableFlavors}
                   onClick={() => setQuantity(quantity + 1)}
                   className="p-2 text-muted-foreground transition hover:text-foreground"
                 >
@@ -202,10 +209,17 @@ const ProductPage = () => {
                 type="button"
                 size="lg"
                 className="h-11 rounded-2xl"
+                disabled={!hasAvailableFlavors}
                 onClick={() => setIsPurchaseDialogOpen(true)}
               >
-                <ShoppingBag className="h-4 w-4" />
-                Finalizar pedido
+                {hasAvailableFlavors ? (
+                  <>
+                    <ShoppingBag className="h-4 w-4" />
+                    Finalizar pedido
+                  </>
+                ) : (
+                  "Indisponivel no momento"
+                )}
               </Button>
 
               <Button type="button" variant="outline" size="lg" className="h-11 rounded-2xl" onClick={() => openCheckout()}>
