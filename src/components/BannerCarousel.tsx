@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { MessageCircle, ShieldCheck, Truck } from "lucide-react";
-import { banners, buildWhatsAppLink, getFeaturedProducts } from "@/data/products";
+import { banners, getFeaturedProducts } from "@/data/products";
 import { Button } from "@/components/ui/button";
+import { useCheckout } from "@/context/checkout-context";
 import monopolioLogo from "@/assets/monopolio-logo.jpg";
 
 export function BannerCarousel() {
+  const { openCheckout } = useCheckout();
   const banner = banners.find((item) => item.active);
   const featuredProduct = getFeaturedProducts()[0];
 
@@ -41,11 +43,15 @@ export function BannerCarousel() {
           <Button asChild variant="neon" size="lg" className="h-10 px-4 text-sm md:h-11 md:px-8">
             <Link to={banner.ctaLink}>{banner.ctaText}</Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="h-10 px-4 text-sm md:h-11 md:px-8">
-            <a href={buildWhatsAppLink(featuredProduct)} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp
-            </a>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="h-10 px-4 text-sm md:h-11 md:px-8"
+            onClick={() => openCheckout(featuredProduct)}
+          >
+            <MessageCircle className="h-4 w-4" />
+            WhatsApp
           </Button>
         </div>
       </div>
@@ -85,11 +91,14 @@ export function BannerCarousel() {
               </div>
             </div>
 
-            <Button asChild variant="whatsapp" className="mt-2 w-full text-xs md:mt-3 md:text-sm">
-              <a href={buildWhatsAppLink(featuredProduct)} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-4 w-4" />
-                Pedir
-              </a>
+            <Button
+              type="button"
+              variant="whatsapp"
+              className="mt-2 w-full text-xs md:mt-3 md:text-sm"
+              onClick={() => openCheckout(featuredProduct)}
+            >
+              <MessageCircle className="h-4 w-4" />
+              Pedir
             </Button>
           </div>
         </div>

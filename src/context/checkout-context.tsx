@@ -1,12 +1,7 @@
 import * as React from "react";
-import {
-  type Product,
-  STORE_NAME,
-  WHATSAPP_NUMBER,
-  formatPrice,
-  formatPuffs,
-  products,
-} from "@/data/products";
+import { type Product, WHATSAPP_NUMBER, products } from "@/data/products";
+import { getShippingFeeByLocation } from "@/data/shipping";
+import { type PaymentMethod, buildWhatsAppOrderMessage } from "@/lib/whatsapp-order";
 
 export interface CheckoutItem {
   id: string;
@@ -18,6 +13,11 @@ export interface CheckoutItem {
 interface CustomerDetails {
   name: string;
   phone: string;
+  cep: string;
+  neighborhood: string;
+  city: string;
+  addressDetails: string;
+  paymentMethod: PaymentMethod;
 }
 
 interface CheckoutContextValue {
@@ -26,7 +26,8 @@ interface CheckoutContextValue {
   customer: CustomerDetails;
   itemCount: number;
   subtotal: number;
-  checkoutUrl: string;
+  freight: number;
+  finalTotal: number;
   canSubmit: boolean;
   openCheckout: (product?: Product, options?: { flavor?: string; quantity?: number }) => void;
   closeCheckout: () => void;
@@ -41,6 +42,15 @@ interface CheckoutContextValue {
 
 const CHECKOUT_ITEMS_KEY = "monopolio-checkout-items";
 const CHECKOUT_CUSTOMER_KEY = "monopolio-checkout-customer";
+const defaultCustomerDetails: CustomerDetails = {
+  name: "",
+  phone: "",
+  cep: "",
+  neighborhood: "",
+  city: "",
+  addressDetails: "",
+  paymentMethod: "pix",
+};
 
 const CheckoutContext = React.createContext<CheckoutContextValue | null>(null);
 
@@ -72,11 +82,26 @@ function getDefaultFlavor(product: Product) {
   return product.variations.find((variation) => variation.inStock)?.name ?? product.variations[0]?.name ?? "";
 }
 
+function normalizeCustomerDetails(value: Partial<CustomerDetails> | null | undefined): CustomerDetails {
+  const paymentMethod = value?.paymentMethod === "card" ? "card" : "pix";
+
+  return {
+    ...defaultCustomerDetails,
+    ...value,
+    paymentMethod,
+  };
+}
+
 function normalizePhone(value: string) {
   return value.replace(/\D/g, "");
 }
 
-function buildCheckoutMessage(items: CheckoutItem[], customer: CustomerDetails) {
+function hasValidPhone(value: string) {
+  const digits = normalizePhone(value);
+  return digits.length === 10 || digits.length === 11;
+}
+
+function getCheckoutSummary(items: CheckoutItem[]) {
   const validItems = items
     .map((item) => {
       const product = products.find((entry) => entry.id === item.productId);
@@ -93,39 +118,47 @@ function buildCheckoutMessage(items: CheckoutItem[], customer: CustomerDetails) 
         itemSubtotal,
       };
     })
-    .filter(Boolean);
+    .filter(
+      (
+        entry,
+      ): entry is {
+        item: CheckoutItem;
+        product: Product;
+        unitPrice: number;
+        itemSubtotal: number;
+      } => Boolean(entry),
+    );
 
   const subtotal = validItems.reduce((acc, entry) => acc + entry.itemSubtotal, 0);
 
-  const lines = [
-    `Olá! Quero finalizar um pedido na ${STORE_NAME}:`,
-    "",
-    `Nome: ${customer.name.trim()}`,
-    `Telefone: ${customer.phone.trim()}`,
-    "",
-    "Itens:",
-    ...validItems.flatMap(({ item, product, unitPrice, itemSubtotal }) => [
-      `- ${product.name}`,
-      `  Marca: ${product.brand}`,
-      `  Puffs: ${formatPuffs(product.puffs)}`,
-      item.flavor ? `  Sabor: ${item.flavor}` : "",
-      `  Quantidade: ${item.quantity}`,
-      `  Valor unitário: ${formatPrice(unitPrice)}`,
-      `  Subtotal: ${formatPrice(itemSubtotal)}`,
-      "",
-    ]),
-    `Subtotal geral: ${formatPrice(subtotal)}`,
-    "",
-    "Pode confirmar disponibilidade, frete e prazo de entrega?",
-  ]
-    .filter(Boolean)
-    .join("\n");
-
-  return lines;
+  return {
+    items: validItems.map(({ item, product, unitPrice, itemSubtotal }) => ({
+      name: product.name,
+      flavor: item.flavor,
+      quantity: item.quantity,
+      unitPrice,
+      subtotal: itemSubtotal,
+    })),
+    subtotal,
+  };
 }
 
-function buildCheckoutUrl(items: CheckoutItem[], customer: CustomerDetails) {
-  const message = buildCheckoutMessage(items, customer);
+function buildCheckoutUrl(items: CheckoutItem[], customer: CustomerDetails, createdAt = new Date()) {
+  const summary = getCheckoutSummary(items);
+  const freight = getShippingFeeByLocation({
+    neighborhood: customer.neighborhood,
+    city: customer.city,
+  });
+  const finalTotal = summary.subtotal + freight;
+  const message = buildWhatsAppOrderMessage({
+    createdAt,
+    customer,
+    items: summary.items,
+    subtotal: summary.subtotal,
+    freight,
+    finalTotal,
+  });
+
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
@@ -133,7 +166,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [items, setItems] = React.useState<CheckoutItem[]>(() => readStorage(CHECKOUT_ITEMS_KEY, []));
   const [customer, setCustomer] = React.useState<CustomerDetails>(() =>
-    readStorage(CHECKOUT_CUSTOMER_KEY, { name: "", phone: "" }),
+    normalizeCustomerDetails(readStorage<Partial<CustomerDetails>>(CHECKOUT_CUSTOMER_KEY, defaultCustomerDetails)),
   );
 
   React.useEffect(() => {
@@ -221,15 +254,26 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     }, 0);
   }, [items]);
 
-  const canSubmit = items.length > 0 && customer.name.trim().length > 1 && normalizePhone(customer.phone).length >= 10;
-  const checkoutUrl = React.useMemo(() => buildCheckoutUrl(items, customer), [items, customer]);
+  const freight = React.useMemo(() => {
+    if (!customer.neighborhood && !customer.city) return 0;
+
+    return getShippingFeeByLocation({
+      neighborhood: customer.neighborhood,
+      city: customer.city,
+    });
+  }, [customer.city, customer.neighborhood]);
+
+  const finalTotal = React.useMemo(() => subtotal + freight, [freight, subtotal]);
+
+  const canSubmit = items.length > 0 && hasValidPhone(customer.phone) && customer.neighborhood.trim().length > 0;
 
   const submitCheckout = React.useCallback(() => {
     if (!canSubmit || typeof window === "undefined") return;
 
+    const checkoutUrl = buildCheckoutUrl(items, customer, new Date());
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
     setIsOpen(false);
-  }, [canSubmit, checkoutUrl]);
+  }, [canSubmit, customer, items]);
 
   const value = React.useMemo<CheckoutContextValue>(
     () => ({
@@ -238,7 +282,8 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
       customer,
       itemCount,
       subtotal,
-      checkoutUrl,
+      freight,
+      finalTotal,
       canSubmit,
       openCheckout,
       closeCheckout,
@@ -253,10 +298,11 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     [
       addProduct,
       canSubmit,
-      checkoutUrl,
       clearCart,
       closeCheckout,
       customer,
+      finalTotal,
+      freight,
       isOpen,
       itemCount,
       items,

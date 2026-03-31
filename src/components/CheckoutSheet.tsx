@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useCheckout } from "@/context/checkout-context";
 import { formatPrice, formatPuffs, products } from "@/data/products";
+import { formatShippingFee, findShippingAreaByLocation } from "@/data/shipping";
 import { ProductImageStage } from "@/components/ProductImageStage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +14,28 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { formatCep, hasValidCep, lookupCepAddress } from "@/lib/cep";
+import { cn } from "@/lib/utils";
+
+function normalizePhone(value: string) {
+  return value.replace(/\D/g, "").slice(0, 11);
+}
+
+function hasValidPhone(value: string) {
+  const digits = normalizePhone(value);
+  return digits.length === 10 || digits.length === 11;
+}
+
+function formatPhoneInput(value: string) {
+  const digits = normalizePhone(value);
+
+  if (!digits) return "";
+  if (digits.length <= 2) return `(${digits}`;
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
 
 function ProductSelect({
   productId,
@@ -49,6 +73,8 @@ export function CheckoutSheet() {
     customer,
     itemCount,
     subtotal,
+    freight,
+    finalTotal,
     canSubmit,
     updateItemFlavor,
     updateItemQuantity,
@@ -57,6 +83,80 @@ export function CheckoutSheet() {
     setCustomerField,
     submitCheckout,
   } = useCheckout();
+  const [touched, setTouched] = useState({
+    cep: false,
+    phone: false,
+    neighborhood: false,
+  });
+  const [cepLookupStatus, setCepLookupStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [cepLookupMessage, setCepLookupMessage] = useState("");
+
+  const paymentOptions = [
+    { value: "pix", label: "Pix" },
+    { value: "card", label: "Cartão" },
+  ] as const;
+
+  useEffect(() => {
+    if (!isOpen) {
+      setTouched({ cep: false, phone: false, neighborhood: false });
+      setCepLookupStatus("idle");
+      setCepLookupMessage("");
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!hasValidCep(customer.cep)) {
+      if (customer.city) {
+        setCustomerField("city", "");
+      }
+
+      if (!customer.cep) {
+        setCepLookupStatus("idle");
+        setCepLookupMessage("");
+      } else {
+        setCepLookupStatus("idle");
+        setCepLookupMessage("Complete o CEP para buscar o bairro automaticamente.");
+      }
+      return;
+    }
+
+    const controller = new AbortController();
+
+    setCepLookupStatus("loading");
+    setCepLookupMessage("Consultando CEP...");
+
+    lookupCepAddress(customer.cep, controller.signal)
+      .then((address) => {
+        const area = findShippingAreaByLocation({
+          neighborhood: address.neighborhood,
+          city: address.city,
+        });
+
+        setCustomerField("cep", address.cep);
+        setCustomerField("city", address.city);
+        setCustomerField("neighborhood", address.neighborhood || area.name);
+        setTouched((current) => ({ ...current, neighborhood: true }));
+        setCepLookupStatus("success");
+        setCepLookupMessage(
+          address.neighborhood
+            ? `CEP encontrado: ${address.neighborhood}, ${address.city}. Frete aplicado conforme a região ${area.name}.`
+            : `CEP encontrado: ${address.city}. Frete aplicado conforme a região ${area.name}.`,
+        );
+      })
+      .catch((error: Error) => {
+        if (controller.signal.aborted) return;
+
+        setCepLookupStatus("error");
+        setCepLookupMessage(error.message || "Não foi possível consultar o CEP.");
+      });
+
+    return () => controller.abort();
+  }, [customer.cep, setCustomerField]);
+
+  const cepInvalid = touched.cep && customer.cep.trim().length > 0 && !hasValidCep(customer.cep);
+  const phoneInvalid = touched.phone && !hasValidPhone(customer.phone);
+  const neighborhoodInvalid = touched.neighborhood && !customer.neighborhood;
+  const neighborhoodSelected = customer.neighborhood.trim().length > 0;
 
   const detailedItems = items
     .map((item) => {
@@ -69,7 +169,15 @@ export function CheckoutSheet() {
         unitPrice: product.promoPrice ?? product.price,
       };
     })
-    .filter(Boolean);
+    .filter(
+      (
+        entry,
+      ): entry is {
+        item: (typeof items)[number];
+        product: (typeof products)[number];
+        unitPrice: number;
+      } => Boolean(entry),
+    );
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => (open ? null : closeCheckout())}>
@@ -77,7 +185,7 @@ export function CheckoutSheet() {
         <SheetHeader>
           <SheetTitle className="font-display text-2xl uppercase tracking-[0.04em]">Checkout</SheetTitle>
           <SheetDescription>
-            Revise os itens, informe seus dados e gere a mensagem pronta para o WhatsApp.
+            Informe telefone e bairro para calcular o frete automaticamente antes de enviar o pedido.
           </SheetDescription>
         </SheetHeader>
 
@@ -170,20 +278,123 @@ export function CheckoutSheet() {
             )}
           </section>
 
-          <section className="space-y-3">
-            <h2 className="text-sm font-semibold text-foreground">Cliente</h2>
-            <div className="grid gap-3">
-              <Input
-                value={customer.name}
-                onChange={(event) => setCustomerField("name", event.target.value)}
-                placeholder="Nome"
-              />
-              <Input
-                value={customer.phone}
-                onChange={(event) => setCustomerField("phone", event.target.value)}
-                placeholder="Telefone"
-              />
+          <section className="space-y-4">
+            <div>
+              <h2 className="text-sm font-semibold text-foreground">Cliente</h2>
+              <p className="mt-1 text-xs text-muted-foreground">Telefone e bairro são obrigatórios para calcular o frete.</p>
             </div>
+
+            <div className="grid gap-3">
+              <div className="grid gap-1.5">
+                <label htmlFor="checkout-name" className="text-xs font-medium text-muted-foreground">
+                  Nome
+                </label>
+                <Input
+                  id="checkout-name"
+                  value={customer.name}
+                  onChange={(event) => setCustomerField("name", event.target.value)}
+                  placeholder="Nome do cliente"
+                />
+              </div>
+
+              <div className="grid gap-1.5">
+                <label htmlFor="checkout-phone" className="text-xs font-medium text-muted-foreground">
+                  Telefone *
+                </label>
+                <Input
+                  id="checkout-phone"
+                  value={customer.phone}
+                  onChange={(event) => setCustomerField("phone", formatPhoneInput(event.target.value))}
+                  onBlur={() => setTouched((current) => ({ ...current, phone: true }))}
+                  placeholder="(81) 98765-4321"
+                  className={cn(phoneInvalid && "border-destructive focus-visible:ring-destructive")}
+                />
+                {phoneInvalid && (
+                  <p className="text-xs text-destructive">Informe um telefone válido com DDD.</p>
+                )}
+              </div>
+
+              <div className="grid gap-1.5">
+                <label htmlFor="checkout-cep" className="text-xs font-medium text-muted-foreground">
+                  CEP
+                </label>
+                <Input
+                  id="checkout-cep"
+                  value={customer.cep}
+                  onChange={(event) => setCustomerField("cep", formatCep(event.target.value))}
+                  onBlur={() => setTouched((current) => ({ ...current, cep: true }))}
+                  placeholder="00000-000"
+                  className={cn(cepInvalid && "border-destructive focus-visible:ring-destructive")}
+                />
+                {cepInvalid && (
+                  <p className="text-xs text-destructive">Digite um CEP válido com 8 números.</p>
+                )}
+                {!cepInvalid && cepLookupMessage && (
+                  <p
+                    className={cn(
+                      "text-xs",
+                      cepLookupStatus === "error"
+                        ? "text-destructive"
+                        : cepLookupStatus === "success"
+                          ? "text-emerald-600"
+                          : "text-muted-foreground",
+                    )}
+                  >
+                    {cepLookupMessage}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid gap-1.5">
+                <label htmlFor="checkout-neighborhood" className="text-xs font-medium text-muted-foreground">
+                  Bairro *
+                </label>
+                <Input
+                  id="checkout-neighborhood"
+                  value={customer.neighborhood}
+                  onChange={(event) => setCustomerField("neighborhood", event.target.value)}
+                  onBlur={() => setTouched((current) => ({ ...current, neighborhood: true }))}
+                  placeholder="Bairro do cliente"
+                  className={cn(neighborhoodInvalid && "border-destructive focus-visible:ring-destructive")}
+                />
+                {neighborhoodInvalid && (
+                  <p className="text-xs text-destructive">Informe um bairro para calcular o frete.</p>
+                )}
+                {neighborhoodSelected && (
+                  <p className="text-xs text-muted-foreground">
+                    Frete para {customer.neighborhood}
+                    {customer.city ? `, ${customer.city}` : ""}: {formatShippingFee(freight)}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid gap-1.5">
+                <label htmlFor="checkout-address-details" className="text-xs font-medium text-muted-foreground">
+                  Número / complemento
+                </label>
+                <Input
+                  id="checkout-address-details"
+                  value={customer.addressDetails}
+                  onChange={(event) => setCustomerField("addressDetails", event.target.value)}
+                  placeholder="Ex.: 123, apto 402, bloco B"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-sm font-semibold text-foreground">Pagamento</h2>
+            <select
+              value={customer.paymentMethod}
+              onChange={(event) => setCustomerField("paymentMethod", event.target.value)}
+              className="h-11 w-full rounded-2xl border border-input bg-background px-3 text-sm text-foreground"
+            >
+              {paymentOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </section>
 
           <section className="glass rounded-2xl p-4">
@@ -195,7 +406,21 @@ export function CheckoutSheet() {
               <span className="text-muted-foreground">Subtotal</span>
               <span className="font-semibold text-foreground">{formatPrice(subtotal)}</span>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">Frete e disponibilidade são confirmados no WhatsApp.</p>
+            <div className="mt-2 flex items-center justify-between gap-3 text-sm">
+              <span className="text-muted-foreground">Frete</span>
+              <span className={cn("font-semibold", neighborhoodSelected ? "text-foreground" : "text-muted-foreground")}>
+                {neighborhoodSelected ? formatShippingFee(freight) : "Informe o bairro"}
+              </span>
+            </div>
+            <div className="mt-2 flex items-center justify-between gap-3 text-sm">
+              <span className="text-muted-foreground">Total final</span>
+              <span className={cn("font-semibold", neighborhoodSelected ? "text-foreground" : "text-muted-foreground")}>
+                {neighborhoodSelected ? formatPrice(finalTotal) : "Informe o bairro"}
+              </span>
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              O pedido do WhatsApp vai incluir telefone, bairro, frete e total já calculados.
+            </p>
           </section>
         </div>
 
@@ -203,7 +428,15 @@ export function CheckoutSheet() {
           <Button type="button" variant="outline" onClick={closeCheckout}>
             Fechar
           </Button>
-          <Button type="button" variant="whatsapp" disabled={!canSubmit} onClick={submitCheckout}>
+          <Button
+            type="button"
+            variant="whatsapp"
+            disabled={!canSubmit}
+            onClick={() => {
+              setTouched({ cep: true, phone: true, neighborhood: true });
+              submitCheckout();
+            }}
+          >
             Enviar pedido
           </Button>
         </SheetFooter>
