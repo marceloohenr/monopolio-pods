@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { AlertCircle, ArrowLeft, Minus, Plus, ShieldCheck, ShoppingBag, Truck } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ProductImageStage } from "@/components/ProductImageStage";
 import { ProductGrid } from "@/components/ProductGrid";
 import { ProductPurchaseDialog } from "@/components/ProductPurchaseDialog";
 import { Button } from "@/components/ui/button";
@@ -98,11 +99,7 @@ const ProductPage = () => {
             </div>
 
             <div className="aspect-square p-4 md:p-6">
-              <img
-                src={product.images[0]}
-                alt={product.name}
-                className="h-full w-full object-contain drop-shadow-[0_24px_50px_rgba(0,0,0,0.16)] [filter:saturate(0.68)_contrast(1.04)]"
-              />
+              <ProductImageStage product={product} variant="detail" />
             </div>
           </div>
 

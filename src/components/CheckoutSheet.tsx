@@ -1,6 +1,7 @@
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useCheckout } from "@/context/checkout-context";
 import { formatPrice, formatPuffs, products } from "@/data/products";
+import { ProductImageStage } from "@/components/ProductImageStage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -100,12 +101,8 @@ export function CheckoutSheet() {
                 {detailedItems.map(({ item, product, unitPrice }) => (
                   <div key={item.id} className="glass rounded-2xl p-3">
                     <div className="flex gap-3">
-                      <div className="h-20 w-20 shrink-0 rounded-xl bg-card p-2">
-                        <img
-                          src={product.images[0]}
-                          alt={product.name}
-                          className="h-full w-full object-contain [filter:grayscale(1)_contrast(1.05)]"
-                        />
+                      <div className="h-20 w-20 shrink-0">
+                        <ProductImageStage product={product} variant="checkout" />
                       </div>
 
                       <div className="min-w-0 flex-1">

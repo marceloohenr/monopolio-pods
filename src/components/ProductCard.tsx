@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, ShoppingBag } from "lucide-react";
 import { Product, formatPrice, formatPuffs } from "@/data/products";
+import { ProductImageStage } from "@/components/ProductImageStage";
 import { ProductPurchaseDialog } from "@/components/ProductPurchaseDialog";
 import { Button } from "@/components/ui/button";
 
@@ -11,19 +12,25 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedFlavor, setSelectedFlavor] = useState("");
   const unitPrice = product.promoPrice ?? product.price;
+
+  const handleFlavorClick = (flavor: string) => {
+    setSelectedFlavor(flavor);
+    setIsDialogOpen(true);
+  };
+
+  const handleOpenPurchaseDialog = () => {
+    setSelectedFlavor("");
+    setIsDialogOpen(true);
+  };
 
   return (
     <>
       <article className="glass overflow-hidden rounded-3xl">
         <Link to={`/produto/${product.slug}`} className="block">
-          <div className="catalog-surface aspect-[4/3] border-b border-border/60 p-4 md:p-5">
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className="h-full w-full object-contain drop-shadow-[0_18px_40px_rgba(0,0,0,0.14)] [filter:saturate(0.68)_contrast(1.04)]"
-              loading="lazy"
-            />
+          <div className="catalog-surface aspect-[5/4] border-b border-border/60 p-4 md:p-5">
+            <ProductImageStage product={product} variant="card" />
           </div>
         </Link>
 
@@ -44,12 +51,19 @@ export function ProductCard({ product }: ProductCardProps) {
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Sabores</p>
             <div className="flex flex-wrap gap-1.5">
               {product.variations.map((variation) => (
-                <span
+                <button
                   key={variation.id}
-                  className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-xs text-foreground"
+                  type="button"
+                  disabled={!variation.inStock}
+                  onClick={() => handleFlavorClick(variation.name)}
+                  className={`rounded-full border px-2.5 py-1 text-xs transition ${
+                    variation.inStock
+                      ? "border-border/60 bg-background text-foreground hover:border-primary/40 hover:bg-secondary"
+                      : "cursor-not-allowed border-border/40 bg-muted text-muted-foreground/50 line-through"
+                  }`}
                 >
                   {variation.name}
-                </span>
+                </button>
               ))}
             </div>
           </div>
@@ -62,7 +76,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <Button
             type="button"
             className="h-11 w-full rounded-2xl text-sm"
-            onClick={() => setIsDialogOpen(true)}
+            onClick={handleOpenPurchaseDialog}
           >
             <ShoppingBag className="h-4 w-4" />
             Finalizar pedido
@@ -74,6 +88,7 @@ export function ProductCard({ product }: ProductCardProps) {
         product={product}
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+        initialFlavor={selectedFlavor}
         initialQuantity={1}
       />
     </>

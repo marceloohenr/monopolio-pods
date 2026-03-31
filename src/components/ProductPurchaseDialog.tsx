@@ -3,6 +3,7 @@ import { Minus, Plus, ShieldCheck, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { useCheckout } from "@/context/checkout-context";
 import { Product, formatPrice, formatPuffs } from "@/data/products";
+import { ProductImageStage } from "@/components/ProductImageStage";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -35,7 +36,7 @@ export function ProductPurchaseDialog({
   initialFlavor,
   initialQuantity,
 }: ProductPurchaseDialogProps) {
-  const { addProduct } = useCheckout();
+  const { openCheckout } = useCheckout();
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const unitPrice = product.promoPrice ?? product.price;
@@ -54,13 +55,16 @@ export function ProductPurchaseDialog({
       return;
     }
 
-    addProduct(product, {
-      flavor: selectedFlavor,
-      quantity,
-    });
-
-    toast.success("Produto adicionado ao carrinho.");
     onOpenChange(false);
+
+    window.setTimeout(() => {
+      openCheckout(product, {
+        flavor: selectedFlavor,
+        quantity,
+      });
+    }, 120);
+
+    toast.success("Produto adicionado. Checkout aberto.");
   };
 
   return (
@@ -68,12 +72,8 @@ export function ProductPurchaseDialog({
       <DialogContent className="max-w-md rounded-3xl border-border/70 p-0">
         <div className="catalog-surface rounded-t-3xl border-b border-border/60 p-5">
           <div className="flex items-start gap-4">
-            <div className="h-24 w-24 shrink-0 rounded-2xl bg-background/85 p-3 shadow-sm">
-              <img
-                src={product.images[0]}
-                alt={product.name}
-                className="h-full w-full object-contain [filter:saturate(0.68)_contrast(1.04)]"
-              />
+            <div className="h-24 w-24 shrink-0">
+              <ProductImageStage product={product} variant="compact" />
             </div>
 
             <DialogHeader className="space-y-1 text-left">

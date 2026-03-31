@@ -1,8 +1,8 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { CategoryNav } from "@/components/CategoryNav";
+import { HomeGalleryHero } from "@/components/HomeGalleryHero";
 import { ProductGrid } from "@/components/ProductGrid";
-import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { AGE_NOTICE, products } from "@/data/products";
 
 const Index = () => {
@@ -28,6 +28,8 @@ const Index = () => {
           </div>
         </section>
 
+        <HomeGalleryHero />
+
         <CategoryNav />
 
         <ProductGrid
@@ -35,8 +37,6 @@ const Index = () => {
           title="Catálogo completo"
           subtitle="Todos os modelos com sabores disponíveis."
         />
-
-        <TestimonialsSection />
 
         <p className="px-4 text-center text-[11px] uppercase tracking-[0.18em] text-primary md:px-0 md:text-xs">
           {AGE_NOTICE}
