@@ -2,7 +2,7 @@ import igniteV55Image from "@/assets/products/ignite-v55-box.png";
 import igniteV80Image from "@/assets/products/ignite-v80-box.png";
 import igniteV120Image from "@/assets/products/ignite-v120-box.png";
 import igniteV155Image from "@/assets/products/ignite-v155-device.png";
-import igniteV300Image from "@/assets/products/ignite-v300-box.webp";
+import igniteV300Image from "@/assets/products/ignite-v300-box.png";
 
 export interface ProductVariation {
   id: string;

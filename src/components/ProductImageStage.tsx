@@ -73,10 +73,10 @@ const productImageAdjustments: Record<string, Partial<Record<ProductImageStageVa
     checkout: { scale: 1.01, x: 1 },
   },
   "ignite-v300-30000-puffs": {
-    card: { scale: 1.2, y: -4 },
-    detail: { scale: 1.26, y: -4 },
-    compact: { scale: 1.12, y: -2 },
-    checkout: { scale: 1.1, y: -2 },
+    card: { scale: 1.08, y: -1 },
+    detail: { scale: 1.14, y: -1 },
+    compact: { scale: 1.02, y: 0 },
+    checkout: { scale: 1.01, y: 0 },
   },
 };
 
