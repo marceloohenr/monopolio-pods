@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CheckoutSheet } from "@/components/CheckoutSheet";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { ThemeProvider } from "@/components/theme-provider";
 import { CheckoutProvider } from "@/context/checkout-context";
 import Index from "./pages/Index.tsx";
@@ -23,6 +24,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/categoria/:slug" element={<CategoryPage />} />

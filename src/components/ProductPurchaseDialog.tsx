@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Minus, Plus, ShieldCheck, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { useCheckout } from "@/context/checkout-context";
@@ -39,6 +39,7 @@ export function ProductPurchaseDialog({
   const { openCheckout } = useCheckout();
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const pendingCheckoutRef = useRef<{ flavor: string; quantity: number } | null>(null);
   const unitPrice = product.promoPrice ?? product.price;
   const subtotal = unitPrice * quantity;
 
@@ -49,27 +50,42 @@ export function ProductPurchaseDialog({
     setQuantity(Math.max(1, initialQuantity ?? 1));
   }, [initialFlavor, initialQuantity, open, product]);
 
+  useEffect(() => {
+    if (open || !pendingCheckoutRef.current) return;
+
+    const checkoutOptions = pendingCheckoutRef.current;
+    pendingCheckoutRef.current = null;
+
+    window.requestAnimationFrame(() => {
+      openCheckout(product, checkoutOptions);
+    });
+  }, [open, openCheckout, product]);
+
   const handleConfirm = () => {
     if (!selectedFlavor) {
       toast.error("Escolha um sabor para continuar.");
       return;
     }
 
+    pendingCheckoutRef.current = {
+      flavor: selectedFlavor,
+      quantity,
+    };
+
     onOpenChange(false);
-
-    window.setTimeout(() => {
-      openCheckout(product, {
-        flavor: selectedFlavor,
-        quantity,
-      });
-    }, 120);
-
     toast.success("Produto adicionado. Checkout aberto.");
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md rounded-3xl border-border/70 p-0">
+      <DialogContent
+        className="max-w-md rounded-3xl border-border/70 p-0"
+        onCloseAutoFocus={(event) => {
+          if (pendingCheckoutRef.current) {
+            event.preventDefault();
+          }
+        }}
+      >
         <div className="catalog-surface rounded-t-3xl border-b border-border/60 p-5">
           <div className="flex items-start gap-4">
             <div className="h-24 w-24 shrink-0">
