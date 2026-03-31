@@ -6,7 +6,7 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { AGE_NOTICE, products } from "@/data/products";
 
 const Index = () => {
-  const catalogProducts = [...products].sort((left, right) => left.puffs - right.puffs);
+  const catalogProducts = products;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">

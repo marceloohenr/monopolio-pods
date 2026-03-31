@@ -7,6 +7,7 @@ interface ProductImageAdjustment {
   scale: number;
   x?: number;
   y?: number;
+  blendMode?: string;
 }
 
 const variantStyles: Record<
@@ -20,64 +21,38 @@ const variantStyles: Record<
   card: {
     stage: "flex h-full w-full items-center justify-center",
     shell:
-      "relative flex h-full w-full items-center justify-center overflow-hidden rounded-[26px] border border-white/80 p-2 backdrop-blur-sm dark:border-white/10 md:p-2.5",
+      "relative isolate flex h-full w-full items-center justify-center overflow-hidden rounded-[26px] border border-white/80 p-2 backdrop-blur-sm dark:border-white/10 md:p-2.5",
     image:
       "h-full w-full origin-center object-contain drop-shadow-[0_24px_44px_rgba(0,0,0,0.16)] [filter:saturate(0.96)_contrast(1.02)]",
   },
   detail: {
     stage: "flex h-full w-full items-center justify-center",
     shell:
-      "relative flex h-full w-full items-center justify-center overflow-hidden rounded-[30px] border border-white/80 p-3 backdrop-blur-sm dark:border-white/10 md:p-4",
+      "relative isolate flex h-full w-full items-center justify-center overflow-hidden rounded-[30px] border border-white/80 p-3 backdrop-blur-sm dark:border-white/10 md:p-4",
     image:
       "h-full w-full origin-center object-contain drop-shadow-[0_30px_56px_rgba(0,0,0,0.18)] [filter:saturate(0.98)_contrast(1.02)]",
   },
   compact: {
     stage: "flex h-full w-full items-center justify-center",
     shell:
-      "relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-white/80 p-1 backdrop-blur-sm dark:border-white/10",
+      "relative isolate flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-white/80 p-1 backdrop-blur-sm dark:border-white/10",
     image:
       "h-full w-full origin-center object-contain drop-shadow-[0_16px_28px_rgba(0,0,0,0.15)] [filter:saturate(0.96)_contrast(1.02)]",
   },
   checkout: {
     stage: "flex h-full w-full items-center justify-center",
     shell:
-      "relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-white/80 p-1 backdrop-blur-sm dark:border-white/10",
+      "relative isolate flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-white/80 p-1 backdrop-blur-sm dark:border-white/10",
     image:
       "h-full w-full origin-center object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.15)] [filter:saturate(0.95)_contrast(1.02)]",
   },
 };
 
-const productImageAdjustments: Record<string, Partial<Record<ProductImageStageVariant, ProductImageAdjustment>>> = {
-  "ignite-v55-5500-puffs": {
-    card: { scale: 1.18, y: -4 },
-    detail: { scale: 1.22, y: -4 },
-    compact: { scale: 1.12, y: -2 },
-    checkout: { scale: 1.08, y: -2 },
-  },
-  "ignite-v80-8000-puffs": {
-    card: { scale: 1.15, y: -3 },
-    detail: { scale: 1.2, y: -3 },
-    compact: { scale: 1.1, y: -2 },
-    checkout: { scale: 1.06, y: -1 },
-  },
-  "ignite-v120-12000-puffs": {
-    card: { scale: 1.14, y: -1 },
-    detail: { scale: 1.18, y: -1 },
-    compact: { scale: 1.08, y: 0 },
-    checkout: { scale: 1.05, y: 0 },
-  },
-  "ignite-v155-15500-puffs": {
-    card: { scale: 1.08, x: 1, y: 0 },
-    detail: { scale: 1.12, x: 1, y: 0 },
-    compact: { scale: 1.03, x: 1 },
-    checkout: { scale: 1.01, x: 1 },
-  },
-  "ignite-v300-30000-puffs": {
-    card: { scale: 1.08, y: -1 },
-    detail: { scale: 1.14, y: -1 },
-    compact: { scale: 1.02, y: 0 },
-    checkout: { scale: 1.01, y: 0 },
-  },
+const baseImageAdjustments: Record<ProductImageStageVariant, ProductImageAdjustment> = {
+  card: { scale: 1.12, y: -1, blendMode: "multiply" },
+  detail: { scale: 1.18, y: -1, blendMode: "multiply" },
+  compact: { scale: 1.06, y: 0, blendMode: "multiply" },
+  checkout: { scale: 1.03, y: 0, blendMode: "multiply" },
 };
 
 interface ProductImageStageProps {
@@ -94,7 +69,8 @@ export function ProductImageStage({
   imageClassName,
 }: ProductImageStageProps) {
   const styles = variantStyles[variant];
-  const adjustment = productImageAdjustments[product.slug]?.[variant] ?? { scale: 1 };
+  const adjustment = baseImageAdjustments[variant];
+  const blendMode = adjustment.blendMode;
   const imageTransform = `translate3d(${adjustment.x ?? 0}%, ${adjustment.y ?? 0}%, 0) scale(${adjustment.scale})`;
 
   return (
@@ -129,7 +105,7 @@ export function ProductImageStage({
             alt={product.name}
             loading="lazy"
             className={cn(styles.image, imageClassName)}
-            style={{ transform: imageTransform }}
+            style={{ transform: imageTransform, mixBlendMode: blendMode }}
           />
         </div>
       </div>

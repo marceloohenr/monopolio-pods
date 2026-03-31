@@ -19,11 +19,11 @@ export function BannerCarousel() {
       <div className="hidden glass rounded-2xl border border-border/50 bg-gradient-to-br from-primary/15 via-background to-background p-4 md:p-6 lg:block">
         <div className="mb-4 flex items-center gap-3">
           <div className="h-14 w-14 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm md:h-20 md:w-20">
-            <img src={monopolioLogo} alt="Logo Monopólio Pods" className="h-full w-full object-cover" />
+            <img src={monopolioLogo} alt="Logo Monopolio Pods" className="h-full w-full object-cover" />
           </div>
           <div className="space-y-1">
             <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Atendimento via WhatsApp</p>
-            <p className="text-xs font-medium text-muted-foreground md:text-sm">Linha Ignite disponível</p>
+            <p className="text-xs font-medium text-muted-foreground md:text-sm">Catalogo multimarcas disponivel</p>
           </div>
         </div>
         <h1 className="max-w-xl font-display text-[2rem] font-bold leading-none text-foreground md:text-5xl">
@@ -35,6 +35,8 @@ export function BannerCarousel() {
 
         <div className="mt-4 flex flex-wrap gap-1.5 text-[11px] font-medium text-foreground md:gap-2 md:text-xs">
           <span className="rounded-full border border-border/60 bg-background/50 px-2.5 py-1 md:px-3 md:py-1.5">Ignite</span>
+          <span className="rounded-full border border-border/60 bg-background/50 px-2.5 py-1 md:px-3 md:py-1.5">Elfbar</span>
+          <span className="rounded-full border border-border/60 bg-background/50 px-2.5 py-1 md:px-3 md:py-1.5">Oxbar</span>
           <span className="rounded-full border border-border/60 bg-background/50 px-2.5 py-1 md:px-3 md:py-1.5">WhatsApp</span>
           <span className="rounded-full border border-border/60 bg-background/50 px-2.5 py-1 md:px-3 md:py-1.5">48h</span>
         </div>
@@ -83,7 +85,7 @@ export function BannerCarousel() {
             <div className="space-y-1.5 text-xs text-foreground md:space-y-2 md:text-sm">
               <div className="flex items-center gap-2">
                 <Truck className="h-4 w-4 text-primary" />
-                <span>Frete por região.</span>
+                <span>Frete por regiao.</span>
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-primary" />
