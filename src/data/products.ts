@@ -4,6 +4,7 @@ import igniteV120Image from "@/assets/products/ignite-v120-box.png";
 import igniteV155Image from "@/assets/products/ignite-v155-device.png";
 import igniteV250Image from "@/assets/products/ignite-v250-device.png";
 import igniteV300Image from "@/assets/products/ignite-v300-box.png";
+import igniteV400Image from "@/assets/products/ignite-v400-device.png";
 import elfbarBc15kImage from "@/assets/products/elfbar-bc-15k.png";
 import elfbarGh23kImage from "@/assets/products/elfbar-gh23k.png";
 import elfbar40kTrioImage from "@/assets/products/elfbar-40k-trio.png";
@@ -424,7 +425,7 @@ export const products: Product[] = [
     puffs: 40000,
     description: "Modelo de 40.000 puffs com autonomia maxima da linha Ignite.",
     price: 205,
-    images: [igniteV300Image],
+    images: [igniteV400Image],
     categoryId: "1",
     variations: [
       { id: "v400-1", name: "Morango Ice", inStock: true },
