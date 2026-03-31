@@ -29,7 +29,7 @@ export function ProductCard({ product }: ProductCardProps) {
     <>
       <article className="glass overflow-hidden rounded-3xl">
         <Link to={`/produto/${product.slug}`} className="block">
-          <div className="catalog-surface aspect-[5/4] border-b border-border/60 p-4 md:p-5">
+          <div className="catalog-surface aspect-[5/4] border-b border-border/60 p-2.5 md:p-3">
             <ProductImageStage product={product} variant="card" />
           </div>
         </Link>

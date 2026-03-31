@@ -98,7 +98,7 @@ const ProductPage = () => {
               </Badge>
             </div>
 
-            <div className="aspect-square p-4 md:p-6">
+            <div className="aspect-square p-2 md:p-3">
               <ProductImageStage product={product} variant="detail" />
             </div>
           </div>

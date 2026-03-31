@@ -1,8 +1,8 @@
-import igniteV55Image from "@/assets/products/ignite-v55.webp";
-import igniteV80Image from "@/assets/products/ignite-v80-gold.jpg";
-import igniteV120Image from "@/assets/products/ignite-v120-rose-gold.jpg";
-import igniteV155Image from "@/assets/products/ignite-v155-orange.jpg";
-import igniteV300Image from "@/assets/products/ignite-v300-black.jpg";
+import igniteV55Image from "@/assets/products/ignite-v55-box.png";
+import igniteV80Image from "@/assets/products/ignite-v80-box.png";
+import igniteV120Image from "@/assets/products/ignite-v120-box.png";
+import igniteV155Image from "@/assets/products/ignite-v155-device.png";
+import igniteV300Image from "@/assets/products/ignite-v300-box.webp";
 
 export interface ProductVariation {
   id: string;
