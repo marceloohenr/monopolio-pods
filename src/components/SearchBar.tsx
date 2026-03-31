@@ -7,8 +7,9 @@ export function SearchBar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
     if (query.trim()) {
       navigate(`/busca?q=${encodeURIComponent(query.trim())}`);
       setOpen(false);
@@ -20,22 +21,29 @@ export function SearchBar() {
       {!open ? (
         <button
           onClick={() => setOpen(true)}
-          className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition"
+          className="rounded-full p-2 text-muted-foreground transition hover:bg-secondary hover:text-foreground"
         >
           <Search className="h-5 w-5" />
         </button>
       ) : (
-        <form onSubmit={handleSubmit} className="flex items-center gap-2 glass rounded-full px-3 py-1.5">
-          <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+        <form onSubmit={handleSubmit} className="glass flex items-center gap-2 rounded-full px-3 py-1.5">
+          <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
           <input
             type="text"
             autoFocus
-            placeholder="Buscar produtos..."
+            placeholder="Buscar"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="bg-transparent border-none outline-none text-sm text-foreground placeholder:text-muted-foreground w-32 md:w-48"
+            onChange={(event) => setQuery(event.target.value)}
+            className="w-32 border-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground md:w-48"
           />
-          <button type="button" onClick={() => { setOpen(false); setQuery(""); }} className="text-muted-foreground hover:text-foreground">
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              setQuery("");
+            }}
+            className="text-muted-foreground hover:text-foreground"
+          >
             <X className="h-4 w-4" />
           </button>
         </form>

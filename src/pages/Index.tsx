@@ -1,51 +1,49 @@
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { BannerCarousel } from "@/components/BannerCarousel";
 import { CategoryNav } from "@/components/CategoryNav";
 import { ProductGrid } from "@/components/ProductGrid";
-import { getFeaturedProducts, getProductsByTag } from "@/data/products";
-import { MessageCircle } from "lucide-react";
-import { WHATSAPP_NUMBER } from "@/data/products";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { AGE_NOTICE, products } from "@/data/products";
 
 const Index = () => {
-  const featured = getFeaturedProducts();
-  const promos = getProductsByTag("promo");
-  const newProducts = getProductsByTag("new");
-  const bestsellers = getProductsByTag("bestseller");
+  const catalogProducts = [...products].sort((left, right) => left.puffs - right.puffs);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
 
-      <main className="container max-w-6xl mx-auto space-y-8 py-6">
-        <BannerCarousel />
+      <main className="container mx-auto max-w-6xl flex-1 space-y-5 py-4 md:space-y-7 md:py-6">
+        <section className="space-y-2 px-4 md:px-0">
+          <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Catálogo</p>
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">Pods disponíveis</h1>
+              <p className="text-sm text-muted-foreground md:text-base">
+                Escolha o modelo, confira os sabores e monte seu pedido.
+              </p>
+            </div>
+            <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground md:text-sm">
+              {catalogProducts.length} modelos
+            </p>
+          </div>
+        </section>
+
         <CategoryNav />
-        
-        {bestsellers.length > 0 && (
-          <ProductGrid products={bestsellers} title="🔥 Mais Procurados" subtitle="Os favoritos dos nossos clientes" />
-        )}
 
-        {promos.length > 0 && (
-          <ProductGrid products={promos} title="💰 Ofertas" subtitle="Preços imperdíveis por tempo limitado" />
-        )}
+        <ProductGrid
+          products={catalogProducts}
+          title="Catálogo completo"
+          subtitle="Todos os modelos com sabores disponíveis."
+        />
 
-        {newProducts.length > 0 && (
-          <ProductGrid products={newProducts} title="✨ Lançamentos" subtitle="Acabou de chegar" />
-        )}
+        <TestimonialsSection />
 
-        {featured.length > 0 && (
-          <ProductGrid products={featured} title="⭐ Destaques" subtitle="Seleção especial para você" />
-        )}
+        <p className="px-4 text-center text-[11px] uppercase tracking-[0.18em] text-primary md:px-0 md:text-xs">
+          {AGE_NOTICE}
+        </p>
       </main>
 
-      {/* WhatsApp FAB */}
-      <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-whatsapp text-whatsapp-foreground p-4 rounded-full shadow-lg animate-pulse-glow hover:scale-110 transition-transform"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </a>
+      <Footer />
     </div>
   );
 };

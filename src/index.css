@@ -1,61 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
-
 @layer base {
   :root {
-    --background: 220 20% 7%;
-    --foreground: 0 0% 95%;
+    --background: 36 18% 96%;
+    --foreground: 220 14% 10%;
 
-    --card: 220 18% 10%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 14% 10%;
 
-    --popover: 220 18% 10%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 14% 10%;
 
-    --primary: 142 72% 50%;
-    --primary-foreground: 220 20% 7%;
+    --primary: 220 18% 9%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 16% 16%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 36 12% 91%;
+    --secondary-foreground: 220 14% 10%;
 
-    --muted: 220 14% 14%;
-    --muted-foreground: 220 10% 55%;
+    --muted: 36 10% 89%;
+    --muted-foreground: 220 8% 38%;
 
-    --accent: 142 72% 50%;
-    --accent-foreground: 220 20% 7%;
+    --accent: 220 18% 9%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 14% 18%;
-    --input: 220 14% 18%;
-    --ring: 142 72% 50%;
+    --border: 220 10% 82%;
+    --input: 220 10% 82%;
+    --ring: 220 18% 9%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --neon: 142 72% 50%;
-    --neon-glow: 0 0 20px hsl(142 72% 50% / 0.4);
-    --neon-glow-strong: 0 0 30px hsl(142 72% 50% / 0.6);
-    --surface-glass: 220 18% 10% / 0.8;
-    --badge-sale: 0 84% 55%;
-    --badge-new: 210 100% 55%;
-    --whatsapp: 142 70% 45%;
+    --neon: 220 18% 9%;
+    --neon-glow: 0 18px 40px hsl(220 18% 9% / 0.08);
+    --neon-glow-strong: 0 24px 60px hsl(220 18% 9% / 0.12);
+    --surface-glass: 0 0% 100% / 0.86;
+    --badge-sale: 10 82% 54%;
+    --badge-new: 220 18% 9%;
+    --whatsapp: 142 70% 42%;
     --whatsapp-foreground: 0 0% 100%;
 
-    --font-display: 'Space Grotesk', sans-serif;
+    --font-display: 'Teko', sans-serif;
     --font-body: 'Inter', sans-serif;
 
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 14% 10%;
+    --sidebar-primary: 220 18% 9%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 36 10% 89%;
+    --sidebar-accent-foreground: 220 14% 10%;
+    --sidebar-border: 220 10% 82%;
+    --sidebar-ring: 220 18% 9%;
+  }
+
+  .dark {
+    --background: 220 20% 8%;
+    --foreground: 36 18% 94%;
+
+    --card: 220 18% 11%;
+    --card-foreground: 36 18% 94%;
+
+    --popover: 220 18% 11%;
+    --popover-foreground: 36 18% 94%;
+
+    --primary: 36 22% 92%;
+    --primary-foreground: 220 18% 9%;
+
+    --secondary: 220 16% 16%;
+    --secondary-foreground: 36 18% 94%;
+
+    --muted: 220 14% 15%;
+    --muted-foreground: 220 8% 70%;
+
+    --accent: 220 16% 18%;
+    --accent-foreground: 36 18% 94%;
+
+    --destructive: 0 70% 52%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 12% 22%;
+    --input: 220 12% 22%;
+    --ring: 36 18% 94%;
+
+    --neon: 36 18% 94%;
+    --neon-glow: 0 18px 40px hsl(0 0% 0% / 0.35);
+    --neon-glow-strong: 0 24px 60px hsl(0 0% 0% / 0.48);
+    --surface-glass: 220 18% 11% / 0.86;
+    --badge-sale: 10 82% 56%;
+    --badge-new: 36 18% 94%;
+    --whatsapp: 142 72% 40%;
+    --whatsapp-foreground: 0 0% 100%;
+
     --sidebar-background: 220 18% 10%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 142 72% 50%;
-    --sidebar-primary-foreground: 220 20% 7%;
-    --sidebar-accent: 220 14% 14%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 220 14% 18%;
-    --sidebar-ring: 142 72% 50%;
+    --sidebar-foreground: 36 18% 94%;
+    --sidebar-primary: 36 18% 94%;
+    --sidebar-primary-foreground: 220 18% 9%;
+    --sidebar-accent: 220 16% 16%;
+    --sidebar-accent-foreground: 36 18% 94%;
+    --sidebar-border: 220 12% 22%;
+    --sidebar-ring: 36 18% 94%;
   }
 }
 
@@ -66,11 +114,21 @@
 
   body {
     @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at top, hsl(0 0% 100% / 0.95), transparent 36%),
+      linear-gradient(180deg, hsl(36 18% 97%), hsl(36 18% 94%));
     font-family: var(--font-body);
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(circle at top, hsl(220 20% 14% / 0.9), transparent 34%),
+      linear-gradient(180deg, hsl(220 20% 10%), hsl(220 18% 7%));
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    letter-spacing: 0.02em;
   }
 }
 
@@ -78,13 +136,43 @@
   .text-glow {
     text-shadow: var(--neon-glow);
   }
+
   .box-glow {
     box-shadow: var(--neon-glow);
   }
+
   .box-glow-strong {
     box-shadow: var(--neon-glow-strong);
   }
+
   .glass {
-    @apply bg-card/80 backdrop-blur-md border border-border/50;
+    @apply border border-border/70 bg-card/90 backdrop-blur-md;
+    box-shadow: 0 12px 34px hsl(220 18% 9% / 0.05);
+  }
+
+  .dark .glass {
+    box-shadow: 0 18px 46px hsl(220 30% 3% / 0.36);
+  }
+
+  .catalog-surface {
+    background:
+      linear-gradient(180deg, hsl(0 0% 100%), hsl(36 16% 94%)),
+      linear-gradient(135deg, hsl(220 18% 9% / 0.03), transparent 45%);
+  }
+
+  .dark .catalog-surface {
+    background:
+      linear-gradient(180deg, hsl(220 18% 12%), hsl(220 18% 9%)),
+      linear-gradient(135deg, hsl(36 18% 94% / 0.05), transparent 45%);
+  }
+
+  .brand-watermark {
+    opacity: 0.1;
+    filter: grayscale(1) contrast(1.05);
+  }
+
+  .dark .brand-watermark {
+    opacity: 0.08;
+    filter: grayscale(1) invert(1) contrast(0.95);
   }
 }

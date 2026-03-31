@@ -1,84 +1,81 @@
-import { Product, formatPrice, buildWhatsAppLink } from "@/data/products";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ShieldCheck, ShoppingBag } from "lucide-react";
+import { Product, formatPrice, formatPuffs } from "@/data/products";
+import { ProductPurchaseDialog } from "@/components/ProductPurchaseDialog";
+import { Button } from "@/components/ui/button";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const discount = product.promoPrice
-    ? Math.round(((product.price - product.promoPrice) / product.price) * 100)
-    : 0;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const unitPrice = product.promoPrice ?? product.price;
 
   return (
-    <div className="group glass rounded-lg overflow-hidden transition-all duration-300 hover:box-glow-strong hover:scale-[1.02] animate-slide-in">
-      <Link to={`/produto/${product.slug}`} className="block">
-        <div className="relative aspect-square bg-secondary/50 overflow-hidden">
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            loading="lazy"
-          />
-          <div className="absolute top-2 left-2 flex flex-col gap-1">
-            {discount > 0 && (
-              <Badge className="bg-badge-sale text-foreground font-bold text-xs px-2 py-0.5">
-                -{discount}%
-              </Badge>
-            )}
-            {product.tags.includes("new") && (
-              <Badge className="bg-badge-new text-foreground font-bold text-xs px-2 py-0.5">
-                NOVO
-              </Badge>
-            )}
-            {product.tags.includes("bestseller") && (
-              <Badge className="bg-primary text-primary-foreground font-bold text-xs px-2 py-0.5">
-                ⭐ MAIS VENDIDO
-              </Badge>
-            )}
+    <>
+      <article className="glass overflow-hidden rounded-3xl">
+        <Link to={`/produto/${product.slug}`} className="block">
+          <div className="catalog-surface aspect-[4/3] border-b border-border/60 p-4 md:p-5">
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="h-full w-full object-contain drop-shadow-[0_18px_40px_rgba(0,0,0,0.14)] [filter:saturate(0.68)_contrast(1.04)]"
+              loading="lazy"
+            />
           </div>
-        </div>
-      </Link>
-
-      <div className="p-3 space-y-2">
-        <Link to={`/produto/${product.slug}`}>
-          <h3 className="font-display font-semibold text-sm leading-tight line-clamp-2 text-foreground group-hover:text-primary transition-colors">
-            {product.name}
-          </h3>
         </Link>
 
-        <div className="flex items-baseline gap-2">
-          {product.promoPrice ? (
-            <>
-              <span className="text-lg font-bold text-primary text-glow">
-                {formatPrice(product.promoPrice)}
-              </span>
-              <span className="text-xs text-muted-foreground line-through">
-                {formatPrice(product.price)}
-              </span>
-            </>
-          ) : (
-            <span className="text-lg font-bold text-foreground">
-              {formatPrice(product.price)}
-            </span>
-          )}
-        </div>
+        <div className="space-y-4 p-4 md:p-5">
+          <div className="space-y-1.5">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-primary">{product.brand}</p>
+            <Link to={`/produto/${product.slug}`}>
+              <h3 className="font-display text-2xl font-bold leading-none text-foreground transition hover:text-primary md:text-[2rem]">
+                {product.name}
+              </h3>
+            </Link>
+            <p className="text-sm text-muted-foreground">{formatPuffs(product.puffs)}</p>
+          </div>
 
-        <a
-          href={buildWhatsAppLink(product)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          <Button variant="whatsapp" size="sm" className="w-full text-xs">
-            <MessageCircle className="h-3.5 w-3.5" />
-            Comprar via WhatsApp
+          <div className="text-2xl font-bold text-foreground md:text-3xl">{formatPrice(unitPrice)}</div>
+
+          <div className="space-y-2">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Sabores</p>
+            <div className="flex flex-wrap gap-1.5">
+              {product.variations.map((variation) => (
+                <span
+                  key={variation.id}
+                  className="rounded-full border border-border/60 bg-background px-2.5 py-1 text-xs text-foreground"
+                >
+                  {variation.name}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            Garantia 48h
+          </div>
+
+          <Button
+            type="button"
+            className="h-11 w-full rounded-2xl text-sm"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <ShoppingBag className="h-4 w-4" />
+            Finalizar pedido
           </Button>
-        </a>
-      </div>
-    </div>
+        </div>
+      </article>
+
+      <ProductPurchaseDialog
+        product={product}
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        initialQuantity={1}
+      />
+    </>
   );
 }

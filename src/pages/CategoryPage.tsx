@@ -1,25 +1,31 @@
 import { useParams } from "react-router-dom";
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { CategoryNav } from "@/components/CategoryNav";
 import { ProductGrid } from "@/components/ProductGrid";
-import { getProductsByCategory, categories } from "@/data/products";
+import { categories, getProductsByCategory } from "@/data/products";
 
 const CategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const products = slug ? getProductsByCategory(slug) : [];
-  const category = categories.find((c) => c.slug === slug);
+  const category = categories.find((item) => item.slug === slug);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="container max-w-6xl mx-auto space-y-6 py-6">
+      <main className="container mx-auto max-w-6xl flex-1 space-y-4 py-4 md:space-y-6 md:py-6">
         <CategoryNav />
         <ProductGrid
           products={products}
           title={category?.name || "Categoria"}
-          subtitle={`${products.length} produto${products.length !== 1 ? "s" : ""}`}
+          subtitle={
+            category
+              ? `${products.length} modelo${products.length !== 1 ? "s" : ""} com sabores disponíveis.`
+              : `${products.length} item${products.length !== 1 ? "s" : ""}.`
+          }
         />
       </main>
+      <Footer />
     </div>
   );
 };

@@ -10,25 +10,23 @@ interface ProductGridProps {
 export function ProductGrid({ products, title, subtitle }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">Nenhum produto encontrado.</p>
+      <div className="px-4 py-12 text-center md:px-0">
+        <p className="text-muted-foreground">Sem produtos.</p>
       </div>
     );
   }
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-3">
       {title && (
         <div className="px-4 md:px-0">
-          <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
-            {title}
-          </h2>
+          <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">{title}</h2>
           {subtitle && (
-            <p className="text-sm text-muted-foreground">{subtitle}</p>
+            <p className="text-xs text-muted-foreground md:text-sm">{subtitle}</p>
           )}
         </div>
       )}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 px-4 md:px-0">
+      <div className="grid grid-cols-1 gap-3 px-4 md:grid-cols-2 md:gap-4 md:px-0 xl:grid-cols-3">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

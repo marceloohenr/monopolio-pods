@@ -1,6 +1,6 @@
-import { categories } from "@/data/products";
 import { Link, useParams } from "react-router-dom";
-import { Zap, Battery, Droplets, Settings, Sparkles, Percent } from "lucide-react";
+import { Battery, Droplets, Percent, Settings, Sparkles, Zap } from "lucide-react";
+import { categories } from "@/data/products";
 
 const iconMap: Record<string, React.ElementType> = {
   Zap,
@@ -15,32 +15,34 @@ export function CategoryNav() {
   const { slug } = useParams();
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 px-4 md:px-0 scrollbar-hide">
+    <div className="scrollbar-hide flex gap-2 overflow-x-auto px-4 pb-2 md:px-0">
       <Link
         to="/"
-        className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+        className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all ${
           !slug
             ? "bg-primary text-primary-foreground box-glow"
-            : "glass text-muted-foreground hover:text-foreground hover:bg-secondary"
+            : "glass text-muted-foreground hover:bg-secondary hover:text-foreground"
         }`}
       >
         Todos
       </Link>
-      {categories.map((cat) => {
-        const Icon = iconMap[cat.icon] || Zap;
-        const isActive = slug === cat.slug;
+
+      {categories.map((category) => {
+        const Icon = iconMap[category.icon] || Zap;
+        const isActive = slug === category.slug;
+
         return (
           <Link
-            key={cat.id}
-            to={`/categoria/${cat.slug}`}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+            key={category.id}
+            to={`/categoria/${category.slug}`}
+            className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all ${
               isActive
                 ? "bg-primary text-primary-foreground box-glow"
-                : "glass text-muted-foreground hover:text-foreground hover:bg-secondary"
+                : "glass text-muted-foreground hover:bg-secondary hover:text-foreground"
             }`}
           >
             <Icon className="h-3.5 w-3.5" />
-            {cat.name}
+            {category.name}
           </Link>
         );
       })}
