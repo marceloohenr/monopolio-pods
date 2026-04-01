@@ -10,8 +10,8 @@ import elfbarGh23kImage from "@/assets/products/elfbar-gh23k.png";
 import elfbar40kTrioImage from "@/assets/products/elfbar-40k-trio.png";
 import elfbar40kIceKingImage from "@/assets/products/elfbar-40k-ice-king.png";
 import elfbar45kProImage from "@/assets/products/elfbar-45k-pro.png";
-import productPod1Image from "@/assets/product-pod-1.jpg";
-import productPod8Image from "@/assets/product-pod-8.jpg";
+import oxbar35kImage from "@/assets/products/oxbar-35k.png";
+import oxbar50kImage from "@/assets/products/oxbar-50k.webp";
 
 export interface ProductVariation {
   id: string;
@@ -586,7 +586,7 @@ export const products: Product[] = [
     puffs: 35000,
     description: "Modelo Oxbar 35K com alto rendimento e pedido via WhatsApp.",
     price: 185,
-    images: [productPod8Image],
+    images: [oxbar35kImage],
     categoryId: "3",
     variations: [{ id: "ox35k-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo"],
@@ -611,7 +611,7 @@ export const products: Product[] = [
     puffs: 50000,
     description: "Modelo Oxbar 50K com a maior autonomia desta rodada do catalogo.",
     price: 220,
-    images: [productPod1Image],
+    images: [oxbar50kImage],
     categoryId: "3",
     variations: [{ id: "ox50k-1", name: "Indisponivel no momento", inStock: false }],
     tags: ["novo", "premium"],
