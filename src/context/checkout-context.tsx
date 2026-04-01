@@ -14,6 +14,7 @@ interface CustomerDetails {
   name: string;
   phone: string;
   cep: string;
+  street: string;
   neighborhood: string;
   city: string;
   addressDetails: string;
@@ -26,8 +27,8 @@ interface CheckoutContextValue {
   customer: CustomerDetails;
   itemCount: number;
   subtotal: number;
-  freight: number;
-  finalTotal: number;
+  freight: number | null;
+  finalTotal: number | null;
   canSubmit: boolean;
   openCheckout: (product?: Product, options?: { flavor?: string; quantity?: number }) => void;
   closeCheckout: () => void;
@@ -46,6 +47,7 @@ const defaultCustomerDetails: CustomerDetails = {
   name: "",
   phone: "",
   cep: "",
+  street: "",
   neighborhood: "",
   city: "",
   addressDetails: "",
@@ -101,6 +103,14 @@ function hasValidPhone(value: string) {
   return digits.length === 10 || digits.length === 11;
 }
 
+function hasShippingLocation(customer: CustomerDetails) {
+  return customer.city.trim().length > 0 && customer.neighborhood.trim().length > 0;
+}
+
+function hasCompleteAddress(customer: CustomerDetails) {
+  return customer.street.trim().length > 0 && hasShippingLocation(customer);
+}
+
 function getCheckoutSummary(items: CheckoutItem[]) {
   const validItems = items
     .map((item) => {
@@ -149,7 +159,7 @@ function buildCheckoutUrl(items: CheckoutItem[], customer: CustomerDetails, crea
     neighborhood: customer.neighborhood,
     city: customer.city,
   });
-  const finalTotal = summary.subtotal + freight;
+  const finalTotal = freight === null ? null : summary.subtotal + freight;
   const message = buildWhatsAppOrderMessage({
     createdAt,
     customer,
@@ -255,7 +265,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const freight = React.useMemo(() => {
-    if (!customer.neighborhood && !customer.city) return 0;
+    if (!hasShippingLocation(customer)) return null;
 
     return getShippingFeeByLocation({
       neighborhood: customer.neighborhood,
@@ -263,9 +273,9 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     });
   }, [customer.city, customer.neighborhood]);
 
-  const finalTotal = React.useMemo(() => subtotal + freight, [freight, subtotal]);
+  const finalTotal = React.useMemo(() => (freight === null ? null : subtotal + freight), [freight, subtotal]);
 
-  const canSubmit = items.length > 0 && hasValidPhone(customer.phone) && customer.neighborhood.trim().length > 0;
+  const canSubmit = items.length > 0 && hasValidPhone(customer.phone) && hasCompleteAddress(customer);
 
   const submitCheckout = React.useCallback(() => {
     if (!canSubmit || typeof window === "undefined") return;

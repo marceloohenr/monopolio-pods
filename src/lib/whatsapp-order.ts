@@ -6,7 +6,9 @@ export interface WhatsAppOrderCustomer {
   name: string;
   phone: string;
   cep?: string;
+  street?: string;
   neighborhood: string;
+  city?: string;
   addressDetails?: string;
   paymentMethod: PaymentMethod;
 }
@@ -24,8 +26,8 @@ interface BuildWhatsAppOrderMessageParams {
   customer: WhatsAppOrderCustomer;
   items: WhatsAppOrderItem[];
   subtotal: number;
-  freight: number;
-  finalTotal: number;
+  freight: number | null;
+  finalTotal: number | null;
 }
 
 function pad(value: number) {
@@ -42,7 +44,7 @@ function formatCompactPrice(value: number) {
 
 function formatCustomerName(name: string) {
   const trimmedName = name.trim();
-  return trimmedName || "Cliente do catálogo";
+  return trimmedName || "Cliente do catalogo";
 }
 
 export function formatOrderTimestamp(date: Date) {
@@ -56,11 +58,15 @@ export function buildOrderNumber(date: Date) {
 export function getPaymentMethodLabel(method: PaymentMethod) {
   switch (method) {
     case "card":
-      return "Cartão";
+      return "Cartao";
     case "pix":
     default:
       return "Pix";
   }
+}
+
+function formatOrderTotal(value: number | null) {
+  return value === null ? "Consultar valores" : formatCompactPrice(value);
 }
 
 export function buildWhatsAppOrderMessage({
@@ -74,14 +80,16 @@ export function buildWhatsAppOrderMessage({
   return [
     "#### NOVO PEDIDO ####",
     "",
-    `#️⃣   Nº pedido: ${buildOrderNumber(createdAt)}`,
+    `Pedido: ${buildOrderNumber(createdAt)}`,
     `feito em ${formatOrderTimestamp(createdAt)}`,
     "",
-    `👤   ${formatCustomerName(customer.name)}`,
-    `📞   ${customer.phone.trim()}`,
-    customer.cep?.trim() ? `📮   CEP: ${customer.cep.trim()}` : "",
-    `📍   Bairro: ${customer.neighborhood}`,
-    customer.addressDetails?.trim() ? `🏠   Número/Complemento: ${customer.addressDetails.trim()}` : "",
+    `Cliente: ${formatCustomerName(customer.name)}`,
+    `Telefone: ${customer.phone.trim()}`,
+    customer.cep?.trim() ? `CEP: ${customer.cep.trim()}` : "",
+    customer.street?.trim() ? `Rua: ${customer.street.trim()}` : "",
+    customer.city?.trim() ? `Cidade: ${customer.city.trim()}` : "",
+    `Bairro: ${customer.neighborhood.trim() || "Nao informado"}`,
+    customer.addressDetails?.trim() ? `Numero/Complemento: ${customer.addressDetails.trim()}` : "",
     "",
     "------- ITENS DO PEDIDO -------",
     "",
@@ -90,17 +98,19 @@ export function buildWhatsAppOrderMessage({
       item.flavor?.trim() ? `Sabor: ${item.flavor.trim()}` : "",
       `Quantidade: ${item.quantity}`,
       `Valor Unitario: ${formatCompactPrice(item.unitPrice)}`,
-      `💵 ${item.quantity} x ${formatPrice(item.unitPrice)} = ${formatCompactPrice(item.subtotal)}`,
+      `${item.quantity} x ${formatPrice(item.unitPrice)} = ${formatCompactPrice(item.subtotal)}`,
       "",
     ]),
     "-------------------------------",
     "",
-    `💳 SUBTOTAL: ${formatCompactPrice(subtotal)}`,
-    `🚚 FRETE: ${formatShippingFee(freight)}`,
-    `VALOR FINAL: ${formatCompactPrice(finalTotal)}`,
+    `SUBTOTAL: ${formatCompactPrice(subtotal)}`,
+    `FRETE: ${formatShippingFee(freight)}`,
+    `VALOR FINAL: ${formatOrderTotal(finalTotal)}`,
     "",
     "PAGAMENTO",
-    `${getPaymentMethodLabel(customer.paymentMethod)}: ${formatCompactPrice(finalTotal)}`,
+    finalTotal === null
+      ? `${getPaymentMethodLabel(customer.paymentMethod)}: valor final a confirmar`
+      : `${getPaymentMethodLabel(customer.paymentMethod)}: ${formatCompactPrice(finalTotal)}`,
   ]
     .filter(Boolean)
     .join("\n");

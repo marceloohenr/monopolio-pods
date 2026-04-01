@@ -2,48 +2,81 @@ import { formatPrice } from "@/data/products";
 
 export interface ShippingArea {
   name: string;
-  fee: number;
+  fee: number | null;
   neighborhoods?: string[];
   cities?: string[];
 }
 
-export const DEFAULT_OTHER_NEIGHBORHOODS_RATE = 10;
+export const DEFAULT_OTHER_NEIGHBORHOODS_RATE: number | null = null;
 
 export const defaultShippingArea: ShippingArea = {
-  name: "Outros bairros",
+  name: "Consultar valores",
   fee: DEFAULT_OTHER_NEIGHBORHOODS_RATE,
 };
 
 export const shippingAreas: ShippingArea[] = [
   {
-    name: "Boa Viagem",
+    name: "Zona Norte do Recife",
+    fee: 0,
+    neighborhoods: [
+      "Agua Fria",
+      "Alto Santa Terezinha",
+      "Arruda",
+      "Beberibe",
+      "Bomba do Hemeterio",
+      "Cajueiro",
+      "Campina do Barreto",
+      "Campo Grande",
+      "Dois Unidos",
+      "Encruzilhada",
+      "Fundao",
+      "Hipodromo",
+      "Linha do Tiro",
+      "Peixinhos",
+      "Ponto de Parada",
+      "Porto da Madeira",
+      "Rosarinho",
+      "Torreao",
+      "Aflitos",
+      "Alto do Mandu",
+      "Alto Jose Bonifacio",
+      "Alto Jose do Pinho",
+      "Apipucos",
+      "Brejo da Guabiraba",
+      "Brejo de Beberibe",
+      "Casa Amarela",
+      "Casa Forte",
+      "Corrego do Jenipapo",
+      "Derby",
+      "Dois Irmaos",
+      "Espinheiro",
+      "Gracas",
+      "Guabiraba",
+      "Jaqueira",
+      "Macaxeira",
+      "Mangabeira",
+      "Monteiro",
+      "Morro da Conceicao",
+      "Nova Descoberta",
+      "Parnamirim",
+      "Passarinho",
+      "Pau-Ferro",
+      "Poco da Panela",
+      "Santana",
+      "Sitio dos Pintos",
+      "Tamarineira",
+      "Vasco da Gama",
+    ],
+  },
+  {
+    name: "Zona Sul do Recife",
     fee: 5,
-    neighborhoods: ["Boa Viagem"],
+    neighborhoods: ["Boa Viagem", "Brasilia Teimosa", "Cohab", "Ibura", "Imbiribeira", "Ipsep", "Jordao", "Pina"],
   },
   {
     name: "Olinda",
     fee: 0,
     cities: ["Olinda"],
-  },
-  {
-    name: "Jaqueira",
-    fee: 0,
-    neighborhoods: ["Jaqueira"],
-  },
-  {
-    name: "Casa Forte",
-    fee: 0,
-    neighborhoods: ["Casa Forte"],
-  },
-  {
-    name: "Rosarinho",
-    fee: 0,
-    neighborhoods: ["Rosarinho"],
-  },
-  {
-    name: "Várzea",
-    fee: 5,
-    neighborhoods: ["Várzea", "Varzea"],
   },
 ];
 
@@ -66,8 +99,16 @@ function matchesAny(values: string[] | undefined, target: string) {
   return values.some((value) => normalizeShippingKey(value) === normalizedTarget);
 }
 
+function matchesArea(area: ShippingArea, target: string) {
+  return (
+    normalizeShippingKey(area.name) === normalizeShippingKey(target) ||
+    matchesAny(area.neighborhoods, target) ||
+    matchesAny(area.cities, target)
+  );
+}
+
 export function getShippingAreaByName(name: string) {
-  return shippingAreas.find((area) => normalizeShippingKey(area.name) === normalizeShippingKey(name)) ?? null;
+  return shippingAreas.find((area) => matchesArea(area, name)) ?? null;
 }
 
 export function findShippingAreaByLocation({
@@ -98,6 +139,7 @@ export function getShippingFeeByLocation({
   return findShippingAreaByLocation({ neighborhood, city }).fee;
 }
 
-export function formatShippingFee(value: number) {
-  return value === 0 ? "Frete grátis" : formatPrice(value).replace(/\u00A0/g, " ");
+export function formatShippingFee(value: number | null) {
+  if (value === null) return "Consultar valores";
+  return value === 0 ? "Frete gratis" : formatPrice(value).replace(/\u00A0/g, " ");
 }

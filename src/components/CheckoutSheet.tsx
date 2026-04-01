@@ -86,6 +86,8 @@ export function CheckoutSheet() {
   const [touched, setTouched] = useState({
     cep: false,
     phone: false,
+    street: false,
+    city: false,
     neighborhood: false,
   });
   const [cepLookupStatus, setCepLookupStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -93,12 +95,12 @@ export function CheckoutSheet() {
 
   const paymentOptions = [
     { value: "pix", label: "Pix" },
-    { value: "card", label: "Cartão" },
+    { value: "card", label: "Cartao" },
   ] as const;
 
   useEffect(() => {
     if (!isOpen) {
-      setTouched({ cep: false, phone: false, neighborhood: false });
+      setTouched({ cep: false, phone: false, street: false, city: false, neighborhood: false });
       setCepLookupStatus("idle");
       setCepLookupMessage("");
     }
@@ -106,16 +108,12 @@ export function CheckoutSheet() {
 
   useEffect(() => {
     if (!hasValidCep(customer.cep)) {
-      if (customer.city) {
-        setCustomerField("city", "");
-      }
-
       if (!customer.cep) {
         setCepLookupStatus("idle");
         setCepLookupMessage("");
       } else {
         setCepLookupStatus("idle");
-        setCepLookupMessage("Complete o CEP para buscar o bairro automaticamente.");
+        setCepLookupMessage("Complete o CEP para buscar rua, cidade e bairro automaticamente.");
       }
       return;
     }
@@ -133,21 +131,30 @@ export function CheckoutSheet() {
         });
 
         setCustomerField("cep", address.cep);
+        setCustomerField("street", address.street);
         setCustomerField("city", address.city);
-        setCustomerField("neighborhood", address.neighborhood || area.name);
-        setTouched((current) => ({ ...current, neighborhood: true }));
+        setCustomerField("neighborhood", address.neighborhood);
+        setTouched((current) => ({ ...current, street: true, city: true, neighborhood: true }));
         setCepLookupStatus("success");
+
+        const addressLabel = [address.street, address.neighborhood, address.city].filter(Boolean).join(", ");
+        const locationFallback = [address.neighborhood, address.city].filter(Boolean).join(", ");
+
         setCepLookupMessage(
-          address.neighborhood
-            ? `CEP encontrado: ${address.neighborhood}, ${address.city}. Frete aplicado conforme a região ${area.name}.`
-            : `CEP encontrado: ${address.city}. Frete aplicado conforme a região ${area.name}.`,
+          addressLabel
+            ? area.fee === null
+              ? `CEP encontrado: ${addressLabel}. Frete dessa regiao precisa ser consultado.`
+              : `CEP encontrado: ${addressLabel}. Frete aplicado conforme a regiao ${area.name}.`
+            : area.fee === null
+              ? `CEP encontrado: ${locationFallback || address.city}. Frete dessa regiao precisa ser consultado.`
+              : `CEP encontrado: ${locationFallback || address.city}. Frete aplicado conforme a regiao ${area.name}.`,
         );
       })
       .catch((error: Error) => {
         if (controller.signal.aborted) return;
 
         setCepLookupStatus("error");
-        setCepLookupMessage(error.message || "Não foi possível consultar o CEP.");
+        setCepLookupMessage(error.message || "Nao foi possivel consultar o CEP.");
       });
 
     return () => controller.abort();
@@ -155,8 +162,14 @@ export function CheckoutSheet() {
 
   const cepInvalid = touched.cep && customer.cep.trim().length > 0 && !hasValidCep(customer.cep);
   const phoneInvalid = touched.phone && !hasValidPhone(customer.phone);
-  const neighborhoodInvalid = touched.neighborhood && !customer.neighborhood;
-  const neighborhoodSelected = customer.neighborhood.trim().length > 0;
+  const hasStreet = customer.street.trim().length > 0;
+  const hasCity = customer.city.trim().length > 0;
+  const hasNeighborhood = customer.neighborhood.trim().length > 0;
+  const hasShippingLocation = hasCity && hasNeighborhood;
+  const streetInvalid = touched.street && !hasStreet;
+  const cityInvalid = touched.city && !hasCity;
+  const neighborhoodInvalid = touched.neighborhood && !hasNeighborhood;
+  const locationLabel = hasShippingLocation ? `${customer.neighborhood}, ${customer.city}` : "";
 
   const detailedItems = items
     .map((item) => {
@@ -185,7 +198,7 @@ export function CheckoutSheet() {
         <SheetHeader>
           <SheetTitle className="font-display text-2xl uppercase tracking-[0.04em]">Checkout</SheetTitle>
           <SheetDescription>
-            Informe telefone e bairro para calcular o frete automaticamente antes de enviar o pedido.
+            Informe telefone, rua, cidade e bairro para calcular o frete automaticamente antes de enviar o pedido.
           </SheetDescription>
         </SheetHeader>
 
@@ -272,7 +285,7 @@ export function CheckoutSheet() {
             ) : (
               <div className="glass rounded-2xl p-5 text-center">
                 <ShoppingBag className="mx-auto h-6 w-6 text-muted-foreground" />
-                <p className="mt-3 text-sm font-medium text-foreground">Seu checkout está vazio.</p>
+                <p className="mt-3 text-sm font-medium text-foreground">Seu checkout esta vazio.</p>
                 <p className="mt-1 text-xs text-muted-foreground">Adicione um pod para continuar.</p>
               </div>
             )}
@@ -281,7 +294,7 @@ export function CheckoutSheet() {
           <section className="space-y-4">
             <div>
               <h2 className="text-sm font-semibold text-foreground">Cliente</h2>
-              <p className="mt-1 text-xs text-muted-foreground">Telefone e bairro são obrigatórios para calcular o frete.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Telefone e endereco sao usados para calcular o frete e enviar o pedido.</p>
             </div>
 
             <div className="grid gap-3">
@@ -310,7 +323,7 @@ export function CheckoutSheet() {
                   className={cn(phoneInvalid && "border-destructive focus-visible:ring-destructive")}
                 />
                 {phoneInvalid && (
-                  <p className="text-xs text-destructive">Informe um telefone válido com DDD.</p>
+                  <p className="text-xs text-destructive">Informe um telefone valido com DDD.</p>
                 )}
               </div>
 
@@ -327,7 +340,7 @@ export function CheckoutSheet() {
                   className={cn(cepInvalid && "border-destructive focus-visible:ring-destructive")}
                 />
                 {cepInvalid && (
-                  <p className="text-xs text-destructive">Digite um CEP válido com 8 números.</p>
+                  <p className="text-xs text-destructive">Digite um CEP valido com 8 numeros.</p>
                 )}
                 {!cepInvalid && cepLookupMessage && (
                   <p
@@ -346,6 +359,40 @@ export function CheckoutSheet() {
               </div>
 
               <div className="grid gap-1.5">
+                <label htmlFor="checkout-street" className="text-xs font-medium text-muted-foreground">
+                  Rua *
+                </label>
+                <Input
+                  id="checkout-street"
+                  value={customer.street}
+                  onChange={(event) => setCustomerField("street", event.target.value)}
+                  onBlur={() => setTouched((current) => ({ ...current, street: true }))}
+                  placeholder="Rua / logradouro do cliente"
+                  className={cn(streetInvalid && "border-destructive focus-visible:ring-destructive")}
+                />
+                {streetInvalid && (
+                  <p className="text-xs text-destructive">Informe a rua para enviar o pedido.</p>
+                )}
+              </div>
+
+              <div className="grid gap-1.5">
+                <label htmlFor="checkout-city" className="text-xs font-medium text-muted-foreground">
+                  Cidade *
+                </label>
+                <Input
+                  id="checkout-city"
+                  value={customer.city}
+                  onChange={(event) => setCustomerField("city", event.target.value)}
+                  onBlur={() => setTouched((current) => ({ ...current, city: true }))}
+                  placeholder="Cidade do cliente"
+                  className={cn(cityInvalid && "border-destructive focus-visible:ring-destructive")}
+                />
+                {cityInvalid && (
+                  <p className="text-xs text-destructive">Informe a cidade para calcular o frete.</p>
+                )}
+              </div>
+
+              <div className="grid gap-1.5">
                 <label htmlFor="checkout-neighborhood" className="text-xs font-medium text-muted-foreground">
                   Bairro *
                 </label>
@@ -358,19 +405,18 @@ export function CheckoutSheet() {
                   className={cn(neighborhoodInvalid && "border-destructive focus-visible:ring-destructive")}
                 />
                 {neighborhoodInvalid && (
-                  <p className="text-xs text-destructive">Informe um bairro para calcular o frete.</p>
+                  <p className="text-xs text-destructive">Informe o bairro para calcular o frete.</p>
                 )}
-                {neighborhoodSelected && (
+                {hasShippingLocation && (
                   <p className="text-xs text-muted-foreground">
-                    Frete para {customer.neighborhood}
-                    {customer.city ? `, ${customer.city}` : ""}: {formatShippingFee(freight)}
+                    Frete para {locationLabel}: {formatShippingFee(freight)}
                   </p>
                 )}
               </div>
 
               <div className="grid gap-1.5">
                 <label htmlFor="checkout-address-details" className="text-xs font-medium text-muted-foreground">
-                  Número / complemento
+                  Numero / complemento
                 </label>
                 <Input
                   id="checkout-address-details"
@@ -408,18 +454,18 @@ export function CheckoutSheet() {
             </div>
             <div className="mt-2 flex items-center justify-between gap-3 text-sm">
               <span className="text-muted-foreground">Frete</span>
-              <span className={cn("font-semibold", neighborhoodSelected ? "text-foreground" : "text-muted-foreground")}>
-                {neighborhoodSelected ? formatShippingFee(freight) : "Informe o bairro"}
+              <span className={cn("font-semibold", hasShippingLocation ? "text-foreground" : "text-muted-foreground")}>
+                {hasShippingLocation ? formatShippingFee(freight) : "Informe a cidade e o bairro"}
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between gap-3 text-sm">
               <span className="text-muted-foreground">Total final</span>
-              <span className={cn("font-semibold", neighborhoodSelected ? "text-foreground" : "text-muted-foreground")}>
-                {neighborhoodSelected ? formatPrice(finalTotal) : "Informe o bairro"}
+              <span className={cn("font-semibold", hasShippingLocation ? "text-foreground" : "text-muted-foreground")}>
+                {hasShippingLocation ? (finalTotal === null ? "Consultar valores" : formatPrice(finalTotal)) : "Informe a cidade e o bairro"}
               </span>
             </div>
             <p className="mt-3 text-xs text-muted-foreground">
-              O pedido do WhatsApp vai incluir telefone, bairro, frete e total já calculados.
+              O pedido do WhatsApp vai incluir telefone, rua, cidade, bairro, frete e total ja calculados.
             </p>
           </section>
         </div>
@@ -433,7 +479,7 @@ export function CheckoutSheet() {
             variant="whatsapp"
             disabled={!canSubmit}
             onClick={() => {
-              setTouched({ cep: true, phone: true, neighborhood: true });
+              setTouched({ cep: true, phone: true, street: true, city: true, neighborhood: true });
               submitCheckout();
             }}
           >
