@@ -95,7 +95,7 @@ export function CheckoutSheet() {
 
   const paymentOptions = [
     { value: "pix", label: "Pix" },
-    { value: "card", label: "Cartao" },
+    { value: "card", label: "Cartão" },
   ] as const;
 
   useEffect(() => {
@@ -143,18 +143,18 @@ export function CheckoutSheet() {
         setCepLookupMessage(
           addressLabel
             ? area.fee === null
-              ? `CEP encontrado: ${addressLabel}. Frete dessa regiao precisa ser consultado.`
-              : `CEP encontrado: ${addressLabel}. Frete aplicado conforme a regiao ${area.name}.`
+              ? `CEP encontrado: ${addressLabel}. Frete dessa região precisa ser consultado.`
+              : `CEP encontrado: ${addressLabel}. Frete aplicado conforme a região ${area.name}.`
             : area.fee === null
-              ? `CEP encontrado: ${locationFallback || address.city}. Frete dessa regiao precisa ser consultado.`
-              : `CEP encontrado: ${locationFallback || address.city}. Frete aplicado conforme a regiao ${area.name}.`,
+              ? `CEP encontrado: ${locationFallback || address.city}. Frete dessa região precisa ser consultado.`
+              : `CEP encontrado: ${locationFallback || address.city}. Frete aplicado conforme a região ${area.name}.`,
         );
       })
       .catch((error: Error) => {
         if (controller.signal.aborted) return;
 
         setCepLookupStatus("error");
-        setCepLookupMessage(error.message || "Nao foi possivel consultar o CEP.");
+        setCepLookupMessage(error.message || "Não foi possível consultar o CEP.");
       });
 
     return () => controller.abort();
@@ -285,7 +285,7 @@ export function CheckoutSheet() {
             ) : (
               <div className="glass rounded-2xl p-5 text-center">
                 <ShoppingBag className="mx-auto h-6 w-6 text-muted-foreground" />
-                <p className="mt-3 text-sm font-medium text-foreground">Seu checkout esta vazio.</p>
+                <p className="mt-3 text-sm font-medium text-foreground">Seu checkout está vazio.</p>
                 <p className="mt-1 text-xs text-muted-foreground">Adicione um pod para continuar.</p>
               </div>
             )}
@@ -294,7 +294,7 @@ export function CheckoutSheet() {
           <section className="space-y-4">
             <div>
               <h2 className="text-sm font-semibold text-foreground">Cliente</h2>
-              <p className="mt-1 text-xs text-muted-foreground">Telefone e endereco sao usados para calcular o frete e enviar o pedido.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Telefone e endereço são usados para calcular o frete e enviar o pedido.</p>
             </div>
 
             <div className="grid gap-3">
@@ -323,7 +323,7 @@ export function CheckoutSheet() {
                   className={cn(phoneInvalid && "border-destructive focus-visible:ring-destructive")}
                 />
                 {phoneInvalid && (
-                  <p className="text-xs text-destructive">Informe um telefone valido com DDD.</p>
+                  <p className="text-xs text-destructive">Informe um telefone válido com DDD.</p>
                 )}
               </div>
 
@@ -340,7 +340,7 @@ export function CheckoutSheet() {
                   className={cn(cepInvalid && "border-destructive focus-visible:ring-destructive")}
                 />
                 {cepInvalid && (
-                  <p className="text-xs text-destructive">Digite um CEP valido com 8 numeros.</p>
+                  <p className="text-xs text-destructive">Digite um CEP válido com 8 números.</p>
                 )}
                 {!cepInvalid && cepLookupMessage && (
                   <p
@@ -416,7 +416,7 @@ export function CheckoutSheet() {
 
               <div className="grid gap-1.5">
                 <label htmlFor="checkout-address-details" className="text-xs font-medium text-muted-foreground">
-                  Numero / complemento
+                  Número / complemento
                 </label>
                 <Input
                   id="checkout-address-details"
@@ -490,3 +490,4 @@ export function CheckoutSheet() {
     </Sheet>
   );
 }
+

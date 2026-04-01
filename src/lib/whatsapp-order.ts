@@ -44,7 +44,7 @@ function formatCompactPrice(value: number) {
 
 function formatCustomerName(name: string) {
   const trimmedName = name.trim();
-  return trimmedName || "Cliente do catalogo";
+  return trimmedName || "Cliente do catálogo";
 }
 
 export function formatOrderTimestamp(date: Date) {
@@ -58,7 +58,7 @@ export function buildOrderNumber(date: Date) {
 export function getPaymentMethodLabel(method: PaymentMethod) {
   switch (method) {
     case "card":
-      return "Cartao";
+      return "Cartão";
     case "pix":
     default:
       return "Pix";
@@ -88,8 +88,8 @@ export function buildWhatsAppOrderMessage({
     customer.cep?.trim() ? `CEP: ${customer.cep.trim()}` : "",
     customer.street?.trim() ? `Rua: ${customer.street.trim()}` : "",
     customer.city?.trim() ? `Cidade: ${customer.city.trim()}` : "",
-    `Bairro: ${customer.neighborhood.trim() || "Nao informado"}`,
-    customer.addressDetails?.trim() ? `Numero/Complemento: ${customer.addressDetails.trim()}` : "",
+    `Bairro: ${customer.neighborhood.trim() || "Não informado"}`,
+    customer.addressDetails?.trim() ? `Número/Complemento: ${customer.addressDetails.trim()}` : "",
     "",
     "------- ITENS DO PEDIDO -------",
     "",
@@ -115,3 +115,4 @@ export function buildWhatsAppOrderMessage({
     .filter(Boolean)
     .join("\n");
 }
+

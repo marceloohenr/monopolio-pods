@@ -64,7 +64,7 @@ export function ProductPurchaseDialog({
 
   const handleConfirm = () => {
     if (!hasAvailableFlavors) {
-      toast.error("Produto indisponivel no momento.");
+      toast.error("Produto indisponível no momento.");
       return;
     }
 
@@ -120,7 +120,7 @@ export function ProductPurchaseDialog({
             <p className="text-sm font-semibold text-foreground">Escolha o sabor</p>
             <Select value={selectedFlavor} onValueChange={setSelectedFlavor} disabled={!hasAvailableFlavors}>
               <SelectTrigger className="h-11 rounded-2xl border-border/60 bg-background text-left">
-                <SelectValue placeholder={hasAvailableFlavors ? "Escolha o sabor" : "Indisponivel no momento"} />
+                <SelectValue placeholder={hasAvailableFlavors ? "Escolha o sabor" : "Indisponível no momento"} />
               </SelectTrigger>
               <SelectContent>
                 {product.variations
@@ -183,7 +183,7 @@ export function ProductPurchaseDialog({
                 Adicionar ao carrinho
               </>
             ) : (
-              "Indisponivel no momento"
+              "Indisponível no momento"
             )}
           </Button>
         </DialogFooter>

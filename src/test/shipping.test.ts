@@ -23,22 +23,23 @@ describe("shipping config", () => {
 
   it("falls back to consult values for other neighborhoods", () => {
     expect(getShippingFeeByNeighborhood(defaultShippingArea.name)).toBe(DEFAULT_OTHER_NEIGHBORHOODS_RATE);
-    expect(getShippingFeeByNeighborhood("Bairro nao mapeado")).toBe(DEFAULT_OTHER_NEIGHBORHOODS_RATE);
+    expect(getShippingFeeByNeighborhood("Bairro não mapeado")).toBe(DEFAULT_OTHER_NEIGHBORHOODS_RATE);
   });
 
-  it("matches configured areas from neighborhood or city", () => {
+  it("matches configured áreas from neighborhood or city", () => {
     expect(findShippingAreaByLocation({ neighborhood: "Campo Grande", city: "Recife" }).name).toBe("Zona Norte do Recife");
     expect(findShippingAreaByLocation({ neighborhood: "Boa Viagem", city: "Recife" }).name).toBe("Zona Sul do Recife");
     expect(findShippingAreaByLocation({ city: "Olinda" }).name).toBe("Olinda");
-    expect(findShippingAreaByLocation({ neighborhood: "Bairro nao mapeado", city: "Recife" }).name).toBe(
+    expect(findShippingAreaByLocation({ neighborhood: "Bairro não mapeado", city: "Recife" }).name).toBe(
       defaultShippingArea.name,
     );
-    expect(getShippingFeeByLocation({ neighborhood: "Bairro nao mapeado", city: "Olinda" })).toBe(0);
+    expect(getShippingFeeByLocation({ neighborhood: "Bairro não mapeado", city: "Olinda" })).toBe(0);
   });
 
   it("formats free and paid shipping labels", () => {
     expect(formatShippingFee(null)).toBe("Consultar valores");
-    expect(formatShippingFee(0)).toBe("Frete gratis");
+    expect(formatShippingFee(0)).toBe("Frete grátis");
     expect(formatShippingFee(5)).toBe("R$ 5,00");
   });
 });
+

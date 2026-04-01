@@ -141,5 +141,6 @@ export function getShippingFeeByLocation({
 
 export function formatShippingFee(value: number | null) {
   if (value === null) return "Consultar valores";
-  return value === 0 ? "Frete gratis" : formatPrice(value).replace(/\u00A0/g, " ");
+  return value === 0 ? "Frete grátis" : formatPrice(value).replace(/\u00A0/g, " ");
 }
+

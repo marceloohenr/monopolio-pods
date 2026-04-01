@@ -88,7 +88,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 Finalizar pedido
               </>
             ) : (
-              "Indisponivel no momento"
+              "Indisponível no momento"
             )}
           </Button>
         </div>

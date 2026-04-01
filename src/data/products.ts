@@ -86,7 +86,7 @@ export interface StorePolicy {
   description: string;
 }
 
-export const STORE_NAME = "Monopolio Pods";
+export const STORE_NAME = "Monopólio Pods";
 export const STORE_TAGLINE = "Ignite x Elfbar x Oxbar";
 export const WHATSAPP_NUMBER = "5581987258754";
 export const WHATSAPP_DISPLAY = "(81) 98725-8754";
@@ -99,7 +99,7 @@ export const categories: Category[] = [
     slug: "ignite",
     icon: "Zap",
     order: 1,
-    description: "Linha Ignite disponivel para pedido no WhatsApp.",
+    description: "Linha Ignite disponível para pedido no WhatsApp.",
   },
   {
     id: "2",
@@ -107,7 +107,7 @@ export const categories: Category[] = [
     slug: "elfbar",
     icon: "Sparkles",
     order: 2,
-    description: "Linha Elfbar disponivel para pedido no WhatsApp.",
+    description: "Linha Elfbar disponível para pedido no WhatsApp.",
   },
   {
     id: "3",
@@ -115,7 +115,7 @@ export const categories: Category[] = [
     slug: "oxbar",
     icon: "Battery",
     order: 3,
-    description: "Linha Oxbar disponivel para pedido no WhatsApp.",
+    description: "Linha Oxbar disponível para pedido no WhatsApp.",
   },
 ];
 
@@ -123,9 +123,9 @@ export const banners: Banner[] = [
   {
     id: "1",
     title: "IGNITE, ELFBAR E OXBAR",
-    subtitle: "Catalogo multimarcas disponivel para pedido no WhatsApp.",
+    subtitle: "Catálogo multimarcas disponível para pedido no WhatsApp.",
     image: "",
-    ctaText: "Ver catalogo",
+    ctaText: "Ver catálogo",
     ctaLink: "/categoria/ignite",
     active: true,
   },
@@ -141,7 +141,7 @@ export const banners: Banner[] = [
   {
     id: "3",
     title: "OXBAR EM DESTAQUE",
-    subtitle: "Linha Oxbar disponivel com garantia e pedido pelo WhatsApp.",
+    subtitle: "Linha Oxbar disponível com garantia e pedido pelo WhatsApp.",
     image: "",
     ctaText: "Ver estoque",
     ctaLink: "/categoria/oxbar",
@@ -152,8 +152,8 @@ export const banners: Banner[] = [
 export const storeHighlights: StoreHighlight[] = [
   {
     id: "1",
-    title: "ZN e Olinda com frete gratis",
-    description: "Entrega sem custo para bairros elegiveis dessas regioes.",
+    title: "ZN e Olinda com frete grátis",
+    description: "Entrega sem custo para bairros elegíveis dessas regiões.",
   },
   {
     id: "2",
@@ -171,20 +171,20 @@ export const deliveryZones: DeliveryZone[] = [
   {
     id: "1",
     area: "Zona Norte e Olinda",
-    value: "Sem custo em areas elegiveis",
-    note: "Entrega via Uber, sujeita a disponibilidade da logistica da loja.",
+    value: "Sem custo em áreas elegíveis",
+    note: "Entrega via Uber, sujeita a disponibilidade da logística da loja.",
   },
   {
     id: "2",
     area: "Zona Sul do Recife",
     value: "Frete fixo de R$ 5,00",
-    note: "Consulte disponibilidade por bairro antes da confirmacao do pedido.",
+    note: "Consulte disponibilidade por bairro antes da confirmação do pedido.",
   },
   {
     id: "3",
-    area: "Outras regioes",
+    area: "Outras regiões",
     value: "Consultar valores",
-    note: "O valor da corrida e informado conforme a regiao e a disponibilidade.",
+    note: "O valor da corrida é informado conforme a região e a disponibilidade.",
   },
 ];
 
@@ -193,29 +193,29 @@ export const storePolicies: StorePolicy[] = [
     id: "1",
     title: "Garantia gratuita",
     description:
-      "Caso o produto apresente problema, a troca do item e sem custo. A logistica da troca fica por conta do cliente.",
+      "Caso o produto apresente problema, a troca do item é sem custo. A logística da troca fica por conta do cliente.",
   },
   {
     id: "2",
     title: "Prazo da garantia",
-    description: "A garantia e valida apenas por 48 horas apos a entrega.",
+    description: "A garantia é válida apenas por 48 horas após a entrega.",
   },
   {
     id: "3",
     title: "Entrega via Uber",
     description:
-      "Nao nos responsabilizamos por problemas ocorridos durante a corrida. Em caso de troca, e necessario solicitar um novo Uber.",
+      "Não nos responsabilizamos por problemas ocorridos durante a corrida. Em caso de troca, é necessário solicitar um novo Uber.",
   },
   {
     id: "4",
-    title: "Logistica da troca",
+    title: "Logística da troca",
     description:
-      "A logistica da troca e sempre de responsabilidade do cliente, inclusive quando houver novo envio do item.",
+      "A logística da troca é sempre de responsabilidade do cliente, inclusive quando houver novo envio do item.",
   },
   {
     id: "5",
     title: "Cobertura de entrega",
-    description: "A entrega sem custo depende da regiao e da disponibilidade da logistica da loja.",
+    description: "A entrega sem custo depende da região e da disponibilidade da logística da loja.",
   },
 ];
 
@@ -238,8 +238,8 @@ export const products: Product[] = [
     tags: ["mentolado"],
     featured: false,
     createdAt: "2026-03-30",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Ultra Thin Miami Mint",
       accent: "#183127",
@@ -276,8 +276,8 @@ export const products: Product[] = [
     tags: ["popular", "mais-sabores"],
     featured: true,
     createdAt: "2026-03-30",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Gold Edition",
       accent: "#9b7a31",
@@ -304,8 +304,8 @@ export const products: Product[] = [
     tags: [],
     featured: false,
     createdAt: "2026-03-30",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Rose Gold Edition",
       accent: "#9f6d60",
@@ -340,8 +340,8 @@ export const products: Product[] = [
     tags: ["popular"],
     featured: true,
     createdAt: "2026-03-30",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Ultra Slim Orange",
       accent: "#cf6b34",
@@ -369,8 +369,8 @@ export const products: Product[] = [
     tags: ["novo", "popular"],
     featured: false,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Digital Display",
       accent: "#23524b",
@@ -406,8 +406,8 @@ export const products: Product[] = [
     tags: ["popular", "premium"],
     featured: true,
     createdAt: "2026-03-30",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Black Digital",
       accent: "#1b2430",
@@ -435,8 +435,8 @@ export const products: Product[] = [
     tags: ["novo", "premium"],
     featured: true,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "High Capacity",
       accent: "#2d343f",
@@ -456,12 +456,12 @@ export const products: Product[] = [
     price: 130,
     images: [elfbarBc15kImage],
     categoryId: "2",
-    variations: [{ id: "bc15k-1", name: "Indisponivel no momento", inStock: false }],
+    variations: [{ id: "bc15k-1", name: "Indisponível no momento", inStock: false }],
     tags: ["novo"],
     featured: false,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "BC Edition",
       accent: "#1f4f3f",
@@ -492,8 +492,8 @@ export const products: Product[] = [
     tags: ["novo"],
     featured: false,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "GH Series",
       accent: "#7d1d41",
@@ -513,12 +513,12 @@ export const products: Product[] = [
     price: 195,
     images: [elfbar40kTrioImage],
     categoryId: "2",
-    variations: [{ id: "40ktrio-1", name: "Indisponivel no momento", inStock: false }],
+    variations: [{ id: "40ktrio-1", name: "Indisponível no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: true,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Trio Edition",
       accent: "#5d2f91",
@@ -538,12 +538,12 @@ export const products: Product[] = [
     price: 198,
     images: [elfbar40kIceKingImage],
     categoryId: "2",
-    variations: [{ id: "40kice-1", name: "Indisponivel no momento", inStock: false }],
+    variations: [{ id: "40kice-1", name: "Indisponível no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: false,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Ice King",
       accent: "#216b8e",
@@ -563,12 +563,12 @@ export const products: Product[] = [
     price: 210,
     images: [elfbar45kProImage],
     categoryId: "2",
-    variations: [{ id: "45kpro-1", name: "Indisponivel no momento", inStock: false }],
+    variations: [{ id: "45kpro-1", name: "Indisponível no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: false,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Pro Edition",
       accent: "#b65f1f",
@@ -588,12 +588,12 @@ export const products: Product[] = [
     price: 185,
     images: [oxbar35kImage],
     categoryId: "3",
-    variations: [{ id: "ox35k-1", name: "Indisponivel no momento", inStock: false }],
+    variations: [{ id: "ox35k-1", name: "Indisponível no momento", inStock: false }],
     tags: ["novo"],
     featured: false,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Performance",
       accent: "#4f3b21",
@@ -613,12 +613,12 @@ export const products: Product[] = [
     price: 220,
     images: [oxbar50kImage],
     categoryId: "3",
-    variations: [{ id: "ox50k-1", name: "Indisponivel no momento", inStock: false }],
+    variations: [{ id: "ox50k-1", name: "Indisponível no momento", inStock: false }],
     tags: ["novo", "premium"],
     featured: true,
     createdAt: "2026-03-31",
-    warrantyNote: "Garantia gratuita de 48 horas apos a entrega.",
-    shippingNote: "Entrega via Uber. Consulte cobertura da regiao e valor da logistica.",
+    warrantyNote: "Garantia gratuita de 48 horas após a entrega.",
+    shippingNote: "Entrega via Uber. Consulte cobertura da região e valor da logística.",
     visualTheme: {
       edition: "Max Capacity",
       accent: "#3f2a6b",
@@ -703,3 +703,4 @@ export function buildWhatsAppLink(product: Product, variation?: string, quantity
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines)}`;
 }
+

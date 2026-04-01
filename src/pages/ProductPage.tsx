@@ -40,7 +40,7 @@ const ProductPage = () => {
         <div className="container py-12 text-center">
           <p className="text-lg text-muted-foreground">Produto não encontrado.</p>
           <Link to="/" className="mt-4 inline-block text-primary hover:underline">
-            Voltar ao inicio
+            Voltar ao início
           </Link>
         </div>
       </div>
@@ -146,7 +146,7 @@ const ProductPage = () => {
               <div className="flex items-center justify-between gap-3">
                 <p className="text-sm font-semibold text-foreground">Sabores</p>
                 <span className="text-xs text-muted-foreground">
-                  {selectedVariation || (hasAvailableFlavors ? "Escolha um sabor" : "Indisponivel no momento")}
+                  {selectedVariation || (hasAvailableFlavors ? "Escolha um sabor" : "Indisponível no momento")}
                 </span>
               </div>
 
@@ -218,7 +218,7 @@ const ProductPage = () => {
                     Finalizar pedido
                   </>
                 ) : (
-                  "Indisponivel no momento"
+                  "Indisponível no momento"
                 )}
               </Button>
 

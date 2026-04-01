@@ -175,4 +175,38 @@
     opacity: 0.08;
     filter: grayscale(1) invert(1) contrast(0.95);
   }
+
+  .marquee-shell {
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-loop 22s linear infinite;
+  }
+
+  .marquee-segment {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-right: 0.5rem;
+    white-space: nowrap;
+  }
+
+  @keyframes marquee-loop {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
 }

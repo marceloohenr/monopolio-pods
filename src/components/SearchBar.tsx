@@ -26,7 +26,7 @@ export function SearchBar() {
           <Search className="h-5 w-5" />
         </button>
       ) : (
-        <form onSubmit={handleSubmit} className="glass flex items-center gap-2 rounded-full px-3 py-1.5">
+        <form onSubmit={handleSubmit} className="glass flex items-center gap-2 rounded-full px-2.5 py-1.5 sm:px-3">
           <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
           <input
             type="text"
@@ -34,7 +34,7 @@ export function SearchBar() {
             placeholder="Buscar"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            className="w-32 border-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground md:w-48"
+            className="w-20 border-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground sm:w-28 md:w-40"
           />
           <button
             type="button"
