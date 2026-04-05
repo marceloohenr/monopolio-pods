@@ -5,35 +5,21 @@ export interface HomeGalleryImage {
   label: string;
 }
 
-export const homeGalleryImages: HomeGalleryImage[] = [
-  {
-    id: "feedback-01",
-    src: "/assets/feedbacks/feedback-01.jpg",
-    alt: "Imagem 1 da galeria da loja",
-    label: "feedback-01.jpg",
+const HOME_GALLERY_IMAGE_COUNT = 73;
+const FEEDBACK_ASSET_VERSION = "2026-04-05-2";
+const FEEDBACK_ASSET_BASE = `${import.meta.env.BASE_URL}assets/feedbacks`;
+
+export const homeGalleryImages: HomeGalleryImage[] = Array.from(
+  { length: HOME_GALLERY_IMAGE_COUNT },
+  (_, index) => {
+    const imageNumber = String(index + 1).padStart(3, "0");
+    const fileName = `feedback-${imageNumber}.jpg`;
+
+    return {
+      id: `feedback-${imageNumber}`,
+      src: `${FEEDBACK_ASSET_BASE}/${fileName}?v=${FEEDBACK_ASSET_VERSION}`,
+      alt: `Feedback ${index + 1} de clientes via WhatsApp`,
+      label: fileName,
+    };
   },
-  {
-    id: "feedback-02",
-    src: "/assets/feedbacks/feedback-02.jpg",
-    alt: "Imagem 2 da galeria da loja",
-    label: "feedback-02.jpg",
-  },
-  {
-    id: "feedback-03",
-    src: "/assets/feedbacks/feedback-03.jpg",
-    alt: "Imagem 3 da galeria da loja",
-    label: "feedback-03.jpg",
-  },
-  {
-    id: "feedback-04",
-    src: "/assets/feedbacks/feedback-04.jpg",
-    alt: "Imagem 4 da galeria da loja",
-    label: "feedback-04.jpg",
-  },
-  {
-    id: "feedback-05",
-    src: "/assets/feedbacks/feedback-05.jpg",
-    alt: "Imagem 5 da galeria da loja",
-    label: "feedback-05.jpg",
-  },
-];
+);

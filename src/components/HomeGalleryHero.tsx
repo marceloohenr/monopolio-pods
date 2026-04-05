@@ -19,39 +19,28 @@ function GallerySlide({
   alt: string;
   label: string;
 }) {
-  const [status, setStatus] = React.useState<"loading" | "loaded" | "error">("loading");
+  const [hasError, setHasError] = React.useState(false);
 
   React.useEffect(() => {
-    let isMounted = true;
-    const image = new Image();
-
-    image.onload = () => {
-      if (isMounted) setStatus("loaded");
-    };
-
-    image.onerror = () => {
-      if (isMounted) setStatus("error");
-    };
-
-    image.src = src;
-
-    return () => {
-      isMounted = false;
-    };
+    setHasError(false);
   }, [src]);
 
   return (
-    <div className="glass group overflow-hidden rounded-[28px]">
-      <div className="relative aspect-[9/16] bg-gradient-to-b from-card to-secondary/70">
-        {status === "loaded" ? (
-          <img
-            src={src}
-            alt={alt}
-            loading="lazy"
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-          />
-        ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
+    <div className="glass group h-full overflow-hidden rounded-[28px]">
+      <div className="relative aspect-[9/16] overflow-hidden bg-gradient-to-b from-card to-secondary/70">
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          onError={() => setHasError(true)}
+          className={`absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.02] ${
+            hasError ? "opacity-0" : "opacity-100"
+          }`}
+        />
+
+        {hasError ? (
+          <div className="absolute inset-0 flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
               <ImageIcon className="h-6 w-6" />
             </div>
@@ -60,11 +49,11 @@ function GallerySlide({
               <p className="text-xs text-muted-foreground">{label}</p>
             </div>
             <p className="max-w-[18rem] text-xs leading-relaxed text-muted-foreground">
-              Adicione o arquivo em <span className="font-medium text-foreground">/public/assets/feedbacks</span> para
-              exibir a imagem automaticamente.
+              Adicione o arquivo em <span className="font-medium text-foreground">/public/assets/feedbacks</span>{" "}
+              para exibir a imagem automaticamente.
             </p>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
