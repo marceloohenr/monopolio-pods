@@ -59,6 +59,121 @@ const COMPANY_HINTS = [
   "caixa",
 ];
 
+const NAME_STOP_WORDS = new Set([
+  "cliente",
+  "contato",
+  "mensagem",
+  "voz",
+  "ligacao",
+  "nao",
+  "atendida",
+  "perdida",
+  "encaminhada",
+  "voce",
+  "editada",
+  "agora",
+  "ontem",
+  "domingo",
+  "segunda",
+  "terca",
+  "quarta",
+  "quinta",
+  "sexta",
+  "sabado",
+  "compra",
+  "verificada",
+  "comprovante",
+  "pix",
+  "cpf",
+  "cnpj",
+  "chave",
+  "conta",
+  "agencia",
+  "banco",
+  "instituicao",
+  "origem",
+  "destino",
+  "nome",
+  "pagador",
+  "recebedor",
+  "beneficiario",
+  "favorecido",
+  "de",
+  "do",
+  "da",
+  "dos",
+  "das",
+  "e",
+  "o",
+  "a",
+  "no",
+  "na",
+  "para",
+  "pra",
+  "pq",
+  "q",
+  "que",
+  "qual",
+  "dele",
+  "dela",
+  "deles",
+  "delas",
+  "meu",
+  "minha",
+  "meus",
+  "minhas",
+  "seu",
+  "sua",
+  "seus",
+  "suas",
+  "teu",
+  "tua",
+  "teus",
+  "tuas",
+  "irmao",
+  "irmão",
+  "irma",
+  "irmã",
+  "brother",
+  "mano",
+  "amigo",
+  "amiga",
+  "papai",
+  "moral",
+  "foi",
+  "tava",
+  "estava",
+  "sem",
+  "com",
+  "dinheiro",
+  "conta",
+  "nomeado",
+  "porque",
+  "por",
+  "isso",
+  "ele",
+  "ela",
+  "pra",
+  "pro",
+  "aguardando",
+  "fazer",
+  "compartilhar",
+  "compartinar",
+  "favoritar",
+  "favorita",
+  "outropix",
+  "contata",
+  "contatá",
+  "picpay",
+  "esperando",
+  "aqui",
+  "la",
+  "lá",
+  "ciente",
+  "menina",
+  "ficar",
+]);
+
 const MANUAL_REDACTIONS = {
   "WhatsApp Image 2026-04-04 at 23.57.24 (2).jpeg": [
     { left: 20, top: 935, width: 175, height: 235, shape: "roundRect", radius: 22 },
@@ -375,6 +490,84 @@ function isLongSensitiveNumericWord(text) {
   return text.replace(/\D/g, "").length >= 11;
 }
 
+function countDigits(text) {
+  return text.replace(/\D/g, "").length;
+}
+
+function isPhoneLikeWord(text) {
+  const digits = countDigits(text);
+  if (digits < 8) return false;
+
+  return /^\+?[\d()\s-]+$/.test(text) || /\+?55/.test(text) || /\d{4,5}[- ]\d{4}/.test(text);
+}
+
+function isLikelyNameWord(text) {
+  const normalized = normalizeText(text);
+  if (normalized.length < 2) return false;
+  if (!/^[a-z]+$/i.test(normalized)) return false;
+  if (NAME_STOP_WORDS.has(normalized)) return false;
+  if (isCompanyText(normalized)) return false;
+
+  return true;
+}
+
+function getLikelyPersonalNameWords(words = []) {
+  return words.filter((word) => isLikelyNameWord(word.text));
+}
+
+function isLikelyPersonalNameSequence(words = []) {
+  const nameWords = getLikelyPersonalNameWords(words);
+  return nameWords.length >= 2 && nameWords.length <= 5;
+}
+
+function getWordsAfterFirstMatch(line, matcher) {
+  const words = line.words ?? [];
+  const anchorIndex = words.findIndex((word) => matcher(normalizeText(word.text)));
+  if (anchorIndex === -1) return [];
+
+  return words.slice(anchorIndex + 1);
+}
+
+function getSensitiveNameWordsFromMessage(line) {
+  const words = line.words ?? [];
+  const explicitLabelWords = getLikelyPersonalNameWords(
+    getWordsAfterFirstMatch(
+      line,
+      (word) =>
+        word === "titular" ||
+        word === "pagador" ||
+        word === "recebedor" ||
+        word === "beneficiario" ||
+        word === "favorecido",
+    ),
+  );
+
+  if (explicitLabelWords.length) return explicitLabelWords;
+
+  const nomeIndex = words.findIndex((word) => normalizeText(word.text) === "nome");
+  if (nomeIndex === -1) return [];
+
+  const collected = [];
+  for (let index = nomeIndex + 1; index < words.length; index += 1) {
+    const word = words[index];
+    if (isLikelyNameWord(word.text)) {
+      collected.push(word);
+    }
+  }
+
+  return collected.slice(0, 3);
+}
+
+function hasSensitivePersonalContext(text) {
+  return /\b(pix|chave|conta|agencia|pagamento|transferencia|banco|credito|debito|transacao|cpf|cnpj|nome|origem|destino|pagador|recebedor|beneficiario|favorecido|titular)\b/.test(
+    text,
+  );
+}
+
+function isPdfDescriptionLine(text) {
+  return text.includes("comprovante") || text.includes(".pdf") || /\b(pdf|pagina|paginas|kb)\b/.test(text);
+}
+
 function isAudioDurationLine(line, width) {
   const text = line.text ?? "";
   const normalized = normalizeText(text);
@@ -572,6 +765,37 @@ function blurWordsAsGroup(regions, words, width, height, options = {}) {
   });
 }
 
+function groupNearbyWords(words = [], gapThreshold = 32) {
+  if (!words.length) return [];
+
+  const sortedWords = [...words].sort(
+    (left, right) => left.bbox.y0 - right.bbox.y0 || left.bbox.x0 - right.bbox.x0,
+  );
+  const groups = [[sortedWords[0]]];
+
+  for (let index = 1; index < sortedWords.length; index += 1) {
+    const current = sortedWords[index];
+    const group = groups[groups.length - 1];
+    const previous = group[group.length - 1];
+    const sameLine = Math.abs(current.bbox.y0 - previous.bbox.y0) < 18;
+    const closeEnough = current.bbox.x0 - previous.bbox.x1 <= gapThreshold;
+
+    if (sameLine && closeEnough) {
+      group.push(current);
+    } else {
+      groups.push([current]);
+    }
+  }
+
+  return groups;
+}
+
+function blurWordGroups(regions, words, width, height, options = {}) {
+  for (const group of groupNearbyWords(words, options.gapThreshold ?? 32)) {
+    blurWordsAsGroup(regions, group, width, height, options);
+  }
+}
+
 function getReceiptValueColumnRegion(component, line, width, height, options = {}) {
   const startRatio = options.startRatio ?? 0.42;
   const rightInset = options.rightInset ?? 16;
@@ -624,6 +848,10 @@ function findNextMeaningfulLine(lines, startIndex) {
 
 function isReceiptInstitutionLine(text) {
   return /\binstitui|banco|pagamentos|payment|credito|debito|meio|tipo|quando\b/.test(text) || isCompanyText(text);
+}
+
+function isReceiptActionLine(text) {
+  return /\b(fazer|compart|favorit|outro ?pix|copiar|salvar|baixar|contat|comprovante|picpay)\b/.test(text);
 }
 
 function isNameFieldLabelWord(text) {
@@ -689,6 +917,7 @@ function getReceiptRegions(component, lines, width, height) {
     const line = componentLines[index];
     const lineText = normalizeText(line.text);
     if (!lineText) continue;
+    if (isReceiptActionLine(lineText)) continue;
 
     const words = line.words ?? [];
     const nameLabel = words.find((word) => isNameFieldLabelWord(word.text));
@@ -757,6 +986,20 @@ function getReceiptRegions(component, lines, width, height) {
       continue;
     }
 
+    if (
+      isLikelyPersonalNameSequence(words) &&
+      !isReceiptInstitutionLine(lineText) &&
+      !isSensitiveReceiptLine(lineText) &&
+      !isReceiptActionLine(lineText) &&
+      !/\b(rua|avenida|estrada|travessa|bairro|apartamento|predio|fundao)\b/.test(lineText)
+    ) {
+      blurWordGroups(regions, getLikelyPersonalNameWords(words), width, height, {
+        ...RECEIPT_FIELD_BLUR,
+        gapThreshold: 18,
+      });
+      continue;
+    }
+
     const genericSensitiveWords = words.filter((word) => isSensitiveReceiptWord(word.text));
     if (genericSensitiveWords.length && !isReceiptInstitutionLine(lineText)) {
       blurWordsAsGroup(regions, genericSensitiveWords, width, height, {
@@ -790,18 +1033,35 @@ function getFinancialMessageRegions(lines, width, height) {
     const lineText = normalizeText(line.text);
     if (!lineText || line.bbox.y0 < height * 0.12) continue;
     if (/99app|trip\.uber|placa do carro|motorista|\.pdf/.test(lineText)) continue;
+    if (isPdfDescriptionLine(lineText)) continue;
+    if (isReceiptActionLine(lineText)) continue;
 
     const words = line.words ?? [];
+    const phoneWords = words.filter((word) => isPhoneLikeWord(word.text));
+    if (phoneWords.length) {
+      blurWordGroups(regions, phoneWords, width, height, RECEIPT_SENSITIVE_BLUR);
+      continue;
+    }
+
     const directSensitiveWords = words.filter(
       (word) => isLongSensitiveNumericWord(word.text) || isTransactionLikeWord(word.text),
     );
 
     if (directSensitiveWords.length) {
-      blurWordsAsGroup(regions, directSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+      blurWordGroups(regions, directSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
       continue;
     }
 
-    if (!/\b(pix|chave|cpf|cnpj|agencia|conta|numero de controle|id da transacao|transacao)\b/.test(lineText)) {
+    const explicitNameWords = getSensitiveNameWordsFromMessage(line);
+    if (explicitNameWords.length) {
+      blurWordGroups(regions, explicitNameWords, width, height, {
+        ...RECEIPT_FIELD_BLUR,
+        gapThreshold: 18,
+      });
+      continue;
+    }
+
+    if (!hasSensitivePersonalContext(lineText)) {
       continue;
     }
 
@@ -809,7 +1069,7 @@ function getFinancialMessageRegions(lines, width, height) {
       (word) => isLongSensitiveNumericWord(word.text) || isTransactionLikeWord(word.text),
     );
     if (inlineSensitiveWords.length) {
-      blurWordsAsGroup(regions, inlineSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+      blurWordGroups(regions, inlineSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
     }
 
     const nextLine = lines[index + 1];
@@ -819,7 +1079,17 @@ function getFinancialMessageRegions(lines, width, height) {
       (word) => isLongSensitiveNumericWord(word.text) || isTransactionLikeWord(word.text),
     );
     if (nextSensitiveWords.length) {
-      blurWordsAsGroup(regions, nextSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+      blurWordGroups(regions, nextSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+    }
+
+    if (/^(nome|titular|pagador|recebedor|beneficiario|favorecido)\b/.test(lineText)) {
+      const nextLineNameWords = getLikelyPersonalNameWords(nextLine.words ?? []).slice(0, 4);
+      if (nextLineNameWords.length >= 2) {
+        blurWordGroups(regions, nextLineNameWords, width, height, {
+          ...RECEIPT_FIELD_BLUR,
+          gapThreshold: 18,
+        });
+      }
     }
   }
 

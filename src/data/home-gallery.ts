@@ -6,7 +6,7 @@ export interface HomeGalleryImage {
 }
 
 const HOME_GALLERY_IMAGE_COUNT = 73;
-const FEEDBACK_ASSET_VERSION = "2026-04-06-10";
+const FEEDBACK_ASSET_VERSION = "2026-04-06-14";
 const FEEDBACK_ASSET_BASE = `${import.meta.env.BASE_URL}assets/feedbacks`;
 
 export const homeGalleryImages: HomeGalleryImage[] = Array.from(
