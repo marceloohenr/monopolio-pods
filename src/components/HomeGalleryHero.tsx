@@ -1,14 +1,13 @@
 import * as React from "react";
-import { BadgeCheck, ImageIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, ImageIcon } from "lucide-react";
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { homeGalleryImages } from "@/data/home-gallery";
 
 const GallerySlide = React.memo(function GallerySlide({
@@ -74,6 +73,29 @@ GallerySlide.displayName = "GallerySlide";
 export function HomeGalleryHero() {
   const [api, setApi] = React.useState<CarouselApi>();
   const [isInteracting, setIsInteracting] = React.useState(false);
+  const interactionTimeoutRef = React.useRef<number>();
+
+  const handleManualNav = React.useCallback(
+    (direction: "prev" | "next") => {
+      window.clearTimeout(interactionTimeoutRef.current);
+      setIsInteracting(true);
+
+      if (direction === "prev") {
+        api?.scrollPrev();
+      } else {
+        api?.scrollNext();
+      }
+
+      interactionTimeoutRef.current = window.setTimeout(() => {
+        setIsInteracting(false);
+      }, 4200);
+    },
+    [api],
+  );
+
+  React.useEffect(() => {
+    return () => window.clearTimeout(interactionTimeoutRef.current);
+  }, []);
 
   React.useEffect(() => {
     if (!api || isInteracting || homeGalleryImages.length <= 1) return;
@@ -112,9 +134,26 @@ export function HomeGalleryHero() {
             </CarouselItem>
           ))}
         </CarouselContent>
-
-        <CarouselPrevious className="hidden md:flex" />
-        <CarouselNext className="hidden md:flex" />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="absolute right-[3.5rem] top-3 z-20 h-9 w-9 rounded-full border border-white/10 bg-black/55 text-white shadow-[0_12px_28px_rgba(0,0,0,0.26)] backdrop-blur-sm hover:bg-black/70 hover:text-white md:left-2 md:right-auto md:top-1/2 md:h-10 md:w-10 md:-translate-y-1/2"
+          onClick={() => handleManualNav("prev")}
+          aria-label="Ver feedback anterior"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="absolute right-3 top-3 z-20 h-9 w-9 rounded-full border border-white/10 bg-black/55 text-white shadow-[0_12px_28px_rgba(0,0,0,0.26)] backdrop-blur-sm hover:bg-black/70 hover:text-white md:right-2 md:top-1/2 md:h-10 md:w-10 md:-translate-y-1/2"
+          onClick={() => handleManualNav("next")}
+          aria-label="Ver proximo feedback"
+        >
+          <ArrowRight className="h-4 w-4" />
+        </Button>
       </Carousel>
     </section>
   );
