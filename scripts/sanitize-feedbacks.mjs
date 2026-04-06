@@ -7,50 +7,73 @@ const ROOT = process.cwd();
 const SOURCE_DIR = "d:/Imagens/Monopolio pods";
 const OUTPUT_DIR = path.join(ROOT, "public", "assets", "feedbacks");
 const FILE_PATTERN = /^WhatsApp Image 2026-04-04 at 23\.57\.\d{2}(?: \(\d\))?\.jpeg$/i;
-const HEADER_TEXT_TOP = 68;
-const HEADER_TEXT_HEIGHT = 72;
 const WHITE_THRESHOLD = 218;
 const MIN_BRIGHT_COMPONENT_AREA = 10_000;
-const BLUR_SIGMA = 16;
+const BLUR_SIGMA = 8;
+const BLUR_OPACITY = 0.76;
+const AUDIO_AVATAR_SIZE = 58;
+const HEADER_AVATAR_BLUR = {
+  dx: 8,
+  dy: 8,
+  sigma: 44,
+  opacity: 1,
+};
+const HEADER_IDENTITY_BLUR = {
+  dx: 18,
+  dy: 12,
+  radius: 20,
+  sigma: 16,
+  opacity: 0.98,
+};
+const RECEIPT_FIELD_BLUR = {
+  dx: 18,
+  dy: 12,
+  radius: 16,
+  sigma: 16,
+  opacity: 0.98,
+};
+const RECEIPT_SENSITIVE_BLUR = {
+  ...RECEIPT_FIELD_BLUR,
+  dx: 20,
+  sigma: 20,
+  opacity: 1,
+};
 
-const RECEIPT_KEYWORDS = [
-  "nome",
-  "cpf",
-  "cnpj",
-  "institui",
-  "chave",
-  "pix",
-  "origem",
-  "destino",
-  "quem recebeu",
-  "dados",
-  "transacao",
-  "transac",
+const COMPANY_HINTS = [
   "banco",
-  "conta",
-  "recebedor",
-  "comprovante",
-  ".pdf",
-  "controle",
+  "inter",
+  "pagamentos",
+  "mercado pago",
+  "mercado",
+  "minastman",
+  "s.a",
+  "sa",
+  "ltda",
+  "eireli",
+  "picpay",
+  "nubank",
+  "nu ",
+  "brasil",
+  "santander",
+  "itau",
+  "caixa",
 ];
-
-const RECEIPT_VALUE_HINTS = [
-  "nome",
-  "cpf",
-  "cnpj",
-  "institui",
-  "chave",
-  "origem",
-  "destino",
-  "recebeu",
-  "conta",
-];
-
-const HEADER_CONTACT_HINTS = ["cliente", "toque para dados do contato", "toque para adicionar aos conta"];
 
 const MANUAL_REDACTIONS = {
   "WhatsApp Image 2026-04-04 at 23.57.24 (2).jpeg": [
-    { left: 20, top: 935, width: 175, height: 235 },
+    { left: 20, top: 935, width: 175, height: 235, shape: "roundRect", radius: 22 },
+  ],
+  "WhatsApp Image 2026-04-04 at 23.57.28.jpeg": [
+    { left: 64, top: 503, width: 60, height: 60, shape: "circle", radius: 30, sigma: 38, opacity: 1 },
+  ],
+  "WhatsApp Image 2026-04-04 at 23.57.30.jpeg": [
+    { left: 194, top: 171, width: 66, height: 66, shape: "circle", radius: 33, sigma: 38, opacity: 1 },
+  ],
+  "WhatsApp Image 2026-04-04 at 23.57.31 (2).jpeg": [
+    { left: 210, top: 316, width: 64, height: 64, shape: "circle", radius: 32, sigma: 38, opacity: 1 },
+  ],
+  "WhatsApp Image 2026-04-04 at 23.57.25 (1).jpeg": [
+    { left: 133, top: 776, width: 58, height: 58, shape: "circle", radius: 29 },
   ],
 };
 
@@ -101,7 +124,7 @@ function bboxToRect(bbox) {
   };
 }
 
-function overlaps(a, b, padding = 10) {
+function overlaps(a, b, padding = 8) {
   return !(
     a.left + a.width + padding < b.left ||
     b.left + b.width + padding < a.left ||
@@ -110,12 +133,18 @@ function overlaps(a, b, padding = 10) {
   );
 }
 
-function mergeRects(rects) {
-  const queue = [...rects];
+function mergeRegions(regions) {
+  const queue = [...regions];
   const merged = [];
 
   while (queue.length) {
     let current = queue.shift();
+
+    if (current.shape === "circle") {
+      merged.push(current);
+      continue;
+    }
+
     let changed = true;
 
     while (changed) {
@@ -123,9 +152,11 @@ function mergeRects(rects) {
 
       for (let index = 0; index < queue.length; index += 1) {
         const candidate = queue[index];
+        if (candidate.shape === "circle") continue;
         if (!overlaps(current, candidate)) continue;
 
         current = {
+          ...current,
           left: Math.min(current.left, candidate.left),
           top: Math.min(current.top, candidate.top),
           width:
@@ -134,6 +165,7 @@ function mergeRects(rects) {
           height:
             Math.max(current.top + current.height, candidate.top + candidate.height) -
             Math.min(current.top, candidate.top),
+          radius: Math.max(current.radius ?? 16, candidate.radius ?? 16),
         };
 
         queue.splice(index, 1);
@@ -213,12 +245,85 @@ function findBrightComponents(raw, width, height) {
   return components;
 }
 
+function isGrayishPixel(raw, offset) {
+  const red = raw[offset];
+  const green = raw[offset + 1];
+  const blue = raw[offset + 2];
+  const maxChannel = Math.max(red, green, blue);
+  const minChannel = Math.min(red, green, blue);
+  const luminance = (red + green + blue) / 3;
+
+  return luminance >= 70 && luminance <= 190 && maxChannel - minChannel <= 28;
+}
+
+function findGrayishComponents(raw, width, height) {
+  const visited = new Uint8Array(width * height);
+  const components = [];
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const pixelIndex = y * width + x;
+      if (visited[pixelIndex]) continue;
+
+      visited[pixelIndex] = 1;
+      if (!isGrayishPixel(raw, pixelIndex * 3)) continue;
+
+      const stack = [pixelIndex];
+      let area = 0;
+      let minX = x;
+      let minY = y;
+      let maxX = x;
+      let maxY = y;
+
+      while (stack.length) {
+        const current = stack.pop();
+        const currentX = current % width;
+        const currentY = Math.floor(current / width);
+        area += 1;
+
+        if (currentX < minX) minX = currentX;
+        if (currentY < minY) minY = currentY;
+        if (currentX > maxX) maxX = currentX;
+        if (currentY > maxY) maxY = currentY;
+
+        const neighbors = [current - 1, current + 1, current - width, current + width];
+
+        for (const neighbor of neighbors) {
+          if (neighbor < 0 || neighbor >= visited.length || visited[neighbor]) continue;
+
+          const neighborY = Math.floor(neighbor / width);
+          const isHorizontalWrap =
+            (neighbor === current - 1 && neighborY !== currentY) ||
+            (neighbor === current + 1 && neighborY !== currentY);
+
+          if (isHorizontalWrap) continue;
+
+          visited[neighbor] = 1;
+          if (!isGrayishPixel(raw, neighbor * 3)) continue;
+          stack.push(neighbor);
+        }
+      }
+
+      components.push({
+        left: minX,
+        top: minY,
+        width: maxX - minX + 1,
+        height: maxY - minY + 1,
+        count: area,
+      });
+    }
+  }
+
+  return components;
+}
+
 function flattenLines(blocks = []) {
   return blocks.flatMap((block) =>
     (block.paragraphs ?? []).flatMap((paragraph) =>
       (paragraph.lines ?? []).map((line) => ({
         text: line.text ?? "",
         bbox: line.bbox,
+        words: line.words ?? [],
       })),
     ),
   );
@@ -236,62 +341,539 @@ function centerInside(rect, component) {
   );
 }
 
-function getHeaderRects(width, height) {
-  return [
-    clampRect(
-      {
-        left: width * 0.10,
-        top: height * 0.055,
-        width: width * 0.11,
-        height: width * 0.11,
-      },
-      width,
-      height,
-    ),
-    clampRect(
-      {
-        left: width * 0.17,
-        top: height * 0.058,
-        width: width * 0.48,
-        height: height * 0.05,
-      },
-      width,
-      height,
-    ),
-  ].filter(Boolean);
-}
-
-function isPhoneLine(text) {
-  return /\+\d{2}\s?\d{2}\s?\d{4,5}-?\d{4}/.test(text);
-}
-
-function isHeaderContactLine(text, line) {
-  return (
-    line.bbox.y1 <= HEADER_TEXT_TOP + HEADER_TEXT_HEIGHT &&
-    (isPhoneLine(text) || HEADER_CONTACT_HINTS.some((hint) => text.includes(hint)))
-  );
-}
-
-function hasReceiptKeyword(text) {
-  return RECEIPT_KEYWORDS.some((keyword) => text.includes(keyword));
-}
-
-function hasSensitiveDigits(text) {
-  return text.replace(/\D/g, "").length >= 6;
-}
-
-function shouldBlurReceiptLine(text) {
-  return hasReceiptKeyword(text) || hasSensitiveDigits(text);
-}
-
-function shouldBlurNextReceiptValue(text) {
-  return RECEIPT_VALUE_HINTS.some((hint) => text.includes(hint));
-}
-
 function getComponentLines(component, lines) {
   return lines
     .filter((line) => centerInside(bboxToRect(line.bbox), component))
     .sort((left, right) => left.bbox.y0 - right.bbox.y0 || left.bbox.x0 - right.bbox.x0);
+}
+
+function getHeaderAvatarRegion(width, height) {
+  const size = Math.round(width * 0.106);
+  return clampRect(
+    {
+      left: Math.round(width * 0.102),
+      top: Math.round(height * 0.051),
+      width: size,
+      height: size,
+      shape: "circle",
+    },
+    width,
+    height,
+  );
+}
+
+function isCompanyText(text) {
+  const normalized = normalizeText(text);
+  return COMPANY_HINTS.some((hint) => normalized.includes(hint));
+}
+
+function isSensitiveNumberWord(text) {
+  return /\d/.test(text) && text.replace(/\D/g, "").length >= 4;
+}
+
+function isLongSensitiveNumericWord(text) {
+  return text.replace(/\D/g, "").length >= 11;
+}
+
+function isAudioDurationLine(line, width) {
+  const text = line.text ?? "";
+  const normalized = normalizeText(text);
+  if (!normalized || normalized.includes("mensagem de voz")) return false;
+  if (line.bbox.x0 > width * 0.68) return false;
+
+  return /^[:;.,|l!i]?\d:\d{2}\b/.test(normalized);
+}
+
+function addRegion(regions, rect, options = {}) {
+  if (!rect) return;
+
+  const shape = options.shape ?? rect.shape ?? "roundRect";
+
+  regions.push({
+    ...rect,
+    shape,
+    radius: options.radius ?? 16,
+    sigma: options.sigma ?? (shape === "circle" ? 20 : BLUR_SIGMA),
+    opacity: options.opacity ?? (shape === "circle" ? 0.96 : BLUR_OPACITY),
+  });
+}
+
+function getWordRegion(word, width, height, options = {}) {
+  return expandRect(bboxToRect(word.bbox), options.dx ?? 8, options.dy ?? 6, width, height);
+}
+
+function getHeaderRegions(lines, width, height) {
+  const regions = [];
+  const avatarRegion = getHeaderAvatarRegion(width, height);
+  if (avatarRegion) {
+    const expandedAvatarRegion = expandRect(
+      avatarRegion,
+      HEADER_AVATAR_BLUR.dx,
+      HEADER_AVATAR_BLUR.dy,
+      width,
+      height,
+    );
+
+    if (expandedAvatarRegion) {
+      addRegion(regions, expandedAvatarRegion, {
+        shape: "circle",
+        radius: expandedAvatarRegion.width / 2,
+        sigma: HEADER_AVATAR_BLUR.sigma,
+        opacity: HEADER_AVATAR_BLUR.opacity,
+      });
+    }
+  }
+
+  const headerIdentityWords = lines
+    .filter((line) => line.bbox.y0 >= height * 0.055 && line.bbox.y1 <= height * 0.115)
+    .flatMap((line) => line.words ?? [])
+    .filter(
+      (word) =>
+        word.bbox.x0 >= width * 0.18 &&
+        word.bbox.x1 <= width * 0.74 &&
+        normalizeText(word.text).length > 0,
+    );
+
+  if (headerIdentityWords.length) {
+    blurWordsAsGroup(regions, headerIdentityWords, width, height, HEADER_IDENTITY_BLUR);
+  }
+
+  const namePill = clampRect(
+    {
+      left: Math.round(width * 0.17),
+      top: Math.round(height * 0.061),
+      width: Math.round(width * 0.56),
+      height: Math.round(height * 0.031),
+    },
+    width,
+    height,
+  );
+
+  if (namePill) {
+    addRegion(regions, namePill, HEADER_IDENTITY_BLUR);
+  }
+
+  return regions;
+}
+
+function getBrightPixelRatio(raw, width, height, rect) {
+  let brightPixels = 0;
+  let totalPixels = 0;
+
+  for (let y = rect.top; y < rect.top + rect.height; y += 1) {
+    for (let x = rect.left; x < rect.left + rect.width; x += 1) {
+      const offset = (y * width + x) * 3;
+      const luminance = (raw[offset] + raw[offset + 1] + raw[offset + 2]) / 3;
+      if (luminance > 180) brightPixels += 1;
+      totalPixels += 1;
+    }
+  }
+
+  return totalPixels ? brightPixels / totalPixels : 0;
+}
+
+function findAudioAvatarRegion(raw, width, height, component) {
+  return clampRect(
+    {
+      left: component.left + 4,
+      top: component.top + 10,
+      width: 58,
+      height: 58,
+    },
+    width,
+    height,
+  );
+}
+
+function getAudioBubbleAvatarRegions(raw, width, height, anchoredRegions = []) {
+  const regions = [];
+  const grayComponents = findGrayishComponents(raw, width, height);
+
+  for (const component of grayComponents) {
+    if (component.left > width * 0.3) continue;
+    if (component.width < width * 0.6) continue;
+    if (component.height < 76 || component.height > 110) continue;
+    if (component.count < 25_000) continue;
+
+    const brightRatio = getBrightPixelRatio(raw, width, height, component);
+    if (brightRatio < 0.007 || brightRatio > 0.022) continue;
+
+    const avatarRect = findAudioAvatarRegion(raw, width, height, component);
+    if (!avatarRect) continue;
+    if (anchoredRegions.some((region) => overlaps(region, avatarRect, 18))) continue;
+    addRegion(regions, avatarRect, { shape: "circle", radius: (avatarRect?.width ?? 0) / 2, sigma: 40, opacity: 1 });
+  }
+
+  return regions;
+}
+
+function getAudioAvatarRegions(lines, width, height) {
+  const regions = [];
+
+  for (const line of lines) {
+    if (!isAudioDurationLine(line, width)) continue;
+
+    const isIncomingBubble = line.bbox.x0 > width * 0.35;
+    const avatarSize = isIncomingBubble ? 58 : 54;
+    const avatarRect = clampRect(
+      {
+        left: isIncomingBubble ? line.bbox.x0 - 135 : line.bbox.x1 + 32,
+        top: isIncomingBubble ? line.bbox.y0 - 60 : line.bbox.y0 - 55,
+        width: avatarSize,
+        height: avatarSize,
+      },
+      width,
+      height,
+    );
+
+    addRegion(regions, avatarRect, { shape: "circle", radius: avatarSize / 2, sigma: 40, opacity: 1 });
+  }
+
+  return regions;
+}
+
+function getWordsAfterLabel(line, labelWord) {
+  return (line.words ?? []).filter((word) => word.bbox.x0 > labelWord.bbox.x1 + 12);
+}
+
+function getWordsRegion(words, width, height, options = {}) {
+  if (!words.length) return null;
+
+  const left = Math.min(...words.map((word) => word.bbox.x0));
+  const top = Math.min(...words.map((word) => word.bbox.y0));
+  const right = Math.max(...words.map((word) => word.bbox.x1));
+  const bottom = Math.max(...words.map((word) => word.bbox.y1));
+
+  return clampRect(
+    {
+      left: left - (options.dx ?? 10),
+      top: top - (options.dy ?? 8),
+      width: right - left + (options.dx ?? 10) * 2,
+      height: bottom - top + (options.dy ?? 8) * 2,
+    },
+    width,
+    height,
+  );
+}
+
+function blurWordsAsGroup(regions, words, width, height, options = {}) {
+  const region = getWordsRegion(
+    words.filter((word) => normalizeText(word.text).length > 0),
+    width,
+    height,
+    options,
+  );
+
+  if (!region) return;
+  addRegion(regions, region, {
+    radius: options.radius ?? 14,
+    sigma: options.sigma,
+    opacity: options.opacity,
+  });
+}
+
+function getReceiptValueColumnRegion(component, line, width, height, options = {}) {
+  const startRatio = options.startRatio ?? 0.42;
+  const rightInset = options.rightInset ?? 16;
+  const dy = options.dy ?? RECEIPT_FIELD_BLUR.dy;
+  const left = Math.round(component.left + component.width * startRatio);
+  const lineTop = line?.bbox?.y0 ?? component.top;
+  const lineBottom = line?.bbox?.y1 ?? lineTop + 18;
+  const right = component.left + component.width - rightInset;
+
+  if (right - left < 56) return null;
+
+  return clampRect(
+    {
+      left,
+      top: lineTop - dy,
+      width: right - left,
+      height: lineBottom - lineTop + dy * 2,
+    },
+    width,
+    height,
+  );
+}
+
+function blurReceiptValueColumn(regions, component, line, width, height, options = {}) {
+  const region = getReceiptValueColumnRegion(component, line, width, height, options);
+  if (!region) return;
+
+  addRegion(regions, region, {
+    radius: options.radius ?? RECEIPT_FIELD_BLUR.radius,
+    sigma: options.sigma ?? RECEIPT_FIELD_BLUR.sigma,
+    opacity: options.opacity ?? RECEIPT_FIELD_BLUR.opacity,
+  });
+}
+
+function isIgnorableOcrLine(text) {
+  const compact = normalizeText(text).replace(/[^a-z0-9]/g, "");
+  return compact.length < 3;
+}
+
+function findNextMeaningfulLine(lines, startIndex) {
+  for (let index = startIndex + 1; index < Math.min(lines.length, startIndex + 4); index += 1) {
+    const candidate = lines[index];
+    const normalized = normalizeText(candidate.text);
+    if (!normalized.length || isIgnorableOcrLine(candidate.text)) continue;
+    return candidate;
+  }
+
+  return null;
+}
+
+function isReceiptInstitutionLine(text) {
+  return /\binstitui|banco|pagamentos|payment|credito|debito|meio|tipo|quando\b/.test(text) || isCompanyText(text);
+}
+
+function isNameFieldLabelWord(text) {
+  const normalized = normalizeText(text);
+  return (
+    normalized === "nome" ||
+    normalized === "origem" ||
+    normalized.endsWith("rigem") ||
+    normalized === "destino" ||
+    normalized === "pagador" ||
+    normalized === "recebedor" ||
+    normalized === "beneficiario" ||
+    normalized === "favorecido"
+  );
+}
+
+function isNameFieldLine(text) {
+  return /\b(nome|origem|rigem|destino|pagador|recebedor|beneficiario|favorecido|quem recebeu|quem fez a transacao|quem pagou|conta de origem|conta origem|conta de destino|conta destino|dados de quem fez a transacao)\b/.test(
+    text,
+  );
+}
+
+function isSensitiveReceiptLine(text) {
+  return /\b(cpf|cnpj|pix|chave|conta|agencia|numero de controle|id da transacao|id de transacao|transacao|cartao|valor|total)\b/.test(
+    text,
+  );
+}
+
+function isTransactionLikeWord(text) {
+  const normalized = normalizeText(text).replace(/[^a-z0-9]/g, "");
+  return /[a-z]/i.test(text) && /\d/.test(text) && normalized.length >= 8;
+}
+
+function isMoneyLikeWord(text) {
+  return /r\$\s*\d|^\d+[.,]\d{2}$/.test(normalizeText(text));
+}
+
+function isSensitiveReceiptWord(text) {
+  return isSensitiveNumberWord(text) || isTransactionLikeWord(text) || isMoneyLikeWord(text);
+}
+
+function isLikelyPersonalValueLine(text) {
+  return text.length > 1 && !isReceiptInstitutionLine(text) && !isSensitiveReceiptLine(text);
+}
+
+function shouldBlurNextLineAsPersonalValue(lineText) {
+  return /\b(quem recebeu|quem fez a transacao|quem pagou|conta de origem|conta origem|conta de destino|conta destino|dados de quem fez a transacao|origem|rigem|destino|nome|pagador|recebedor|beneficiario|favorecido)\b/.test(
+    lineText,
+  );
+}
+
+function shouldBlurNameWords(words) {
+  if (!words.length) return false;
+  const text = normalizeText(words.map((word) => word.text).join(" "));
+  return isLikelyPersonalValueLine(text);
+}
+
+function getReceiptRegions(component, lines, width, height) {
+  const regions = [];
+  const componentLines = getComponentLines(component, lines);
+
+  for (let index = 0; index < componentLines.length; index += 1) {
+    const line = componentLines[index];
+    const lineText = normalizeText(line.text);
+    if (!lineText) continue;
+
+    const words = line.words ?? [];
+    const nameLabel = words.find((word) => isNameFieldLabelWord(word.text));
+
+    if (nameLabel) {
+      const inlineNameWords = getWordsAfterLabel(line, nameLabel);
+      if (shouldBlurNameWords(inlineNameWords)) {
+        blurWordsAsGroup(regions, inlineNameWords, width, height, RECEIPT_FIELD_BLUR);
+      } else {
+        const nextLine = findNextMeaningfulLine(componentLines, index);
+        if (nextLine) {
+          const nextLineText = normalizeText(nextLine.text);
+          if (isLikelyPersonalValueLine(nextLineText)) {
+            blurWordsAsGroup(regions, nextLine.words ?? [], width, height, RECEIPT_FIELD_BLUR);
+          }
+        }
+      }
+
+      blurReceiptValueColumn(regions, component, line, width, height, {
+        ...RECEIPT_FIELD_BLUR,
+        startRatio: 0.38,
+      });
+
+      continue;
+    }
+
+    if (isNameFieldLine(lineText)) {
+      blurReceiptValueColumn(regions, component, line, width, height, {
+        ...RECEIPT_FIELD_BLUR,
+        startRatio: 0.38,
+      });
+
+      const nextLine = findNextMeaningfulLine(componentLines, index);
+      if (nextLine) {
+        const nextLineText = normalizeText(nextLine.text);
+        if (shouldBlurNextLineAsPersonalValue(lineText) && isLikelyPersonalValueLine(nextLineText)) {
+          blurWordsAsGroup(regions, nextLine.words ?? [], width, height, RECEIPT_FIELD_BLUR);
+        }
+      }
+      continue;
+    }
+
+    if (isSensitiveReceiptLine(lineText)) {
+      const inlineSensitiveWords = words.filter((word) => isSensitiveReceiptWord(word.text));
+      if (inlineSensitiveWords.length) {
+        blurWordsAsGroup(regions, inlineSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+      } else {
+        const nextLine = findNextMeaningfulLine(componentLines, index);
+        if (nextLine) {
+          const nextLineText = normalizeText(nextLine.text);
+          if (shouldBlurNextLineAsPersonalValue(lineText) && isLikelyPersonalValueLine(nextLineText)) {
+            blurWordsAsGroup(regions, nextLine.words ?? [], width, height, RECEIPT_FIELD_BLUR);
+          }
+
+          const nextSensitiveWords = (nextLine.words ?? []).filter((word) => isSensitiveReceiptWord(word.text));
+          if (nextSensitiveWords.length) {
+            blurWordsAsGroup(regions, nextSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+          }
+        }
+      }
+
+      blurReceiptValueColumn(regions, component, line, width, height, {
+        ...RECEIPT_SENSITIVE_BLUR,
+        startRatio: 0.24,
+      });
+      continue;
+    }
+
+    const genericSensitiveWords = words.filter((word) => isSensitiveReceiptWord(word.text));
+    if (genericSensitiveWords.length && !isReceiptInstitutionLine(lineText)) {
+      blurWordsAsGroup(regions, genericSensitiveWords, width, height, {
+        ...RECEIPT_SENSITIVE_BLUR,
+        dx: 22,
+      });
+      continue;
+    }
+
+    if (/\b(nome|origem|rigem|destino)\b/.test(lineText) && !isReceiptInstitutionLine(lineText)) {
+      const trailingWords = words.filter((word) => !isNameFieldLabelWord(word.text));
+      if (shouldBlurNameWords(trailingWords)) {
+        blurWordsAsGroup(regions, trailingWords, width, height, RECEIPT_FIELD_BLUR);
+      }
+
+      blurReceiptValueColumn(regions, component, line, width, height, {
+        ...RECEIPT_FIELD_BLUR,
+        startRatio: 0.38,
+      });
+    }
+  }
+
+  return regions;
+}
+
+function getFinancialMessageRegions(lines, width, height) {
+  const regions = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const lineText = normalizeText(line.text);
+    if (!lineText || line.bbox.y0 < height * 0.12) continue;
+    if (/99app|trip\.uber|placa do carro|motorista|\.pdf/.test(lineText)) continue;
+
+    const words = line.words ?? [];
+    const directSensitiveWords = words.filter(
+      (word) => isLongSensitiveNumericWord(word.text) || isTransactionLikeWord(word.text),
+    );
+
+    if (directSensitiveWords.length) {
+      blurWordsAsGroup(regions, directSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+      continue;
+    }
+
+    if (!/\b(pix|chave|cpf|cnpj|agencia|conta|numero de controle|id da transacao|transacao)\b/.test(lineText)) {
+      continue;
+    }
+
+    const inlineSensitiveWords = words.filter(
+      (word) => isLongSensitiveNumericWord(word.text) || isTransactionLikeWord(word.text),
+    );
+    if (inlineSensitiveWords.length) {
+      blurWordsAsGroup(regions, inlineSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+    }
+
+    const nextLine = lines[index + 1];
+    if (!nextLine || nextLine.bbox.y0 - line.bbox.y1 > 90) continue;
+
+    const nextSensitiveWords = (nextLine.words ?? []).filter(
+      (word) => isLongSensitiveNumericWord(word.text) || isTransactionLikeWord(word.text),
+    );
+    if (nextSensitiveWords.length) {
+      blurWordsAsGroup(regions, nextSensitiveWords, width, height, RECEIPT_SENSITIVE_BLUR);
+    }
+  }
+
+  return regions;
+}
+
+function buildShapeMask(width, height, shape, radius = 16) {
+  if (shape === "circle") {
+    const circleRadius = Math.min(width, height) / 2;
+    return Buffer.from(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><circle cx="${width / 2}" cy="${
+        height / 2
+      }" r="${circleRadius}" fill="white"/></svg>`,
+    );
+  }
+
+  return Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect x="0" y="0" width="${width}" height="${height}" rx="${radius}" ry="${radius}" fill="white"/></svg>`,
+  );
+}
+
+async function createMaskedOverlay(buffer, region) {
+  const base = sharp(buffer).extract(region);
+  const processed =
+    region.shape === "circle"
+      ? base
+          .clone()
+          .resize(Math.max(6, Math.round(region.width * 0.12)), Math.max(6, Math.round(region.height * 0.12)), {
+            fit: "fill",
+            kernel: sharp.kernel.nearest,
+          })
+          .resize(region.width, region.height, {
+            fit: "fill",
+            kernel: sharp.kernel.nearest,
+          })
+          .blur(Math.max(10, (region.sigma ?? BLUR_SIGMA) / 2.4))
+      : base.clone().blur(region.sigma ?? BLUR_SIGMA);
+  const blurred = await processed.ensureAlpha(region.opacity ?? BLUR_OPACITY).png().toBuffer();
+  const mask = buildShapeMask(region.width, region.height, region.shape, region.radius);
+
+  return sharp({
+    create: {
+      width: region.width,
+      height: region.height,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    },
+  })
+    .composite([
+      { input: blurred, left: 0, top: 0 },
+      { input: mask, left: 0, top: 0, blend: "dest-in" },
+    ])
+    .png()
+    .toBuffer();
 }
 
 async function prepareOutputDirectory() {
@@ -310,74 +892,46 @@ async function getSourceFiles() {
   return allFiles.filter((fileName) => FILE_PATTERN.test(fileName)).sort((left, right) => left.localeCompare(right));
 }
 
-async function buildSensitiveRects(worker, sourceFileName, buffer, width, height, brightComponents) {
-  const sensitiveRects = [...getHeaderRects(width, height)];
-
-  for (const rect of MANUAL_REDACTIONS[sourceFileName] ?? []) {
-    const safeRect = clampRect(rect, width, height);
-    if (safeRect) sensitiveRects.push(safeRect);
-  }
-
+async function buildSensitiveRegions(worker, sourceFileName, buffer, raw, width, height, brightComponents) {
   const {
     data: { blocks = [] },
   } = await worker.recognize(buffer, {}, { blocks: true });
   const lines = flattenLines(blocks);
-
-  for (const line of lines) {
-    const text = normalizeText(line.text);
-    if (!text) continue;
-
-    if (isHeaderContactLine(text, line)) {
-      const rect = expandRect(bboxToRect(line.bbox), 18, 12, width, height);
-      if (rect) sensitiveRects.push(rect);
-    }
-
-    if ((text.includes(".pdf") || text.includes("comprovante")) && line.bbox.y1 < height * 0.55) {
-      const rect = expandRect(bboxToRect(line.bbox), 12, 10, width, height);
-      if (rect) sensitiveRects.push(rect);
-    }
-  }
+  const audioAnchorRegions = getAudioAvatarRegions(lines, width, height);
+  const regions = [
+    ...getHeaderRegions(lines, width, height),
+    ...audioAnchorRegions,
+    ...getAudioBubbleAvatarRegions(raw, width, height, audioAnchorRegions),
+    ...getFinancialMessageRegions(lines, width, height),
+  ];
 
   for (const component of brightComponents) {
-    const componentLines = getComponentLines(component, lines);
-
-    for (let index = 0; index < componentLines.length; index += 1) {
-      const line = componentLines[index];
-      const text = normalizeText(line.text);
-      if (!shouldBlurReceiptLine(text)) continue;
-
-      const rect = expandRect(bboxToRect(line.bbox), 10, 8, width, height);
-      if (rect) sensitiveRects.push(rect);
-
-      if (!shouldBlurNextReceiptValue(text)) continue;
-
-      for (let nextIndex = index + 1; nextIndex < componentLines.length; nextIndex += 1) {
-        const nextLine = componentLines[nextIndex];
-        const nextText = normalizeText(nextLine.text);
-        const verticalGap = nextLine.bbox.y0 - line.bbox.y1;
-
-        if (verticalGap > 46) break;
-        if (!nextText || hasReceiptKeyword(nextText)) break;
-
-        const nextRect = expandRect(bboxToRect(nextLine.bbox), 10, 8, width, height);
-        if (nextRect) sensitiveRects.push(nextRect);
-        break;
-      }
-    }
+    regions.push(...getReceiptRegions(component, lines, width, height));
   }
 
-  return mergeRects(sensitiveRects).map((rect) => clampRect(rect, width, height)).filter(Boolean);
+  for (const manual of MANUAL_REDACTIONS[sourceFileName] ?? []) {
+    const rect = clampRect(manual, width, height);
+    if (!rect) continue;
+    addRegion(regions, rect, manual);
+  }
+
+  return mergeRegions(regions)
+    .map((region) => {
+      const rect = clampRect(region, width, height);
+      return rect ? { ...region, ...rect } : null;
+    })
+    .filter(Boolean);
 }
 
-async function blurRects(buffer, rects) {
+async function blurRegions(buffer, regions) {
   const overlays = [];
 
-  for (const rect of rects) {
-    const fragment = await sharp(buffer).extract(rect).blur(BLUR_SIGMA).toBuffer();
+  for (const region of regions) {
+    const overlay = await createMaskedOverlay(buffer, region);
     overlays.push({
-      input: fragment,
-      left: rect.left,
-      top: rect.top,
+      input: overlay,
+      left: region.left,
+      top: region.top,
     });
   }
 
@@ -393,7 +947,7 @@ async function main() {
     ? sourceFiles.filter((fileName) => fileName.toLowerCase().includes(filter))
     : sourceFiles;
   const filesToProcess = Number.isFinite(limit) ? filteredFiles.slice(0, limit) : filteredFiles;
-  const worker = await createWorker("eng");
+  const worker = await createWorker("por+eng");
 
   try {
     for (const [index, fileName] of filesToProcess.entries()) {
@@ -408,11 +962,19 @@ async function main() {
       ]);
 
       const brightComponents = findBrightComponents(raw, info.width, info.height);
-      const rects = await buildSensitiveRects(worker, fileName, orientedBuffer, info.width, info.height, brightComponents);
-      const sanitizedBuffer = await blurRects(orientedBuffer, rects);
+      const regions = await buildSensitiveRegions(
+        worker,
+        fileName,
+        orientedBuffer,
+        raw,
+        info.width,
+        info.height,
+        brightComponents,
+      );
+      const sanitizedBuffer = await blurRegions(orientedBuffer, regions);
 
       await fs.writeFile(outputPath, sanitizedBuffer);
-      console.log(`${outputName} <- ${fileName} (${rects.length} areas)`);
+      console.log(`${outputName} <- ${fileName} (${regions.length} regions)`);
     }
 
     console.log(`Sanitized ${filesToProcess.length} feedback images into ${OUTPUT_DIR}`);
