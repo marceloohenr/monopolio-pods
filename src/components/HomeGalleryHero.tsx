@@ -29,8 +29,8 @@ const GallerySlide = React.memo(function GallerySlide({
   }, [src]);
 
   return (
-    <div className="glass group h-full overflow-hidden rounded-[30px] border-border/60 p-2 sm:p-2.5">
-      <div className="relative aspect-[591/1280] overflow-hidden rounded-[24px] bg-[#0f1013] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+    <div className="group mx-auto overflow-hidden rounded-[26px] border border-black/10 bg-[#16171b] p-[3px] shadow-[0_18px_45px_rgba(15,16,19,0.10)] sm:rounded-[30px] sm:p-1">
+      <div className="relative aspect-[591/1280] overflow-hidden rounded-[22px] bg-[#0f1013] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] sm:rounded-[26px]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0.18))]" />
         <img
           src={src}
@@ -39,14 +39,14 @@ const GallerySlide = React.memo(function GallerySlide({
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
           onError={() => setHasError(true)}
-          sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 82vw"
+          sizes="(min-width: 1024px) 31vw, (min-width: 640px) 46vw, (min-width: 380px) 74vw, 86vw"
           className={`absolute inset-0 h-full w-full object-contain object-top transition duration-500 group-hover:scale-[1.01] ${
             hasError ? "opacity-0" : "opacity-100"
           }`}
         />
 
-        <Badge className="absolute left-4 top-4 z-10 border-white/20 bg-black/55 px-3 py-1 text-[11px] font-semibold text-white shadow-sm backdrop-blur-sm">
-          <BadgeCheck className="mr-1.5 h-3.5 w-3.5" />
+        <Badge className="absolute left-3 top-3 z-10 border-white/20 bg-black/55 px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm backdrop-blur-sm sm:left-4 sm:top-4 sm:px-3 sm:text-[11px]">
+          <BadgeCheck className="mr-1.5 h-3 w-3 sm:h-3.5 sm:w-3.5" />
           Compra verificada
         </Badge>
 
@@ -87,7 +87,7 @@ export function HomeGalleryHero() {
 
   return (
     <section
-      className="space-y-4 px-4 md:px-0"
+      className="space-y-3 overflow-hidden px-4 md:space-y-4 md:px-0"
       onMouseEnter={() => setIsInteracting(true)}
       onMouseLeave={() => setIsInteracting(false)}
       onFocusCapture={() => setIsInteracting(true)}
@@ -95,18 +95,18 @@ export function HomeGalleryHero() {
     >
       <div className="space-y-2">
         <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Registros</p>
-        <h2 className="font-display text-3xl font-bold leading-none text-foreground md:text-4xl">
+        <h2 className="font-display text-[2rem] font-bold leading-[0.95] text-foreground sm:text-3xl md:text-4xl">
           Feedback de clientes
         </h2>
       </div>
 
-      <Carousel setApi={setApi} opts={{ align: "start", loop: true }} className="px-0 md:px-12">
-        <CarouselContent>
+      <Carousel setApi={setApi} opts={{ align: "start", loop: true }} className="-mx-1 px-1 sm:mx-0 sm:px-0 md:px-12">
+        <CarouselContent className="items-start">
           {homeGalleryImages.map((image, index) => (
             <CarouselItem
               key={image.id}
-              className="basis-[82%] sm:basis-[48%] lg:basis-[32%]"
-              style={{ contentVisibility: "auto", containIntrinsicSize: "340px 736px" }}
+              className="basis-[88%] min-[380px]:basis-[78%] sm:basis-[48%] lg:basis-[32%]"
+              style={{ contentVisibility: "auto", containIntrinsicSize: "300px 650px" }}
             >
               <GallerySlide src={image.src} alt={image.alt} label={image.label} priority={index < 4} />
             </CarouselItem>
