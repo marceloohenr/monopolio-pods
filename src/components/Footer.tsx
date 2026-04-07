@@ -3,12 +3,12 @@ import { Instagram, MapPin, MessageCircle, ShieldCheck, Truck } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import {
   AGE_NOTICE,
-  STORE_NAME,
   STORE_TAGLINE,
   WHATSAPP_DISPLAY,
   WHATSAPP_NUMBER,
   deliveryZones,
 } from "@/data/products";
+import { SITE_NAME } from "@/lib/site-config";
 import monopolioLogo from "@/assets/monopolio-logo.jpg";
 
 export function Footer() {
@@ -19,16 +19,22 @@ export function Footer() {
           <div className="space-y-3">
             <Link to="/" className="inline-flex items-center gap-3">
               <div className="h-12 w-12 overflow-hidden rounded-2xl border border-border/60 bg-background shadow-sm">
-                <img src={monopolioLogo} alt="Logo Monopólio Pods" className="h-full w-full object-cover" />
+                <img
+                  src={monopolioLogo}
+                  alt="Logo da Monopolio Pods com entrega em Recife e Olinda"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div>
-                <p className="font-display text-2xl leading-none text-foreground">{STORE_NAME}</p>
+                <p className="font-display text-2xl leading-none text-foreground">{SITE_NAME}</p>
                 <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{STORE_TAGLINE}</p>
               </div>
             </Link>
 
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Informações de contato, entrega, garantia e canais oficiais da loja.
+              Loja de pods em Recife e Olinda com atendimento no WhatsApp, entrega regional e garantia de 48 horas para Ignite, Elfbar e Oxbar.
             </p>
 
             <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Contato</p>
@@ -80,7 +86,7 @@ export function Footer() {
             <div className="rounded-3xl border border-border/60 bg-background/60 p-4">
               <p className="text-base font-semibold text-foreground">Garantia gratuita de 48h</p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Caso o produto apresente problema após a entrega, a troca segue a política informada pela loja.
+                Caso o produto apresente problema apos a entrega, a troca segue a politica informada pela loja.
               </p>
               <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-primary">{AGE_NOTICE}</p>
             </div>
@@ -88,7 +94,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-border/60 pt-4 text-center text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-left">
-          <p>{STORE_NAME} | Recife e região metropolitana</p>
+          <p>{SITE_NAME} | Recife e regiao metropolitana</p>
 
           <Button
             asChild
@@ -106,4 +112,3 @@ export function Footer() {
     </footer>
   );
 }
-

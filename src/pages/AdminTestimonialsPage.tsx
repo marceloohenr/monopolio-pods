@@ -2,6 +2,7 @@ import * as React from "react";
 import { Trash2 } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { SeoHead } from "@/components/SeoHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -70,6 +71,8 @@ const AdminTestimonialsPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <SeoHead title="Admin de depoimentos" description="Area administrativa local." path="/admin/depoimentos" noindex />
+
       <Header />
 
       <main className="container mx-auto max-w-5xl flex-1 space-y-6 py-4 md:py-6">

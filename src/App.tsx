@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CheckoutSheet } from "@/components/CheckoutSheet";
+import { SeoRuntime } from "@/components/SeoRuntime";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ThemeProvider } from "@/components/theme-provider";
 import { CheckoutProvider } from "@/context/checkout-context";
@@ -24,6 +25,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <SeoRuntime />
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />

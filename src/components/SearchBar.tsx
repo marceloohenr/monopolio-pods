@@ -31,7 +31,7 @@ export function SearchBar() {
           <input
             type="text"
             autoFocus
-            placeholder="Buscar"
+            placeholder="Buscar pods"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             className="w-20 border-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground sm:w-28 md:w-40"

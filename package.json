@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "seo:generate": "node scripts/generate-seo-assets.mjs",
+    "dev": "npm run seo:generate && vite",
+    "build": "npm run seo:generate && vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "npm run seo:generate && vite preview",
     "sanitize:feedbacks": "node scripts/sanitize-feedbacks.mjs",
     "test": "vitest run",
     "test:watch": "vitest"

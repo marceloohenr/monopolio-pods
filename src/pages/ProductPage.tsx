@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { ProductImageStage } from "@/components/ProductImageStage";
 import { ProductGrid } from "@/components/ProductGrid";
 import { ProductPurchaseDialog } from "@/components/ProductPurchaseDialog";
+import { SeoHead } from "@/components/SeoHead";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCheckout } from "@/context/checkout-context";
@@ -18,6 +19,7 @@ import {
   hasAvailableVariations,
   products,
 } from "@/data/products";
+import { buildBreadcrumbSchema, buildLocalBusinessSchema, buildProductSchema, buildProductSeoDescription } from "@/lib/site-config";
 
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -71,9 +73,27 @@ const ProductPage = () => {
     `Contato da loja: ${WHATSAPP_DISPLAY}.`,
     AGE_NOTICE,
   ];
+  const seoDescription = buildProductSeoDescription(product);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <SeoHead
+        title={`${product.name} em Recife | Comprar ${product.brand} em Recife`}
+        description={seoDescription}
+        path={`/produto/${product.slug}`}
+        keywords={[`${product.brand.toLowerCase()} recife`, `${product.name.toLowerCase()} recife`]}
+        type="product"
+        schema={[
+          buildLocalBusinessSchema(),
+          buildProductSchema(product),
+          buildBreadcrumbSchema([
+            { name: "Inicio", path: "/" },
+            { name: product.brand, path: `/categoria/${product.brand.toLowerCase()}` },
+            { name: product.name, path: `/produto/${product.slug}` },
+          ]),
+        ]}
+      />
+
       <Header />
 
       <main className="container mx-auto max-w-6xl flex-1 space-y-6 py-4 md:space-y-8 md:py-6">
@@ -121,6 +141,9 @@ const ProductPage = () => {
 
             <div>
               <p className="text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Compra de {product.brand} em Recife e Olinda com atendimento no WhatsApp, entrega regional via Uber e garantia de 48 horas.
+              </p>
               <p className="mt-3 text-3xl font-bold text-foreground md:text-4xl">{formatPrice(unitPrice)}</p>
             </div>
 

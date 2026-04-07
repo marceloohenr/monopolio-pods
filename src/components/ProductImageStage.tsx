@@ -1,4 +1,5 @@
 import { Product } from "@/data/products";
+import { buildProductImageAlt } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 type ProductImageStageVariant = "card" | "detail" | "compact" | "checkout";
@@ -102,8 +103,9 @@ export function ProductImageStage({
 
           <img
             src={product.images[0]}
-            alt={product.name}
-            loading="lazy"
+            alt={buildProductImageAlt(product)}
+            loading={variant === "detail" ? "eager" : "lazy"}
+            decoding="async"
             className={cn(styles.image, imageClassName)}
             style={{ transform: imageTransform, mixBlendMode: blendMode }}
           />

@@ -19,16 +19,21 @@ export function BannerCarousel() {
       <div className="hidden glass rounded-2xl border border-border/50 bg-gradient-to-br from-primary/15 via-background to-background p-4 md:p-6 lg:block">
         <div className="mb-4 flex items-center gap-3">
           <div className="h-14 w-14 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm md:h-20 md:w-20">
-            <img src={monopolioLogo} alt="Logo Monopólio Pods" className="h-full w-full object-cover" />
+            <img
+              src={monopolioLogo}
+              alt="Logo da Monopolio Pods"
+              className="h-full w-full object-cover"
+              decoding="async"
+            />
           </div>
           <div className="space-y-1">
             <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Atendimento via WhatsApp</p>
-            <p className="text-xs font-medium text-muted-foreground md:text-sm">Catálogo multimarcas disponível</p>
+            <p className="text-xs font-medium text-muted-foreground md:text-sm">Catalogo multimarcas disponivel em Recife e Olinda</p>
           </div>
         </div>
-        <h1 className="max-w-xl font-display text-[2rem] font-bold leading-none text-foreground md:text-5xl">
+        <h2 className="max-w-xl font-display text-[2rem] font-bold leading-none text-foreground md:text-5xl">
           {banner.title}
-        </h1>
+        </h2>
         <p className="mt-2 max-w-2xl text-xs leading-relaxed text-muted-foreground md:mt-4 md:text-base">
           {banner.subtitle}
         </p>
@@ -67,7 +72,9 @@ export function BannerCarousel() {
           <div className="overflow-hidden rounded-xl bg-card/60 md:rounded-2xl">
             <img
               src={featuredProduct.images[0]}
-              alt={featuredProduct.name}
+              alt={`${featuredProduct.name} disponivel no catalogo da Monopolio Pods`}
+              loading="eager"
+              decoding="async"
               className="h-full w-full object-contain p-2.5 md:p-4"
             />
           </div>
@@ -85,7 +92,7 @@ export function BannerCarousel() {
             <div className="space-y-1.5 text-xs text-foreground md:space-y-2 md:text-sm">
               <div className="flex items-center gap-2">
                 <Truck className="h-4 w-4 text-primary" />
-                <span>Frete por região.</span>
+                <span>Frete por regiao.</span>
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-primary" />
@@ -108,4 +115,3 @@ export function BannerCarousel() {
     </section>
   );
 }
-

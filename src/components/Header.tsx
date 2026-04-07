@@ -91,7 +91,12 @@ export function Header() {
       <div className="container flex min-h-16 items-center justify-between gap-2 px-4 py-2.5 sm:gap-3">
         <Link to="/" className="group flex min-w-0 flex-1 items-center gap-2">
           <div className="h-11 w-11 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm transition group-hover:scale-[1.03]">
-            <img src={monopolioLogo} alt="Logo Monopolio Pods" className="h-full w-full object-cover" />
+            <img
+              src={monopolioLogo}
+              alt="Logo da Monopolio Pods para compra de pods em Recife"
+              className="h-full w-full object-cover"
+              decoding="async"
+            />
           </div>
           <div className="min-w-0 leading-none">
             <span className="block truncate font-display text-sm font-bold text-foreground sm:text-base md:text-lg">
