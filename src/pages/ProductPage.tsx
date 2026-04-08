@@ -87,7 +87,7 @@ const ProductPage = () => {
           buildLocalBusinessSchema(),
           buildProductSchema(product),
           buildBreadcrumbSchema([
-            { name: "Inicio", path: "/" },
+            { name: "Início", path: "/" },
             { name: product.brand, path: `/categoria/${product.brand.toLowerCase()}` },
             { name: product.name, path: `/produto/${product.slug}` },
           ]),

@@ -31,7 +31,7 @@ export function Header() {
 
                 <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/10 px-2.5 py-1 text-primary-foreground">
                   <Truck className="h-3 w-3" />
-                  ZN gratis | ZS R$ 5,00 | demais regioes consultar
+                  ZN grátis | ZS R$ 5,00 | demais regiões: consultar
                 </div>
 
                 <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/10 px-2.5 py-1 text-primary-foreground">
@@ -53,7 +53,7 @@ export function Header() {
 
                 <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/10 px-2.5 py-1 text-primary-foreground">
                   <Truck className="h-3 w-3" />
-                  ZN gratis | ZS R$ 5,00 | demais regioes consultar
+                  ZN grátis | ZS R$ 5,00 | demais regiões: consultar
                 </div>
 
                 <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/10 px-2.5 py-1 text-primary-foreground">
@@ -77,7 +77,7 @@ export function Header() {
 
             <div className="inline-flex items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/10 px-3 py-1 text-primary-foreground">
               <Truck className="h-3.5 w-3.5" />
-              ZN gratis | ZS R$ 5,00 | demais regioes consultar
+              ZN grátis | ZS R$ 5,00 | demais regiões: consultar
             </div>
 
             <div className="hidden items-center gap-1.5 rounded-full border border-primary-foreground/15 bg-primary-foreground/10 px-3 py-1 text-primary-foreground lg:inline-flex">

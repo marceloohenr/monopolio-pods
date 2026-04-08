@@ -28,7 +28,7 @@ export function BannerCarousel() {
           </div>
           <div className="space-y-1">
             <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Atendimento via WhatsApp</p>
-            <p className="text-xs font-medium text-muted-foreground md:text-sm">Catalogo multimarcas disponivel em Recife e Olinda</p>
+            <p className="text-xs font-medium text-muted-foreground md:text-sm">Catálogo multimarcas disponível em Recife e Olinda</p>
           </div>
         </div>
         <h2 className="max-w-xl font-display text-[2rem] font-bold leading-none text-foreground md:text-5xl">
@@ -72,7 +72,7 @@ export function BannerCarousel() {
           <div className="overflow-hidden rounded-xl bg-card/60 md:rounded-2xl">
             <img
               src={featuredProduct.images[0]}
-              alt={`${featuredProduct.name} disponivel no catalogo da Monopolio Pods`}
+              alt={`${featuredProduct.name} disponível no catálogo da Monopolio Pods`}
               loading="eager"
               decoding="async"
               className="h-full w-full object-contain p-2.5 md:p-4"
@@ -92,7 +92,7 @@ export function BannerCarousel() {
             <div className="space-y-1.5 text-xs text-foreground md:space-y-2 md:text-sm">
               <div className="flex items-center gap-2">
                 <Truck className="h-4 w-4 text-primary" />
-                <span>Frete por regiao.</span>
+                <span>Frete por região.</span>
               </div>
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-primary" />

@@ -609,7 +609,7 @@ export const products: Product[] = [
     slug: "oxbar-50k-50000-puffs",
     brand: "Oxbar",
     puffs: 50000,
-    description: "Modelo Oxbar 50K com a maior autonomia desta rodada do catalogo.",
+    description: "Modelo Oxbar 50K com a maior autonomia desta rodada do catálogo.",
     price: 220,
     images: [oxbar50kImage],
     categoryId: "3",
@@ -686,14 +686,14 @@ export function buildWhatsAppLink(product: Product, variation?: string, quantity
   const subtotal = unitPrice * quantity;
 
   const lines = [
-    `Ola! Quero fazer um pedido na ${STORE_NAME}:`,
+    `Olá! Quero fazer um pedido na ${STORE_NAME}:`,
     "",
     `Produto: ${product.name}`,
     `Marca: ${product.brand}`,
     `Puffs: ${formatPuffs(product.puffs)}`,
     variation ? `Sabor: ${variation}` : "",
     `Quantidade: ${quantity}`,
-    `Valor unitario: ${formatPrice(unitPrice)}`,
+    `Valor unitário: ${formatPrice(unitPrice)}`,
     `Subtotal: ${formatPrice(subtotal)}`,
     "",
     "Pode confirmar disponibilidade, frete e prazo de entrega?",

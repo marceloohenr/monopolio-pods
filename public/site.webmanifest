@@ -1,7 +1,7 @@
 {
   "name": "Monopolio Pods",
   "short_name": "Monopolio",
-  "description": "Catalogo de pods em Recife e Olinda com modelos Ignite, Elfbar e Oxbar, entrega regional e pedido no WhatsApp.",
+  "description": "Catálogo de pods em Recife e Olinda com modelos Ignite, Elfbar e Oxbar, entrega regional e pedido no WhatsApp.",
   "lang": "pt-BR",
   "start_url": "/",
   "scope": "/",

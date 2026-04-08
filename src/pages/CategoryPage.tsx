@@ -25,7 +25,7 @@ const CategoryPage = () => {
         schema={[
           buildLocalBusinessSchema(),
           buildBreadcrumbSchema([
-            { name: "Inicio", path: "/" },
+            { name: "Início", path: "/" },
             { name: categoryName, path: slug ? `/categoria/${slug}` : "/" },
           ]),
         ]}
@@ -45,8 +45,8 @@ const CategoryPage = () => {
 
         <ProductGrid
           products={products}
-          title={`Modelos ${categoryName} disponiveis`}
-          subtitle={`${products.length} modelo${products.length !== 1 ? "s" : ""} com sabores e entrega em Recife, Olinda e regiao metropolitana.`}
+          title={`Modelos ${categoryName} disponíveis`}
+          subtitle={`${products.length} modelo${products.length !== 1 ? "s" : ""} com sabores e entrega em Recife, Olinda e região metropolitana.`}
         />
       </main>
       <Footer />

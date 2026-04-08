@@ -71,7 +71,7 @@ const AdminTestimonialsPage = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <SeoHead title="Admin de depoimentos" description="Area administrativa local." path="/admin/depoimentos" noindex />
+      <SeoHead title="Admin de depoimentos" description="Área administrativa local." path="/admin/depoimentos" noindex />
 
       <Header />
 

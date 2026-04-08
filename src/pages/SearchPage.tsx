@@ -10,7 +10,7 @@ const SearchPage = () => {
   const [params] = useSearchParams();
   const query = params.get("q") || "";
   const results = searchProducts(query);
-  const pageTitle = query ? `Busca por ${query} no catalogo de pods` : "Buscar pods em Recife";
+  const pageTitle = query ? `Busca por ${query} no catálogo de pods` : "Buscar pods em Recife";
   const pageDescription = buildSearchSeoDescription(query, results.length);
 
   return (
@@ -34,11 +34,11 @@ const SearchPage = () => {
 
         <ProductGrid
           products={results}
-          title={query ? `Busca por ${query}` : "Catalogo completo"}
+          title={query ? `Busca por ${query}` : "Catálogo completo"}
           subtitle={
             query
-              ? `${results.length} resultado${results.length !== 1 ? "s" : ""} no catalogo de pods para Recife e Olinda.`
-              : "Todos os modelos Ignite, Elfbar e Oxbar disponiveis para pedido."
+              ? `${results.length} resultado${results.length !== 1 ? "s" : ""} no catálogo de pods para Recife e Olinda.`
+              : "Todos os modelos Ignite, Elfbar e Oxbar disponíveis para pedido."
           }
         />
       </main>

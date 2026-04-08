@@ -108,9 +108,9 @@ async function generateSocialPreview() {
       <rect width="${canvasWidth}" height="${canvasHeight}" rx="36" fill="url(#glow)" />
       <rect x="66" y="72" width="122" height="122" rx="30" fill="rgba(255,255,255,0.08)" />
       <text x="220" y="116" fill="#f5f1e8" font-size="68" font-weight="800" font-family="Arial, sans-serif">Monopolio Pods</text>
-      <text x="220" y="174" fill="#d9d2c4" font-size="28" font-weight="600" font-family="Arial, sans-serif">Pods em Recife e Olinda com entrega rapida</text>
+      <text x="220" y="174" fill="#d9d2c4" font-size="28" font-weight="600" font-family="Arial, sans-serif">Pods em Recife e Olinda com entrega rápida</text>
       <text x="80" y="290" fill="#ffffff" font-size="76" font-weight="800" font-family="Arial, sans-serif">Ignite, Elfbar e Oxbar</text>
-      <text x="80" y="350" fill="#cfd4dc" font-size="30" font-weight="500" font-family="Arial, sans-serif">Catalogo atualizado, compra no WhatsApp, frete regional e garantia de 48h.</text>
+      <text x="80" y="350" fill="#cfd4dc" font-size="30" font-weight="500" font-family="Arial, sans-serif">Catálogo atualizado, compra no WhatsApp, frete regional e garantia de 48h.</text>
       <rect x="80" y="404" width="220" height="52" rx="26" fill="#ffffff" fill-opacity="0.1" />
       <rect x="318" y="404" width="206" height="52" rx="26" fill="#ffffff" fill-opacity="0.1" />
       <rect x="542" y="404" width="188" height="52" rx="26" fill="#ffffff" fill-opacity="0.1" />
@@ -144,7 +144,7 @@ async function generateManifest() {
     name: "Monopolio Pods",
     short_name: "Monopolio",
     description:
-      "Catalogo de pods em Recife e Olinda com modelos Ignite, Elfbar e Oxbar, entrega regional e pedido no WhatsApp.",
+      "Catálogo de pods em Recife e Olinda com modelos Ignite, Elfbar e Oxbar, entrega regional e pedido no WhatsApp.",
     lang: "pt-BR",
     start_url: "/",
     scope: "/",

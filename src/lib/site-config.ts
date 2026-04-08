@@ -4,7 +4,7 @@ export const DEFAULT_SITE_URL = (import.meta.env.VITE_SITE_URL || "https://monop
 export const SITE_NAME = "Monopolio Pods";
 export const SITE_LEGAL_NAME = SITE_NAME;
 export const SITE_DESCRIPTION =
-  "Comprar pods em Recife e Olinda com entrega via Uber, catalogo de Ignite, Elfbar e Oxbar, atendimento rapido no WhatsApp e garantia de 48 horas.";
+  "Comprar pods em Recife e Olinda com entrega via Uber, catálogo de Ignite, Elfbar e Oxbar, atendimento rápido no WhatsApp e garantia de 48 horas.";
 export const SITE_OG_IMAGE = "/og-catalogo-monopolio-pods.jpg";
 export const SITE_LOCALE = "pt_BR";
 export const SITE_TWITTER_HANDLE = "@monopoliopods";
@@ -17,7 +17,7 @@ export const SITE_KEYWORDS = [
   "pods entrega recife",
   "pods olinda",
   "pod descartavel recife",
-  "catalogo de pods recife",
+  "catálogo de pods recife",
 ];
 
 export function toAbsoluteUrl(pathname = "/") {
@@ -32,19 +32,19 @@ export function buildTitle(title: string) {
 }
 
 export function buildProductSeoDescription(product: Product) {
-  return `${product.name} da ${product.brand} com ${product.puffs.toLocaleString("pt-BR")} puffs, sabores disponiveis e entrega em Recife e Olinda. Compre no catalogo da ${SITE_NAME} com frete regional e garantia de 48 horas.`;
+  return `${product.name} da ${product.brand} com ${product.puffs.toLocaleString("pt-BR")} puffs, sabores disponíveis e entrega em Recife e Olinda. Compre no catálogo da ${SITE_NAME} com frete regional e garantia de 48 horas.`;
 }
 
 export function buildCategorySeoDescription(categoryName: string, totalProducts: number) {
-  return `${categoryName} em Recife e Olinda com ${totalProducts} modelo${totalProducts !== 1 ? "s" : ""} disponive${totalProducts !== 1 ? "is" : "l"} para pedido no WhatsApp. Catalogo da ${SITE_NAME} com entrega, frete regional e garantia de 48 horas.`;
+  return `${categoryName} em Recife e Olinda com ${totalProducts} modelo${totalProducts !== 1 ? "s" : ""} disponível${totalProducts !== 1 ? "eis" : ""} para pedido no WhatsApp. Catálogo da ${SITE_NAME} com entrega, frete regional e garantia de 48 horas.`;
 }
 
 export function buildSearchSeoDescription(query: string, totalProducts: number) {
   if (!query) {
-    return "Busque pods Ignite, Elfbar e Oxbar em Recife e Olinda no catalogo da Monopolio Pods.";
+    return "Busque pods Ignite, Elfbar e Oxbar em Recife e Olinda no catálogo da Monopolio Pods.";
   }
 
-  return `Busca por ${query} com ${totalProducts} resultado${totalProducts !== 1 ? "s" : ""} no catalogo da ${SITE_NAME} para Recife, Olinda e regiao metropolitana.`;
+  return `Busca por ${query} com ${totalProducts} resultado${totalProducts !== 1 ? "s" : ""} no catálogo da ${SITE_NAME} para Recife, Olinda e região metropolitana.`;
 }
 
 export function buildLocalBusinessSchema() {
@@ -56,9 +56,9 @@ export function buildLocalBusinessSchema() {
     image: toAbsoluteUrl(SITE_OG_IMAGE),
     url: DEFAULT_SITE_URL,
     telephone: WHATSAPP_DISPLAY,
-    areaServed: ["Recife", "Olinda", "Regiao Metropolitana do Recife"],
+    areaServed: ["Recife", "Olinda", "Região Metropolitana do Recife"],
     priceRange: "$$",
-    paymentAccepted: ["Pix", "Cartao"],
+    paymentAccepted: ["Pix", "Cartão"],
     currenciesAccepted: "BRL",
     sameAs: ["https://www.instagram.com/monopoliopods/"],
     description: SITE_DESCRIPTION,
@@ -73,7 +73,7 @@ export function buildLocalBusinessSchema() {
     })),
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Catalogo de pods Monopolio Pods",
+      name: "Catálogo de pods Monopolio Pods",
       itemListElement: categories.map((category) => ({
         "@type": "OfferCatalog",
         name: category.name,
@@ -172,5 +172,5 @@ export function buildProductSchema(product: Product) {
 }
 
 export function buildProductImageAlt(product: Product) {
-  return `${product.name} da ${product.brand} disponivel para compra em Recife e Olinda`;
+  return `${product.name} da ${product.brand} disponível para compra em Recife e Olinda`;
 }

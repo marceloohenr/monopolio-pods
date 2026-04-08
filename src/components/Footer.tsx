@@ -86,7 +86,7 @@ export function Footer() {
             <div className="rounded-3xl border border-border/60 bg-background/60 p-4">
               <p className="text-base font-semibold text-foreground">Garantia gratuita de 48h</p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Caso o produto apresente problema apos a entrega, a troca segue a politica informada pela loja.
+                Caso o produto apresente problema após a entrega, a troca segue a política informada pela loja.
               </p>
               <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-primary">{AGE_NOTICE}</p>
             </div>
@@ -94,7 +94,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 border-t border-border/60 pt-4 text-center text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-left">
-          <p>{SITE_NAME} | Recife e regiao metropolitana</p>
+          <p>{SITE_NAME} | Recife e região metropolitana</p>
 
           <Button
             asChild

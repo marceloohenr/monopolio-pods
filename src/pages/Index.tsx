@@ -14,14 +14,14 @@ const Index = () => {
     <div className="flex min-h-screen flex-col bg-background">
       <SeoHead
         title="Pods Recife | Comprar pods em Recife e Olinda"
-        description="Compre pods em Recife e Olinda com entrega via Uber. Catalogo com Ignite, Elfbar e Oxbar, pedido rapido no WhatsApp, frete regional e garantia de 48 horas."
+        description="Peça pods em Recife e Olinda pelo WhatsApp com entrega via Uber, frete regional e garantia de 48 horas. Modelos Ignite, Elfbar e Oxbar prontos para compra."
         path="/"
         keywords={["pods recife", "comprar pods recife", "pods olinda", "pods entrega recife"]}
         schema={[
           buildWebsiteSchema(),
           buildLocalBusinessSchema(),
           buildCollectionSchema(
-            "Catalogo de pods em Recife e Olinda",
+            "Catálogo de pods em Recife e Olinda",
             catalogProducts.map((product) => `/produto/${product.slug}`),
           ),
         ]}
@@ -31,14 +31,14 @@ const Index = () => {
 
       <main className="container mx-auto max-w-6xl flex-1 space-y-5 py-4 md:space-y-7 md:py-6">
         <section className="space-y-3 px-4 md:px-0">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Catalogo local</p>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Catálogo local</p>
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div className="max-w-3xl">
               <h1 className="font-display text-3xl font-bold text-foreground md:text-5xl">
                 Comprar pods em Recife e Olinda
               </h1>
               <p className="text-sm text-muted-foreground md:text-base">
-                Catalogo de pods com Ignite, Elfbar e Oxbar para pedido rapido no WhatsApp, entrega via Uber e frete regional para Recife, Olinda e regiao metropolitana.
+                Peça pelo WhatsApp e receba em Recife ou Olinda com entrega via Uber, frete regional e garantia de 48 horas. Modelos Ignite, Elfbar e Oxbar prontos para compra.
               </p>
             </div>
             <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground md:text-sm">
@@ -53,17 +53,17 @@ const Index = () => {
 
         <ProductGrid
           products={catalogProducts}
-          title="Catalogo de pods em Recife"
-          subtitle="Modelos Ignite, Elfbar e Oxbar com sabores disponiveis, entrega em Recife e Olinda e atendimento direto no WhatsApp."
+          title="Catálogo de pods em Recife"
+          subtitle="Modelos Ignite, Elfbar e Oxbar com sabores disponíveis, pedido rápido no WhatsApp, entrega em Recife e Olinda e garantia local."
         />
 
-        <section className="sr-only" aria-label="Informacoes sobre entrega de pods em Recife e Olinda">
-          <h2>Entrega de pods em Recife e Olinda com pedido rapido</h2>
+        <section className="sr-only" aria-label="Informações sobre entrega de pods em Recife e Olinda">
+          <h2>Entrega de pods em Recife e Olinda com pedido rápido</h2>
           <p>
-            A Monopolio Pods trabalha com pods descartaveis das marcas Ignite, Elfbar e Oxbar para clientes de Recife, Olinda e regiao metropolitana. O catalogo inclui modelos com diferentes faixas de puffs, sabores variados e pedido direto pelo WhatsApp.
+            A Monopolio Pods trabalha com pods descartáveis das marcas Ignite, Elfbar e Oxbar para clientes de Recife, Olinda e região metropolitana. O catálogo inclui modelos com diferentes faixas de puffs, sabores variados e pedido direto pelo WhatsApp.
           </p>
           <p>
-            Quem procura comprar pods em Recife encontra opcoes com entrega via Uber, frete regional conforme o bairro e garantia de 48 horas. A loja atende Zona Norte, Zona Sul, Olinda e outras areas sob consulta.
+            Quem procura comprar pods em Recife encontra opções com entrega via Uber, frete regional conforme o bairro e garantia de 48 horas. A loja atende Zona Norte, Zona Sul, Olinda e outras áreas sob consulta.
           </p>
         </section>
 
