@@ -8,7 +8,10 @@ import { AGE_NOTICE, products } from "@/data/products";
 import { buildCollectionSchema, buildLocalBusinessSchema, buildWebsiteSchema } from "@/lib/site-config";
 
 const Index = () => {
-  const catalogProducts = products;
+  const brandOrder = ["Ignite", "Elfbar", "Oxbar"];
+  const catalogProducts = [...products].sort(
+    (a, b) => brandOrder.indexOf(a.brand) - brandOrder.indexOf(b.brand),
+  );
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
