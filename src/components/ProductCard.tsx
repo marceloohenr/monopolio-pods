@@ -51,29 +51,37 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="text-2xl font-bold text-foreground md:text-3xl">{formatPrice(unitPrice)}</div>
 
           <div className="space-y-2">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Sabores</p>
-            <div className="flex flex-wrap gap-1.5">
-              {product.variations.map((variation) => (
-                <button
-                  key={variation.id}
-                  type="button"
-                  disabled={!variation.inStock}
-                  onClick={() => handleFlavorClick(variation.name)}
-                  className={`rounded-full border px-2.5 py-1 text-xs transition ${
-                    variation.inStock
-                      ? "border-border/60 bg-background text-foreground hover:border-primary/40 hover:bg-secondary"
-                      : "cursor-not-allowed border-border/40 bg-muted text-muted-foreground/50 line-through"
-                  }`}
-                >
-                  {variation.name}
-                </button>
-              ))}
-            </div>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              {hasAvailableFlavors ? "Sabores" : "Status"}
+            </p>
+            {hasAvailableFlavors ? (
+              <div className="flex flex-wrap gap-1.5">
+                {product.variations.map((variation) => (
+                  <button
+                    key={variation.id}
+                    type="button"
+                    disabled={!variation.inStock}
+                    onClick={() => handleFlavorClick(variation.name)}
+                    className={`rounded-full border px-2.5 py-1 text-xs transition ${
+                      variation.inStock
+                        ? "border-border/60 bg-background text-foreground hover:border-primary/40 hover:bg-secondary"
+                        : "cursor-not-allowed border-border/40 bg-muted text-muted-foreground/50 line-through"
+                    }`}
+                  >
+                    {variation.name}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-amber-300/40 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">
+                Indisponivel no momento
+              </div>
+            )}
           </div>
 
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
             <ShieldCheck className="h-3.5 w-3.5" />
-            Garantia 48h
+            {hasAvailableFlavors ? "Garantia 48h" : "Produto em falta"}
           </div>
 
           <Button
@@ -88,7 +96,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 Finalizar pedido
               </>
             ) : (
-              "Indisponível no momento"
+              "Indisponivel no momento"
             )}
           </Button>
         </div>
