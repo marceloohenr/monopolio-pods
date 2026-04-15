@@ -4,7 +4,7 @@ import igniteV120Image from "@/assets/products/ignite-v120-box.png";
 import igniteV155Image from "@/assets/products/ignite-v155-device.png";
 import igniteV250Image from "@/assets/products/ignite-v250-device.png";
 import igniteV300Image from "@/assets/products/ignite-v300-box.png";
-import igniteV400Image from "@/assets/products/ignite-v400-device.png";
+import igniteV400Image from "@/assets/products/ignite-v400-device.webp";
 import elfbarBc15kImage from "@/assets/products/elfbar-bc-15k.png";
 import elfbarGh23kImage from "@/assets/products/elfbar-gh23k.png";
 import elfbar40kTrioImage from "@/assets/products/elfbar-40k-trio.png";
