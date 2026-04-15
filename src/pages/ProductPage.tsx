@@ -97,6 +97,7 @@ const ProductPage = () => {
       <Header />
 
       <main className="container mx-auto max-w-6xl flex-1 space-y-6 py-4 md:space-y-8 md:py-6">
+        {/* Cabeçalho e área principal do produto */}
         <div className="px-4 md:px-0">
           <Link
             to="/"
@@ -252,6 +253,7 @@ const ProductPage = () => {
           </div>
         </div>
 
+        {/* Regras da loja e observações para o cliente */}
         <section className="space-y-3 px-4 md:px-0">
           <div>
             <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Informações</p>

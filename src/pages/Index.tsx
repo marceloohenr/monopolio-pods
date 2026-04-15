@@ -8,6 +8,7 @@ import { AGE_NOTICE, products } from "@/data/products";
 import { buildCollectionSchema, buildLocalBusinessSchema, buildWebsiteSchema } from "@/lib/site-config";
 
 const Index = () => {
+  // Ordem comercial usada na vitrine principal.
   const brandOrder = ["Ignite", "Elfbar", "Oxbar"];
   const catalogProducts = [...products].sort(
     (a, b) => brandOrder.indexOf(a.brand) - brandOrder.indexOf(b.brand),
@@ -33,6 +34,7 @@ const Index = () => {
       <Header />
 
       <main className="container mx-auto max-w-6xl flex-1 space-y-5 py-4 md:space-y-7 md:py-6">
+        {/* Abertura da home com posicionamento do catálogo */}
         <section className="space-y-3 px-4 md:px-0">
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Catálogo local</p>
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -54,6 +56,7 @@ const Index = () => {
 
         <CategoryNav />
 
+        {/* Grade principal do catálogo */}
         <ProductGrid
           products={catalogProducts}
           title="Catálogo de pods em Recife"

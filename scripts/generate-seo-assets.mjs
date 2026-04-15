@@ -233,4 +233,4 @@ await generateManifest();
 await generateRobotsTxt();
 await generateSitemap();
 
-console.log("SEO assets generated successfully.");
+console.log("Assets de SEO atualizados.");

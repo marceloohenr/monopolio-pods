@@ -77,6 +77,7 @@ export function buildWhatsAppOrderMessage({
   freight,
   finalTotal,
 }: BuildWhatsAppOrderMessageParams) {
+  // Estrutura final enviada para o atendimento no WhatsApp.
   return [
     "#### NOVO PEDIDO ####",
     "",

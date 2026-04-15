@@ -92,6 +92,7 @@ export const WHATSAPP_NUMBER = "5581987258754";
 export const WHATSAPP_DISPLAY = "(81) 98725-8754";
 export const AGE_NOTICE = "Proibida a venda para menores de 18 anos.";
 
+// Marcas usadas na navegação e na organização do catálogo.
 export const categories: Category[] = [
   {
     id: "1",
@@ -219,6 +220,7 @@ export const storePolicies: StorePolicy[] = [
   },
 ];
 
+// Base central de produtos usada na home, busca e páginas individuais.
 export const products: Product[] = [
   {
     id: "1",
