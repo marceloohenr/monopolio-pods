@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { MessageCircle, ShieldCheck, Truck } from "lucide-react";
 import { banners, getFeaturedProducts } from "@/data/products";
@@ -9,10 +10,26 @@ export function BannerCarousel() {
   const { openCheckout } = useCheckout();
   const banner = banners.find((item) => item.active);
   const featuredProduct = getFeaturedProducts()[0];
+  const [imageIndex, setImageIndex] = React.useState(0);
 
   if (!banner || !featuredProduct) return null;
 
   const theme = featuredProduct.visualTheme;
+  const imageSrc = featuredProduct.images[imageIndex] ?? featuredProduct.images[0];
+
+  React.useEffect(() => {
+    setImageIndex(0);
+  }, [featuredProduct.id]);
+
+  const handleImageError = () => {
+    setImageIndex((current) => {
+      if (current < featuredProduct.images.length - 1) {
+        return current + 1;
+      }
+
+      return current;
+    });
+  };
 
   return (
     <section className="mx-4 md:mx-0 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:gap-3">
@@ -71,10 +88,11 @@ export function BannerCarousel() {
         <div className="mt-3 grid grid-cols-[112px_1fr] gap-3 md:mt-4 md:gap-4">
           <div className="overflow-hidden rounded-xl bg-card/60 md:rounded-2xl">
             <img
-              src={featuredProduct.images[0]}
+              src={imageSrc}
               alt={`${featuredProduct.name} disponível no catálogo da Monopolio Pods`}
               loading="eager"
               decoding="async"
+              onError={handleImageError}
               className="h-full w-full object-contain p-2.5 md:p-4"
             />
           </div>

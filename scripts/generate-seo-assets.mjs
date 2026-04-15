@@ -76,9 +76,9 @@ async function generateSocialPreview() {
   const canvasHeight = 630;
   const logoPath = path.join(rootDir, "src", "assets", "monopolio-logo.jpg");
   const productPaths = [
-    path.join(rootDir, "src", "assets", "products", "ignite-v155-device.png"),
+    path.join(rootDir, "src", "assets", "products", "ignite-v80-gold.jpg"),
     path.join(rootDir, "src", "assets", "products", "elfbar-gh23k.png"),
-    path.join(rootDir, "src", "assets", "products", "oxbar-50k.webp"),
+    path.join(rootDir, "src", "assets", "products", "ignite-v400-device.png"),
   ];
 
   const [logo, ...products] = await Promise.all([

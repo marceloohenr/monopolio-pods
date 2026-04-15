@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Product } from "@/data/products";
 import { buildProductImageAlt } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
@@ -69,10 +70,26 @@ export function ProductImageStage({
   className,
   imageClassName,
 }: ProductImageStageProps) {
+  const [imageIndex, setImageIndex] = React.useState(0);
   const styles = variantStyles[variant];
   const adjustment = baseImageAdjustments[variant];
   const blendMode = adjustment.blendMode;
   const imageTransform = `translate3d(${adjustment.x ?? 0}%, ${adjustment.y ?? 0}%, 0) scale(${adjustment.scale})`;
+  const imageSrc = product.images[imageIndex] ?? product.images[0];
+
+  React.useEffect(() => {
+    setImageIndex(0);
+  }, [product.id]);
+
+  const handleImageError = () => {
+    setImageIndex((current) => {
+      if (current < product.images.length - 1) {
+        return current + 1;
+      }
+
+      return current;
+    });
+  };
 
   return (
     <div className={cn("relative h-full w-full", className)}>
@@ -102,10 +119,11 @@ export function ProductImageStage({
           />
 
           <img
-            src={product.images[0]}
+            src={imageSrc}
             alt={buildProductImageAlt(product)}
             loading={variant === "detail" ? "eager" : "lazy"}
             decoding="async"
+            onError={handleImageError}
             className={cn(styles.image, imageClassName)}
             style={{ transform: imageTransform, mixBlendMode: blendMode }}
           />

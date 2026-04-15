@@ -51,12 +51,27 @@ export function TestimonialsSection() {
               <div className="glass h-full rounded-2xl p-4">
                 <div className="flex items-center gap-3">
                   {item.photoUrl ? (
-                    <img src={item.photoUrl} alt={item.name} className="h-12 w-12 rounded-full object-cover" />
+                    <img
+                      src={item.photoUrl}
+                      alt={item.name}
+                      className="h-12 w-12 rounded-full object-cover"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                        const fallback = event.currentTarget.nextElementSibling as HTMLElement | null;
+                        if (fallback) {
+                          fallback.style.display = "flex";
+                        }
+                      }}
+                    />
                   ) : (
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-                      {getInitials(item.name)}
-                    </div>
+                    <></>
                   )}
+                  <div
+                    className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground"
+                    style={{ display: item.photoUrl ? "none" : "flex" }}
+                  >
+                    {getInitials(item.name)}
+                  </div>
 
                   <div>
                     <p className="font-semibold text-foreground">{item.name}</p>
