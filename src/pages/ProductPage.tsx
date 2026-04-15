@@ -299,7 +299,7 @@ const ProductPage = () => {
           </div>
         </section>
 
-        {related.length > 0 && <ProductGrid products={related} title="Mais modelos" subtitle="Outras opcoes da mesma faixa." />}
+        {related.length > 0 && <ProductGrid products={related} title="Mais modelos" subtitle="Outras opções da mesma faixa." />}
       </main>
 
       <ProductPurchaseDialog

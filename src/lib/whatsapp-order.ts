@@ -44,7 +44,7 @@ function formatCompactPrice(value: number) {
 
 function formatCustomerName(name: string) {
   const trimmedName = name.trim();
-  return trimmedName || "Cliente do catalogo";
+  return trimmedName || "Cliente do catálogo";
 }
 
 export function formatOrderTimestamp(date: Date) {
@@ -58,7 +58,7 @@ export function buildOrderNumber(date: Date) {
 export function getPaymentMethodLabel(method: PaymentMethod) {
   switch (method) {
     case "card":
-      return "CARTAO";
+      return "CARTÃO";
     case "pix":
     default:
       return "PIX";
@@ -87,8 +87,8 @@ export function buildWhatsAppOrderMessage({
     "-------------------------------",
     customer.cep?.trim() ? `CEP: *${customer.cep.trim()}*` : "",
     customer.street?.trim() ? `Rua: *${customer.street.trim()}*` : "",
-    `Bairro: *${customer.neighborhood.trim() || "Nao informado"}*`,
-    customer.addressDetails?.trim() ? `Numero: *${customer.addressDetails.trim()}*` : "",
+    `Bairro: *${customer.neighborhood.trim() || "Não informado"}*`,
+    customer.addressDetails?.trim() ? `Número: *${customer.addressDetails.trim()}*` : "",
     customer.city?.trim() ? `Cidade: *${customer.city.trim()}*` : "",
     "",
     "------- ITENS DO PEDIDO -------",
@@ -97,7 +97,7 @@ export function buildWhatsAppOrderMessage({
       `*${item.quantity} ${item.name}*`,
       item.flavor?.trim() ? `Sabor: *${item.flavor.trim()}*` : "",
       `Quantidade: *${item.quantity}*`,
-      `Valor Unitario: ${formatCompactPrice(item.unitPrice)}`,
+      `Valor Unitário: ${formatCompactPrice(item.unitPrice)}`,
       `${item.quantity} x ${formatPrice(item.unitPrice)} = ${formatCompactPrice(item.subtotal)}`,
       "",
     ]),
@@ -117,4 +117,3 @@ export function buildWhatsAppOrderMessage({
     .filter(Boolean)
     .join("\n");
 }
-

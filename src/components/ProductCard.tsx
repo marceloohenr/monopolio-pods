@@ -74,7 +74,7 @@ export function ProductCard({ product }: ProductCardProps) {
               </div>
             ) : (
               <div className="rounded-2xl border border-amber-300/40 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">
-                Indisponivel no momento
+                Indisponível no momento
               </div>
             )}
           </div>
@@ -96,7 +96,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 Finalizar pedido
               </>
             ) : (
-              "Indisponivel no momento"
+              "Indisponível no momento"
             )}
           </Button>
         </div>

@@ -43,13 +43,13 @@ describe("whatsapp order formatting", () => {
 
     expect(message).toContain("#### NOVO PEDIDO ####");
     expect(message).toContain("Pedido: 2102261920");
-    expect(message).toMatch(/Cliente: \*Cliente do cat.?logo\*/);
+    expect(message).toContain("Cliente: *Cliente do catálogo*");
     expect(message).toContain("Telefone: *(81) 98725-8754*");
     expect(message).toContain("CEP: *51020-001*");
     expect(message).toContain("Rua: *Avenida Boa Viagem*");
     expect(message).toContain("Cidade: *Recife*");
     expect(message).toContain("Bairro: *Boa Viagem*");
-    expect(message).toContain("Numero: *123, apto 402*");
+    expect(message).toContain("Número: *123, apto 402*");
     expect(message).toContain("*1 Ignite V55*");
     expect(message).toContain("Sabor: *Icy Mint*");
     expect(message).toContain("Quantidade: *1*");
@@ -88,6 +88,6 @@ describe("whatsapp order formatting", () => {
     expect(message).toContain("Rua: *Rua do Futuro*");
     expect(message).toContain("FRETE: Consultar valores");
     expect(message).toContain("*VALOR FINAL: Consultar valores*");
-    expect(message).toContain("PAGAMENTO:\n*CARTAO: valor final a confirmar*");
+    expect(message).toContain("PAGAMENTO:\n*CARTÃO: valor final a confirmar*");
   });
 });

@@ -1,4 +1,4 @@
-import { formatPrice } from "@/data/products";
+﻿import { formatPrice } from "@/data/products";
 
 export interface ShippingArea {
   name: string;
@@ -19,7 +19,7 @@ export const shippingAreas: ShippingArea[] = [
     name: "Zona Norte do Recife",
     fee: 0,
     neighborhoods: [
-      "Agua Fria",
+      "Água Fria",
       "Alto Santa Terezinha",
       "Arruda",
       "Beberibe",
@@ -143,4 +143,6 @@ export function formatShippingFee(value: number | null) {
   if (value === null) return "Consultar valores";
   return value === 0 ? "Frete grátis" : formatPrice(value).replace(/\u00A0/g, " ");
 }
+
+
 

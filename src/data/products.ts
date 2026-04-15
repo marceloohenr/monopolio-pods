@@ -1,4 +1,4 @@
-import igniteV55Image from "@/assets/products/ignite-v55-box.png";
+﻿import igniteV55Image from "@/assets/products/ignite-v55-box.png";
 import igniteV80Image from "@/assets/products/ignite-v80-box.png";
 import igniteV120Image from "@/assets/products/ignite-v120-box.png";
 import igniteV155Image from "@/assets/products/ignite-v155-device.png";
@@ -262,14 +262,14 @@ export const products: Product[] = [
     images: [igniteV80Image],
     categoryId: "1",
     variations: [
-      { id: "v80-1", name: "Maracuja Kiwi", inStock: true },
+      { id: "v80-1", name: "Maracujá Kiwi", inStock: true },
       { id: "v80-2", name: "Morango Kiwi", inStock: true },
       { id: "v80-3", name: "Uva Ice", inStock: true },
       { id: "v80-4", name: "Melancia Ice", inStock: true },
       { id: "v80-5", name: "Cactus", inStock: true },
       { id: "v80-6", name: "Melancia Frozen", inStock: true },
-      { id: "v80-7", name: "Maca Frozen", inStock: true },
-      { id: "v80-8", name: "Agua Menta Frozen", inStock: true },
+      { id: "v80-7", name: "Maçã Frozen", inStock: true },
+      { id: "v80-8", name: "Água Menta Frozen", inStock: true },
     ],
     tags: ["popular", "mais-sabores"],
     featured: true,
@@ -291,7 +291,7 @@ export const products: Product[] = [
     slug: "ignite-v120-12000-puffs",
     brand: "Ignite",
     puffs: 12000,
-    description: "Modelo de 12.000 puffs com autonomia intermediaria.",
+    description: "Modelo de 12.000 puffs com autonomia intermediária.",
     price: 115,
     images: [igniteV120Image],
     categoryId: "1",
@@ -341,7 +341,7 @@ export const products: Product[] = [
     slug: "ignite-v250-25000-puffs",
     brand: "Ignite",
     puffs: 25000,
-    description: "Modelo de 25.000 puffs com autonomia alta e recarga rapida.",
+    description: "Modelo de 25.000 puffs com autonomia alta e recarga rápida.",
     price: 150,
     images: [igniteV250Image],
     categoryId: "1",
@@ -369,7 +369,7 @@ export const products: Product[] = [
     slug: "ignite-v300-30000-puffs",
     brand: "Ignite",
     puffs: 30000,
-    description: "Modelo de 30.000 puffs com autonomia maxima.",
+    description: "Modelo de 30.000 puffs com autonomia máxima.",
     price: 180,
     images: [igniteV300Image],
     categoryId: "1",
@@ -404,22 +404,22 @@ export const products: Product[] = [
     slug: "ignite-v400-40000-puffs",
     brand: "Ignite",
     puffs: 40000,
-    description: "Modelo de 40.000 puffs com autonomia maxima da linha Ignite.",
+    description: "Modelo de 40.000 puffs com autonomia máxima da linha Ignite.",
     price: 200,
     images: [igniteV400Image],
     categoryId: "1",
     variations: [
-      { id: "v400-1", name: "Manga Ice X Maracuja Goiaba", inStock: true },
-      { id: "v400-2", name: "Maca Ice X Morango Melancia", inStock: true },
+      { id: "v400-1", name: "Manga Ice X Maracujá Goiaba", inStock: true },
+      { id: "v400-2", name: "Maçã Ice X Morango Melancia", inStock: true },
       { id: "v400-3", name: "Uva Ice X Morango", inStock: true },
       { id: "v400-4", name: "Uva Ice X Melancia Ice", inStock: true },
-      { id: "v400-5", name: "Uva Pop X Pessego Ice", inStock: true },
+      { id: "v400-5", name: "Uva Pop X Pêssego Ice", inStock: true },
       { id: "v400-6", name: "Melancia Ice X Cereja Ice", inStock: true },
-      { id: "v400-7", name: "Pessego Melancia Ice X Manga Ice", inStock: true },
+      { id: "v400-7", name: "Pêssego Melancia Ice X Manga Ice", inStock: true },
       { id: "v400-8", name: "Blueberry Ice X Framboesa Amora", inStock: true },
-      { id: "v400-9", name: "Menta Ice X Pessego Uva", inStock: true },
+      { id: "v400-9", name: "Menta Ice X Pêssego Uva", inStock: true },
       { id: "v400-10", name: "Triple Mango", inStock: true },
-      { id: "v400-11", name: "Morango Maca Melancia", inStock: true },
+      { id: "v400-11", name: "Morango Maçã Melancia", inStock: true },
       { id: "v400-12", name: "Morango Kiwi", inStock: true },
     ],
     tags: ["novo", "premium"],
@@ -472,11 +472,11 @@ export const products: Product[] = [
     images: [elfbarGh23kImage],
     categoryId: "2",
     variations: [
-      { id: "gh23k-1", name: "Pessego Manga Melancia", inStock: true },
+      { id: "gh23k-1", name: "Pêssego Manga Melancia", inStock: true },
       { id: "gh23k-2", name: "Uva Ice", inStock: true },
       { id: "gh23k-3", name: "Menta Ice", inStock: true },
       { id: "gh23k-4", name: "Morango Banana", inStock: true },
-      { id: "gh23k-5", name: "Abacaxi Ameixa Limao Menta", inStock: true },
+      { id: "gh23k-5", name: "Abacaxi Ameixa Limão Menta", inStock: true },
     ],
     tags: ["novo"],
     featured: false,
@@ -692,4 +692,5 @@ export function buildWhatsAppLink(product: Product, variation?: string, quantity
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines)}`;
 }
+
 
