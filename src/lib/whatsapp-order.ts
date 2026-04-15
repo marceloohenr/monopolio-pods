@@ -44,7 +44,7 @@ function formatCompactPrice(value: number) {
 
 function formatCustomerName(name: string) {
   const trimmedName = name.trim();
-  return trimmedName || "Cliente do catálogo";
+  return trimmedName || "Cliente do catalogo";
 }
 
 export function formatOrderTimestamp(date: Date) {
@@ -58,10 +58,10 @@ export function buildOrderNumber(date: Date) {
 export function getPaymentMethodLabel(method: PaymentMethod) {
   switch (method) {
     case "card":
-      return "Cartão";
+      return "CARTAO";
     case "pix":
     default:
-      return "Pix";
+      return "PIX";
   }
 }
 
@@ -81,22 +81,22 @@ export function buildWhatsAppOrderMessage({
     "#### NOVO PEDIDO ####",
     "",
     `Pedido: ${buildOrderNumber(createdAt)}`,
-    `feito em ${formatOrderTimestamp(createdAt)}`,
     "",
-    `Cliente: ${formatCustomerName(customer.name)}`,
-    `Telefone: ${customer.phone.trim()}`,
-    customer.cep?.trim() ? `CEP: ${customer.cep.trim()}` : "",
-    customer.street?.trim() ? `Rua: ${customer.street.trim()}` : "",
-    customer.city?.trim() ? `Cidade: ${customer.city.trim()}` : "",
-    `Bairro: ${customer.neighborhood.trim() || "Não informado"}`,
-    customer.addressDetails?.trim() ? `Número/Complemento: ${customer.addressDetails.trim()}` : "",
+    `Cliente: *${formatCustomerName(customer.name)}*`,
+    `Telefone: *${customer.phone.trim()}*`,
+    "-------------------------------",
+    customer.cep?.trim() ? `CEP: *${customer.cep.trim()}*` : "",
+    customer.street?.trim() ? `Rua: *${customer.street.trim()}*` : "",
+    `Bairro: *${customer.neighborhood.trim() || "Nao informado"}*`,
+    customer.addressDetails?.trim() ? `Numero: *${customer.addressDetails.trim()}*` : "",
+    customer.city?.trim() ? `Cidade: *${customer.city.trim()}*` : "",
     "",
     "------- ITENS DO PEDIDO -------",
     "",
     ...items.flatMap((item) => [
-      `${item.quantity} ${item.name}`,
-      item.flavor?.trim() ? `Sabor: ${item.flavor.trim()}` : "",
-      `Quantidade: ${item.quantity}`,
+      `*${item.quantity} ${item.name}*`,
+      item.flavor?.trim() ? `Sabor: *${item.flavor.trim()}*` : "",
+      `Quantidade: *${item.quantity}*`,
       `Valor Unitario: ${formatCompactPrice(item.unitPrice)}`,
       `${item.quantity} x ${formatPrice(item.unitPrice)} = ${formatCompactPrice(item.subtotal)}`,
       "",
@@ -105,12 +105,14 @@ export function buildWhatsAppOrderMessage({
     "",
     `SUBTOTAL: ${formatCompactPrice(subtotal)}`,
     `FRETE: ${formatShippingFee(freight)}`,
-    `VALOR FINAL: ${formatOrderTotal(finalTotal)}`,
+    `*VALOR FINAL: ${formatOrderTotal(finalTotal)}*`,
+    "-------------------------------",
     "",
-    "PAGAMENTO",
+    "PAGAMENTO:",
+    "",
     finalTotal === null
-      ? `${getPaymentMethodLabel(customer.paymentMethod)}: valor final a confirmar`
-      : `${getPaymentMethodLabel(customer.paymentMethod)}: ${formatCompactPrice(finalTotal)}`,
+      ? `*${getPaymentMethodLabel(customer.paymentMethod)}: valor final a confirmar*`
+      : `*${getPaymentMethodLabel(customer.paymentMethod)}: ${formatCompactPrice(finalTotal)}*`,
   ]
     .filter(Boolean)
     .join("\n");

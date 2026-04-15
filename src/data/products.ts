@@ -297,10 +297,7 @@ export const products: Product[] = [
     price: 115,
     images: [igniteV120Image],
     categoryId: "1",
-    variations: [
-      { id: "v120-1", name: "Melancia Pessego", inStock: true },
-      { id: "v120-2", name: "Aloe Grape", inStock: true },
-    ],
+    variations: [{ id: "v120-0", name: "Indisponível no momento", inStock: false }],
     tags: [],
     featured: false,
     createdAt: "2026-03-30",

@@ -43,19 +43,21 @@ describe("whatsapp order formatting", () => {
 
     expect(message).toContain("#### NOVO PEDIDO ####");
     expect(message).toContain("Pedido: 2102261920");
-    expect(message).toContain("Cliente: Cliente do catálogo");
-    expect(message).toContain("Telefone: (81) 98725-8754");
-    expect(message).toContain("CEP: 51020-001");
-    expect(message).toContain("Rua: Avenida Boa Viagem");
-    expect(message).toContain("Cidade: Recife");
-    expect(message).toContain("Bairro: Boa Viagem");
-    expect(message).toContain("Número/Complemento: 123, apto 402");
-    expect(message).toContain("1 Ignite V55");
-    expect(message).toContain("Sabor: Icy Mint");
+    expect(message).toMatch(/Cliente: \*Cliente do cat.?logo\*/);
+    expect(message).toContain("Telefone: *(81) 98725-8754*");
+    expect(message).toContain("CEP: *51020-001*");
+    expect(message).toContain("Rua: *Avenida Boa Viagem*");
+    expect(message).toContain("Cidade: *Recife*");
+    expect(message).toContain("Bairro: *Boa Viagem*");
+    expect(message).toContain("Numero: *123, apto 402*");
+    expect(message).toContain("*1 Ignite V55*");
+    expect(message).toContain("Sabor: *Icy Mint*");
+    expect(message).toContain("Quantidade: *1*");
     expect(message).toContain("SUBTOTAL: R$95,00");
     expect(message).toContain("FRETE: R$ 5,00");
-    expect(message).toContain("VALOR FINAL: R$100,00");
-    expect(message).toContain("PAGAMENTO\nPix: R$100,00");
+    expect(message).toContain("*VALOR FINAL: R$100,00*");
+    expect(message).toContain("-------------------------------");
+    expect(message).toContain("PAGAMENTO:\n*PIX: R$100,00*");
   });
 
   it("marks freight and total as consult when the region needs manual confirmation", () => {
@@ -83,10 +85,9 @@ describe("whatsapp order formatting", () => {
       finalTotal: null,
     });
 
-    expect(message).toContain("Rua: Rua do Futuro");
+    expect(message).toContain("Rua: *Rua do Futuro*");
     expect(message).toContain("FRETE: Consultar valores");
-    expect(message).toContain("VALOR FINAL: Consultar valores");
-    expect(message).toContain("PAGAMENTO\nCartão: valor final a confirmar");
+    expect(message).toContain("*VALOR FINAL: Consultar valores*");
+    expect(message).toContain("PAGAMENTO:\n*CARTAO: valor final a confirmar*");
   });
 });
-
