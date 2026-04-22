@@ -17,15 +17,15 @@ const Index = () => {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SeoHead
-        title="Pods Recife | Comprar pods em Recife e Olinda"
-        description="Peça pods em Recife e Olinda pelo WhatsApp com entrega via Uber, frete regional e garantia de 48 horas. Modelos Ignite, Elfbar e Oxbar prontos para compra."
+        title="Monopolio Pods | Venda de pods"
+        description="Catálogo de pods com modelos Ignite, Elfbar e Oxbar, sabores disponíveis, pedido pelo WhatsApp e garantia de 48 horas."
         path="/"
-        keywords={["pods recife", "comprar pods recife", "pods olinda", "pods entrega recife"]}
+        keywords={["monopolio pods", "venda de pods", "catalogo de pods", "comprar pods", "pods ignite", "pods elfbar", "pods oxbar"]}
         schema={[
           buildWebsiteSchema(),
           buildLocalBusinessSchema(),
           buildCollectionSchema(
-            "Catálogo de pods em Recife e Olinda",
+            "Catálogo de pods Monopolio Pods",
             catalogProducts.map((product) => `/produto/${product.slug}`),
           ),
         ]}
@@ -36,14 +36,14 @@ const Index = () => {
       <main className="container mx-auto max-w-6xl flex-1 space-y-5 py-4 md:space-y-7 md:py-6">
         {/* Abertura da home com posicionamento do catálogo */}
         <section className="space-y-3 px-4 md:px-0">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Catálogo local</p>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Monopolio Pods</p>
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div className="max-w-3xl">
               <h1 className="font-display text-3xl font-bold text-foreground md:text-5xl">
-                Comprar pods em Recife e Olinda
+                Venda de pods
               </h1>
               <p className="text-sm text-muted-foreground md:text-base">
-                Peça pelo WhatsApp e receba em Recife ou Olinda com entrega via Uber, frete regional e garantia de 48 horas. Modelos Ignite, Elfbar e Oxbar prontos para compra.
+                Catálogo de pods com modelos Ignite, Elfbar e Oxbar, sabores disponíveis, pedido pelo WhatsApp e garantia de 48 horas.
               </p>
             </div>
             <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground md:text-sm">
@@ -59,8 +59,8 @@ const Index = () => {
         {/* Grade principal do catálogo */}
         <ProductGrid
           products={catalogProducts}
-          title="Catálogo de pods em Recife"
-          subtitle="Modelos Ignite, Elfbar e Oxbar com sabores disponíveis, pedido rápido no WhatsApp, entrega em Recife e Olinda e garantia local."
+          title="Catálogo de pods"
+          subtitle="Modelos Ignite, Elfbar e Oxbar com sabores disponíveis, pedido rápido no WhatsApp e garantia de 48 horas."
         />
 
         <section className="sr-only" aria-label="Informações sobre entrega de pods em Recife e Olinda">
