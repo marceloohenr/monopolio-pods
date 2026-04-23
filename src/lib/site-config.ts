@@ -51,9 +51,11 @@ export function buildLocalBusinessSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${DEFAULT_SITE_URL}/#organization`,
     name: SITE_LEGAL_NAME,
-    alternateName: SITE_NAME,
+    alternateName: ["Monopólio Pods", "monopoliopods"],
     image: toAbsoluteUrl(SITE_OG_IMAGE),
+    logo: toAbsoluteUrl("/icons/icon-512.png"),
     url: DEFAULT_SITE_URL,
     telephone: WHATSAPP_DISPLAY,
     areaServed: ["Recife", "Olinda", "Região Metropolitana do Recife"],
@@ -87,10 +89,14 @@ export function buildWebsiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${DEFAULT_SITE_URL}/#website`,
     name: SITE_NAME,
-    alternateName: SITE_LEGAL_NAME,
+    alternateName: ["Monopólio Pods", "monopoliopods"],
     url: DEFAULT_SITE_URL,
     inLanguage: "pt-BR",
+    publisher: {
+      "@id": `${DEFAULT_SITE_URL}/#organization`,
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: `${DEFAULT_SITE_URL}/busca?q={search_term_string}`,
