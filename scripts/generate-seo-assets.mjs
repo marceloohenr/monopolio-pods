@@ -6,7 +6,7 @@ const rootDir = process.cwd();
 const publicDir = path.join(rootDir, "public");
 const iconsDir = path.join(publicDir, "icons");
 const sourcePath = path.join(rootDir, "src", "data", "products.ts");
-const siteUrl = (process.env.SITE_URL || process.env.VITE_SITE_URL || "https://monopoliopods.vercel.app").replace(
+const siteUrl = (process.env.SITE_URL || process.env.VITE_SITE_URL || "https://monopoliopods.com").replace(
   /\/+$/,
   "",
 );
