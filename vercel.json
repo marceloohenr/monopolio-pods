@@ -1,6 +1,17 @@
 {
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "monopoliopods.vercel.app"
+        }
+      ],
+      "destination": "https://monopoliopods.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
