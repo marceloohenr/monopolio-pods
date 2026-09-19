@@ -3,13 +3,21 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ProductGrid } from "@/components/ProductGrid";
 import { SeoHead } from "@/components/SeoHead";
-import { searchProducts } from "@/data/products";
+import { CatalogStatus, useCatalog } from "@/context/catalog-context";
 import { buildSearchSeoDescription } from "@/lib/site-config";
 
 const SearchPage = () => {
   const [params] = useSearchParams();
   const query = params.get("q") || "";
-  const results = searchProducts(query);
+  const { products, categories, isLoading, isError } = useCatalog();
+  const normalizedQuery = query.trim().toLowerCase();
+  const results = !normalizedQuery
+    ? products
+    : products.filter((product) => {
+        const category = categories.find((item) => item.id === product.categoryId);
+        return [product.name, product.brand, product.description, String(product.puffs), category?.name ?? "", ...product.variations.map((item) => item.name)]
+          .some((value) => value.toLowerCase().includes(normalizedQuery));
+      });
   const pageTitle = query ? `Busca por ${query} no catálogo de pods` : "Buscar pods em Recife";
   const pageDescription = buildSearchSeoDescription(query, results.length);
 
@@ -24,6 +32,9 @@ const SearchPage = () => {
 
       <Header />
       <main className="container mx-auto max-w-6xl flex-1 space-y-4 py-4 md:space-y-6 md:py-6">
+        {(isLoading || isError) && <CatalogStatus />}
+        {!isLoading && !isError && (
+        <>
         <section className="space-y-2 px-4 md:px-0">
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Busca</p>
           <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
@@ -41,6 +52,8 @@ const SearchPage = () => {
               : "Todos os modelos Ignite, Elfbar e Oxbar disponíveis para pedido."
           }
         />
+        </>
+        )}
       </main>
       <Footer />
     </div>

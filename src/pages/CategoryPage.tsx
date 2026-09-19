@@ -4,13 +4,14 @@ import { Header } from "@/components/Header";
 import { CategoryNav } from "@/components/CategoryNav";
 import { ProductGrid } from "@/components/ProductGrid";
 import { SeoHead } from "@/components/SeoHead";
-import { categories, getProductsByCategory } from "@/data/products";
+import { CatalogStatus, useCatalog } from "@/context/catalog-context";
 import { buildBreadcrumbSchema, buildCategorySeoDescription, buildLocalBusinessSchema } from "@/lib/site-config";
 
 const CategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const products = slug ? getProductsByCategory(slug) : [];
+  const { products: catalog, categories, isLoading, isError } = useCatalog();
   const category = categories.find((item) => item.slug === slug);
+  const products = category ? catalog.filter((product) => product.categoryId === category.id) : [];
   const categoryName = category?.name || "Pods";
   const pageTitle = `${categoryName} Recife | ${categoryName} em Recife e Olinda`;
   const pageDescription = buildCategorySeoDescription(categoryName, products.length);
@@ -33,6 +34,9 @@ const CategoryPage = () => {
 
       <Header />
       <main className="container mx-auto max-w-6xl flex-1 space-y-4 py-4 md:space-y-6 md:py-6">
+        {(isLoading || isError) && <CatalogStatus />}
+        {!isLoading && !isError && (
+        <>
         <section className="space-y-2 px-4 md:px-0">
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Categoria</p>
           <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl">
@@ -48,6 +52,8 @@ const CategoryPage = () => {
           title={`Modelos ${categoryName} disponíveis`}
           subtitle={`${products.length} modelo${products.length !== 1 ? "s" : ""} com sabores e entrega em Recife, Olinda e região metropolitana.`}
         />
+        </>
+        )}
       </main>
       <Footer />
     </div>

@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { Battery, Droplets, Percent, Settings, Sparkles, Zap } from "lucide-react";
-import { categories } from "@/data/products";
+import { useCatalog } from "@/context/catalog-context";
 
 const iconMap: Record<string, React.ElementType> = {
   Zap,
@@ -13,6 +13,7 @@ const iconMap: Record<string, React.ElementType> = {
 
 export function CategoryNav() {
   const { slug } = useParams();
+  const { categories } = useCatalog();
 
   return (
     <div className="scrollbar-hide flex gap-2 overflow-x-auto px-4 pb-2 md:px-0">

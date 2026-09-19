@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, ShoppingBag } from "lucide-react";
-import { Product, formatPrice, formatPuffs, hasAvailableVariations } from "@/data/products";
+import { Product, formatPrice, formatPuffs, isProductAvailable } from "@/data/products";
 import { ProductImageStage } from "@/components/ProductImageStage";
 import { ProductPurchaseDialog } from "@/components/ProductPurchaseDialog";
 import { Button } from "@/components/ui/button";
@@ -14,16 +14,16 @@ export function ProductCard({ product }: ProductCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const unitPrice = product.promoPrice ?? product.price;
-  const hasAvailableFlavors = hasAvailableVariations(product);
+  const productAvailable = isProductAvailable(product);
 
   const handleFlavorClick = (flavor: string) => {
-    if (!hasAvailableFlavors) return;
+    if (!productAvailable) return;
     setSelectedFlavor(flavor);
     setIsDialogOpen(true);
   };
 
   const handleOpenPurchaseDialog = () => {
-    if (!hasAvailableFlavors) return;
+    if (!productAvailable) return;
     setSelectedFlavor("");
     setIsDialogOpen(true);
   };
@@ -52,9 +52,9 @@ export function ProductCard({ product }: ProductCardProps) {
 
           <div className="space-y-2">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              {hasAvailableFlavors ? "Sabores" : "Status"}
+              {productAvailable ? "Sabores" : "Status"}
             </p>
-            {hasAvailableFlavors ? (
+            {productAvailable ? (
               <div className="flex flex-wrap gap-1.5">
                 {product.variations.map((variation) => (
                   <button
@@ -81,16 +81,16 @@ export function ProductCard({ product }: ProductCardProps) {
 
           <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
             <ShieldCheck className="h-3.5 w-3.5" />
-            {hasAvailableFlavors ? "Garantia 48h" : "Produto em falta"}
+            {productAvailable ? "Garantia 48h" : "Produto em falta"}
           </div>
 
           <Button
             type="button"
             className="h-11 w-full rounded-2xl text-sm"
-            disabled={!hasAvailableFlavors}
+            disabled={!productAvailable}
             onClick={handleOpenPurchaseDialog}
           >
-            {hasAvailableFlavors ? (
+            {productAvailable ? (
               <>
                 <ShoppingBag className="h-4 w-4" />
                 Finalizar pedido

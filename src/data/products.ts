@@ -17,6 +17,17 @@ export interface ProductVariation {
   id: string;
   name: string;
   inStock: boolean;
+  isAvailable?: boolean;
+}
+
+export interface ProductImageRecord {
+  id: string;
+  path: string;
+  mimeType: string;
+  width: number;
+  height: number;
+  sortOrder: number;
+  isPrimary: boolean;
 }
 
 export interface ProductVisualTheme {
@@ -36,12 +47,15 @@ export interface Product {
   puffs: number;
   description: string;
   price: number;
+  priceCents?: number;
   promoPrice?: number;
   images: string[];
   categoryId: string;
   variations: ProductVariation[];
   tags: string[];
   featured: boolean;
+  isAvailable?: boolean;
+  imageRecords?: ProductImageRecord[];
   createdAt: string;
   warrantyNote: string;
   shippingNote: string;
@@ -623,6 +637,10 @@ export function getProductsByTag(tag: string): Product[] {
 
 export function hasAvailableVariations(product: Product): boolean {
   return product.variations.some((variation) => variation.inStock);
+}
+
+export function isProductAvailable(product: Product): boolean {
+  return (product.isAvailable ?? hasAvailableVariations(product)) && hasAvailableVariations(product);
 }
 
 export function getProductsByCategory(categorySlug: string): Product[] {

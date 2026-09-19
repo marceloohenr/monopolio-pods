@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useCheckout } from "@/context/checkout-context";
-import { formatPrice, formatPuffs, products } from "@/data/products";
+import { formatPrice, formatPuffs } from "@/data/products";
+import { useCatalog } from "@/context/catalog-context";
 import { formatShippingFee, findShippingAreaByLocation } from "@/data/shipping";
 import { ProductImageStage } from "@/components/ProductImageStage";
 import { Button } from "@/components/ui/button";
@@ -46,6 +47,7 @@ function ProductSelect({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const { products } = useCatalog();
   const product = products.find((entry) => entry.id === productId);
 
   if (!product || product.variations.length === 0) return null;
@@ -66,6 +68,7 @@ function ProductSelect({
 }
 
 export function CheckoutSheet() {
+  const { products } = useCatalog();
   const {
     isOpen,
     closeCheckout,

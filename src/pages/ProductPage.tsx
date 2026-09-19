@@ -15,16 +15,17 @@ import {
   WHATSAPP_DISPLAY,
   formatPrice,
   formatPuffs,
-  getProductBySlug,
   hasAvailableVariations,
-  products,
+  isProductAvailable,
 } from "@/data/products";
+import { CatalogStatus, useCatalog } from "@/context/catalog-context";
 import { buildBreadcrumbSchema, buildLocalBusinessSchema, buildProductSchema, buildProductSeoDescription } from "@/lib/site-config";
 
 const ProductPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { openCheckout } = useCheckout();
-  const product = slug ? getProductBySlug(slug) : undefined;
+  const { products, isLoading, isError } = useCatalog();
+  const product = slug ? products.find((item) => item.slug === slug) : undefined;
   const [selectedVariation, setSelectedVariation] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isPurchaseDialogOpen, setIsPurchaseDialogOpen] = useState(false);
@@ -34,6 +35,15 @@ const ProductPage = () => {
     setSelectedVariation(defaultVariation);
     setQuantity(1);
   }, [defaultVariation, product?.id]);
+
+  if (isLoading || isError) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <CatalogStatus />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -53,6 +63,7 @@ const ProductPage = () => {
     .filter((item) => item.categoryId === product.categoryId && item.id !== product.id)
     .slice(0, 3);
   const hasAvailableFlavors = hasAvailableVariations(product);
+  const productAvailable = isProductAvailable(product);
   const availableFlavorCount = product.variations.filter((variation) => variation.inStock).length;
   const unitPrice = product.promoPrice ?? product.price;
   const subtotal = unitPrice * quantity;
@@ -136,7 +147,7 @@ const ProductPage = () => {
                 {formatPuffs(product.puffs)}
               </Badge>
               <Badge variant="outline" className="rounded-full border-border/60 bg-background/60 text-foreground">
-                {hasAvailableFlavors ? `${availableFlavorCount} sabores` : "Sem sabores ativos"}
+                  {productAvailable ? `${availableFlavorCount} sabores` : "Indisponível"}
               </Badge>
             </div>
 
@@ -179,7 +190,7 @@ const ProductPage = () => {
                   <button
                     key={variation.id}
                     type="button"
-                    disabled={!variation.inStock}
+                    disabled={!productAvailable || !variation.inStock}
                     onClick={() => setSelectedVariation(variation.name)}
                     className={`rounded-full border px-3 py-1.5 text-sm transition ${
                       selectedVariation === variation.name
@@ -200,7 +211,7 @@ const ProductPage = () => {
               <div className="glass flex items-center rounded-full px-1">
                 <button
                   type="button"
-                  disabled={!hasAvailableFlavors}
+                  disabled={!productAvailable}
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="p-2 text-muted-foreground transition hover:text-foreground"
                 >
@@ -209,7 +220,7 @@ const ProductPage = () => {
                 <span className="w-8 text-center text-sm font-semibold text-foreground">{quantity}</span>
                 <button
                   type="button"
-                  disabled={!hasAvailableFlavors}
+                  disabled={!productAvailable}
                   onClick={() => setQuantity(quantity + 1)}
                   className="p-2 text-muted-foreground transition hover:text-foreground"
                 >
@@ -233,10 +244,10 @@ const ProductPage = () => {
                 type="button"
                 size="lg"
                 className="h-11 rounded-2xl"
-                disabled={!hasAvailableFlavors}
+                disabled={!productAvailable}
                 onClick={() => setIsPurchaseDialogOpen(true)}
               >
-                {hasAvailableFlavors ? (
+                {productAvailable ? (
                   <>
                     <ShoppingBag className="h-4 w-4" />
                     Finalizar pedido

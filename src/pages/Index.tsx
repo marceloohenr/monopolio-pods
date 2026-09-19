@@ -4,10 +4,12 @@ import { CategoryNav } from "@/components/CategoryNav";
 import { HomeGalleryHero } from "@/components/HomeGalleryHero";
 import { ProductGrid } from "@/components/ProductGrid";
 import { SeoHead } from "@/components/SeoHead";
-import { AGE_NOTICE, products } from "@/data/products";
+import { AGE_NOTICE } from "@/data/products";
+import { CatalogStatus, useCatalog } from "@/context/catalog-context";
 import { buildCollectionSchema, buildLocalBusinessSchema, buildWebsiteSchema } from "@/lib/site-config";
 
 const Index = () => {
+  const { products, isLoading, isError } = useCatalog();
   // Ordem comercial usada na vitrine principal.
   const brandOrder = ["Ignite", "Elfbar", "Oxbar"];
   const catalogProducts = [...products].sort(
@@ -34,6 +36,9 @@ const Index = () => {
       <Header />
 
       <main className="container mx-auto max-w-6xl flex-1 space-y-5 py-4 md:space-y-7 md:py-6">
+        {(isLoading || isError) && <CatalogStatus />}
+        {!isLoading && !isError && (
+        <>
         {/* Abertura da home com posicionamento do catálogo */}
         <section className="space-y-3 px-4 md:px-0">
           <p className="text-[10px] uppercase tracking-[0.22em] text-primary md:text-xs">Monopolio Pods</p>
@@ -76,6 +81,8 @@ const Index = () => {
         <p className="px-4 text-center text-[11px] uppercase tracking-[0.18em] text-primary md:px-0 md:text-xs">
           {AGE_NOTICE}
         </p>
+        </>
+        )}
       </main>
 
       <Footer />

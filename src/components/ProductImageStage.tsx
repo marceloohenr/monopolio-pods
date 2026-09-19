@@ -9,7 +9,7 @@ interface ProductImageAdjustment {
   scale: number;
   x?: number;
   y?: number;
-  blendMode?: string;
+  blendMode?: React.CSSProperties["mixBlendMode"];
 }
 
 const variantStyles: Record<
@@ -75,7 +75,7 @@ export function ProductImageStage({
   const adjustment = baseImageAdjustments[variant];
   const blendMode = adjustment.blendMode;
   const imageTransform = `translate3d(${adjustment.x ?? 0}%, ${adjustment.y ?? 0}%, 0) scale(${adjustment.scale})`;
-  const imageSrc = product.images[imageIndex] ?? product.images[0];
+  const imageSrc = product.images[imageIndex] ?? product.images[0] ?? "/placeholder.svg";
 
   React.useEffect(() => {
     setImageIndex(0);

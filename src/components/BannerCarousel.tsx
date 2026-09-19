@@ -1,25 +1,27 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { MessageCircle, ShieldCheck, Truck } from "lucide-react";
-import { banners, getFeaturedProducts } from "@/data/products";
+import { banners, isProductAvailable } from "@/data/products";
+import { useCatalog } from "@/context/catalog-context";
 import { Button } from "@/components/ui/button";
 import { useCheckout } from "@/context/checkout-context";
 import monopolioLogo from "@/assets/monopolio-logo.jpg";
 
 export function BannerCarousel() {
   const { openCheckout } = useCheckout();
+  const { products } = useCatalog();
   const banner = banners.find((item) => item.active);
-  const featuredProduct = getFeaturedProducts()[0];
+  const featuredProduct = products.find((product) => product.featured && isProductAvailable(product)) ?? products.find(isProductAvailable);
   const [imageIndex, setImageIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    setImageIndex(0);
+  }, [featuredProduct?.id]);
 
   if (!banner || !featuredProduct) return null;
 
   const theme = featuredProduct.visualTheme;
   const imageSrc = featuredProduct.images[imageIndex] ?? featuredProduct.images[0];
-
-  React.useEffect(() => {
-    setImageIndex(0);
-  }, [featuredProduct.id]);
 
   const handleImageError = () => {
     setImageIndex((current) => {

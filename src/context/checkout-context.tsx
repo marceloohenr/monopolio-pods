@@ -1,5 +1,6 @@
 import * as React from "react";
-import { type Product, WHATSAPP_NUMBER, products } from "@/data/products";
+import { type Product, WHATSAPP_NUMBER } from "@/data/products";
+import { useCatalog } from "@/context/catalog-context";
 import { getShippingFeeByLocation } from "@/data/shipping";
 import { type PaymentMethod, buildWhatsAppOrderMessage } from "@/lib/whatsapp-order";
 
@@ -111,7 +112,7 @@ function hasCompleteAddress(customer: CustomerDetails) {
   return customer.street.trim().length > 0 && hasShippingLocation(customer);
 }
 
-function getCheckoutSummary(items: CheckoutItem[]) {
+function getCheckoutSummary(items: CheckoutItem[], products: Product[]) {
   const validItems = items
     .map((item) => {
       const product = products.find((entry) => entry.id === item.productId);
@@ -153,8 +154,8 @@ function getCheckoutSummary(items: CheckoutItem[]) {
   };
 }
 
-function buildCheckoutUrl(items: CheckoutItem[], customer: CustomerDetails, createdAt = new Date()) {
-  const summary = getCheckoutSummary(items);
+function buildCheckoutUrl(items: CheckoutItem[], customer: CustomerDetails, products: Product[], createdAt = new Date()) {
+  const summary = getCheckoutSummary(items, products);
   const freight = getShippingFeeByLocation({
     neighborhood: customer.neighborhood,
     city: customer.city,
@@ -173,6 +174,7 @@ function buildCheckoutUrl(items: CheckoutItem[], customer: CustomerDetails, crea
 }
 
 export function CheckoutProvider({ children }: { children: React.ReactNode }) {
+  const { products } = useCatalog();
   const [isOpen, setIsOpen] = React.useState(false);
   const [items, setItems] = React.useState<CheckoutItem[]>(() => readStorage(CHECKOUT_ITEMS_KEY, []));
   const [customer, setCustomer] = React.useState<CustomerDetails>(() =>
@@ -262,7 +264,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
       const unitPrice = product.promoPrice ?? product.price;
       return acc + unitPrice * item.quantity;
     }, 0);
-  }, [items]);
+  }, [items, products]);
 
   const freight = React.useMemo(() => {
     if (!hasShippingLocation(customer)) return null;
@@ -271,7 +273,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
       neighborhood: customer.neighborhood,
       city: customer.city,
     });
-  }, [customer.city, customer.neighborhood]);
+  }, [customer]);
 
   const finalTotal = React.useMemo(() => (freight === null ? null : subtotal + freight), [freight, subtotal]);
 
@@ -280,10 +282,10 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
   const submitCheckout = React.useCallback(() => {
     if (!canSubmit || typeof window === "undefined") return;
 
-    const checkoutUrl = buildCheckoutUrl(items, customer, new Date());
+    const checkoutUrl = buildCheckoutUrl(items, customer, products, new Date());
     window.open(checkoutUrl, "_blank", "noopener,noreferrer");
     setIsOpen(false);
-  }, [canSubmit, customer, items]);
+  }, [canSubmit, customer, items, products]);
 
   const value = React.useMemo<CheckoutContextValue>(
     () => ({

@@ -1,4 +1,4 @@
-import { categories, deliveryZones, Product, WHATSAPP_DISPLAY } from "@/data/products";
+import { categories, deliveryZones, isProductAvailable, Product, WHATSAPP_DISPLAY } from "@/data/products";
 
 export const DEFAULT_SITE_URL = (import.meta.env.VITE_SITE_URL || "https://monopoliopods.com").replace(/\/+$/, "");
 export const SITE_NAME = "Monopolio Pods";
@@ -133,7 +133,7 @@ export function buildCollectionSchema(title: string, paths: string[]) {
 
 export function buildProductSchema(product: Product) {
   const offerPrice = product.promoPrice ?? product.price;
-  const isAvailable = product.variations.some((variation) => variation.inStock);
+  const isAvailable = isProductAvailable(product);
 
   return {
     "@context": "https://schema.org",

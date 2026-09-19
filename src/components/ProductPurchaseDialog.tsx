@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Minus, Plus, ShieldCheck, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { useCheckout } from "@/context/checkout-context";
-import { Product, formatPrice, formatPuffs, hasAvailableVariations } from "@/data/products";
+import { Product, formatPrice, formatPuffs, isProductAvailable } from "@/data/products";
 import { ProductImageStage } from "@/components/ProductImageStage";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,7 +42,7 @@ export function ProductPurchaseDialog({
   const pendingCheckoutRef = useRef<{ flavor: string; quantity: number } | null>(null);
   const unitPrice = product.promoPrice ?? product.price;
   const subtotal = unitPrice * quantity;
-  const hasAvailableFlavors = hasAvailableVariations(product);
+  const productAvailable = isProductAvailable(product);
 
   useEffect(() => {
     if (!open) return;
@@ -63,7 +63,7 @@ export function ProductPurchaseDialog({
   }, [open, openCheckout, product]);
 
   const handleConfirm = () => {
-    if (!hasAvailableFlavors) {
+    if (!productAvailable) {
       toast.error("Produto indisponível no momento.");
       return;
     }
@@ -118,9 +118,9 @@ export function ProductPurchaseDialog({
 
           <div className="space-y-2">
             <p className="text-sm font-semibold text-foreground">Escolha o sabor</p>
-            <Select value={selectedFlavor} onValueChange={setSelectedFlavor} disabled={!hasAvailableFlavors}>
+            <Select value={selectedFlavor} onValueChange={setSelectedFlavor} disabled={!productAvailable}>
               <SelectTrigger className="h-11 rounded-2xl border-border/60 bg-background text-left">
-                <SelectValue placeholder={hasAvailableFlavors ? "Escolha o sabor" : "Indisponível no momento"} />
+                <SelectValue placeholder={productAvailable ? "Escolha o sabor" : "Indisponível no momento"} />
               </SelectTrigger>
               <SelectContent>
                 {product.variations
@@ -132,7 +132,7 @@ export function ProductPurchaseDialog({
                   ))}
               </SelectContent>
             </Select>
-            {!hasAvailableFlavors && (
+            {!productAvailable && (
               <p className="text-xs text-muted-foreground">Esse produto esta sem sabores ativos no momento.</p>
             )}
           </div>
@@ -142,7 +142,7 @@ export function ProductPurchaseDialog({
             <div className="glass flex items-center rounded-full px-1">
               <button
                 type="button"
-                disabled={!hasAvailableFlavors}
+                disabled={!productAvailable}
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 className="p-2 text-muted-foreground transition hover:text-foreground"
               >
@@ -151,7 +151,7 @@ export function ProductPurchaseDialog({
               <span className="w-10 text-center text-sm font-semibold text-foreground">{quantity}</span>
               <button
                 type="button"
-                disabled={!hasAvailableFlavors}
+                disabled={!productAvailable}
                 onClick={() => setQuantity(quantity + 1)}
                 className="p-2 text-muted-foreground transition hover:text-foreground"
               >
@@ -176,8 +176,8 @@ export function ProductPurchaseDialog({
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Fechar
           </Button>
-          <Button type="button" onClick={handleConfirm} disabled={!selectedFlavor || !hasAvailableFlavors}>
-            {hasAvailableFlavors ? (
+          <Button type="button" onClick={handleConfirm} disabled={!selectedFlavor || !productAvailable}>
+            {productAvailable ? (
               <>
                 <ShoppingBag className="h-4 w-4" />
                 Adicionar ao carrinho

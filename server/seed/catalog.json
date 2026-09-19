@@ -1,0 +1,670 @@
+{
+  "categories": [
+    {
+      "id": "1",
+      "name": "Ignite",
+      "slug": "ignite",
+      "icon": "Zap",
+      "order": 1,
+      "description": "Linha Ignite disponível para pedido no WhatsApp."
+    },
+    {
+      "id": "2",
+      "name": "Elfbar",
+      "slug": "elfbar",
+      "icon": "Sparkles",
+      "order": 2,
+      "description": "Linha Elfbar disponível para pedido no WhatsApp."
+    },
+    {
+      "id": "3",
+      "name": "Oxbar",
+      "slug": "oxbar",
+      "icon": "Battery",
+      "order": 3,
+      "description": "Linha Oxbar disponível para pedido no WhatsApp."
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Ignite V55 - 5.500 Puffs",
+      "slug": "ignite-v55-5500-puffs",
+      "brand": "Ignite",
+      "puffs": 5500,
+      "description": "Modelo de 5.500 puffs com perfil mentolado.",
+      "price": 95,
+      "categoryId": "1",
+      "variations": [
+        {
+          "id": "v55-0",
+          "name": "Indisponível no momento",
+          "inStock": false
+        }
+      ],
+      "tags": [
+        "mentolado"
+      ],
+      "featured": false,
+      "createdAt": "2026-03-30",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Ultra Thin Miami Mint",
+        "accent": "#183127",
+        "accentSoft": "rgba(24, 49, 39, 0.10)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #ffffff 0%, #edf7f1 100%)",
+        "shadow": "0 28px 70px rgba(24, 49, 39, 0.14)"
+      },
+      "sourceImages": [
+        "src/assets/products/ignite-v55-box.png"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Ignite V80 - 8.000 Puffs",
+      "slug": "ignite-v80-8000-puffs",
+      "brand": "Ignite",
+      "puffs": 8000,
+      "description": "Modelo de 8.000 puffs com ampla variedade de sabores.",
+      "price": 105,
+      "categoryId": "1",
+      "variations": [
+        {
+          "id": "v80-1",
+          "name": "Maracujá Kiwi",
+          "inStock": true
+        },
+        {
+          "id": "v80-2",
+          "name": "Morango Kiwi",
+          "inStock": true
+        },
+        {
+          "id": "v80-3",
+          "name": "Menta Ice",
+          "inStock": true
+        },
+        {
+          "id": "v80-4",
+          "name": "Uva Ice",
+          "inStock": true
+        },
+        {
+          "id": "v80-5",
+          "name": "Melancia Ice",
+          "inStock": true
+        },
+        {
+          "id": "v80-6",
+          "name": "Melancia Frozen",
+          "inStock": true
+        },
+        {
+          "id": "v80-7",
+          "name": "Maçã Frozen",
+          "inStock": true
+        },
+        {
+          "id": "v80-8",
+          "name": "Água Menta Frozen",
+          "inStock": true
+        }
+      ],
+      "tags": [
+        "popular",
+        "mais-sabores"
+      ],
+      "featured": true,
+      "createdAt": "2026-03-30",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Gold Edition",
+        "accent": "#9b7a31",
+        "accentSoft": "rgba(155, 122, 49, 0.13)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #fffbf2 0%, #efe1b8 100%)",
+        "shadow": "0 28px 70px rgba(155, 122, 49, 0.18)"
+      },
+      "sourceImages": [
+        "src/assets/products/ignite-v80-box.png"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Ignite V120 - 12.000 Puffs",
+      "slug": "ignite-v120-12000-puffs",
+      "brand": "Ignite",
+      "puffs": 12000,
+      "description": "Modelo de 12.000 puffs com autonomia intermediária.",
+      "price": 115,
+      "categoryId": "1",
+      "variations": [
+        {
+          "id": "v120-0",
+          "name": "Indisponível no momento",
+          "inStock": false
+        }
+      ],
+      "tags": [],
+      "featured": false,
+      "createdAt": "2026-03-30",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Rose Gold Edition",
+        "accent": "#9f6d60",
+        "accentSoft": "rgba(159, 109, 96, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #fffaf8 0%, #f4dfd5 100%)",
+        "shadow": "0 28px 70px rgba(159, 109, 96, 0.15)"
+      },
+      "sourceImages": [
+        "src/assets/products/ignite-v120-box.png"
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Ignite V155 - 15.500 Puffs",
+      "slug": "ignite-v155-15500-puffs",
+      "brand": "Ignite",
+      "puffs": 15500,
+      "description": "Modelo de 15.500 puffs com autonomia alta e mais sabores.",
+      "price": 130,
+      "categoryId": "1",
+      "variations": [
+        {
+          "id": "v155-1",
+          "name": "Morango Kiwi",
+          "inStock": true
+        },
+        {
+          "id": "v155-2",
+          "name": "Uva Ice",
+          "inStock": true
+        },
+        {
+          "id": "v155-3",
+          "name": "Melancia Ice",
+          "inStock": true
+        },
+        {
+          "id": "v155-4",
+          "name": "Abacaxi Ice",
+          "inStock": true
+        },
+        {
+          "id": "v155-5",
+          "name": "Morango Melancia",
+          "inStock": true
+        },
+        {
+          "id": "v155-6",
+          "name": "Menta Ice",
+          "inStock": true
+        },
+        {
+          "id": "v155-7",
+          "name": "Maracujá Kiwi Goiaba",
+          "inStock": true
+        }
+      ],
+      "tags": [
+        "popular"
+      ],
+      "featured": true,
+      "createdAt": "2026-03-30",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Ultra Slim Orange",
+        "accent": "#cf6b34",
+        "accentSoft": "rgba(207, 107, 52, 0.13)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #fffaf4 0%, #ffd8bd 100%)",
+        "shadow": "0 28px 70px rgba(207, 107, 52, 0.16)"
+      },
+      "sourceImages": [
+        "src/assets/products/ignite-v155-device.png"
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Ignite V250 - 25.000 Puffs",
+      "slug": "ignite-v250-25000-puffs",
+      "brand": "Ignite",
+      "puffs": 25000,
+      "description": "Modelo de 25.000 puffs com autonomia alta e recarga rápida.",
+      "price": 150,
+      "categoryId": "1",
+      "variations": [
+        {
+          "id": "v250-0",
+          "name": "Indisponível no momento",
+          "inStock": false
+        }
+      ],
+      "tags": [
+        "novo"
+      ],
+      "featured": false,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Digital Display",
+        "accent": "#23524b",
+        "accentSoft": "rgba(35, 82, 75, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #f7fffd 0%, #d7efe9 100%)",
+        "shadow": "0 28px 70px rgba(35, 82, 75, 0.16)"
+      },
+      "sourceImages": [
+        "src/assets/products/ignite-v250-device.png"
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Ignite V300 - 30.000 Puffs",
+      "slug": "ignite-v300-30000-puffs",
+      "brand": "Ignite",
+      "puffs": 30000,
+      "description": "Modelo de 30.000 puffs com autonomia máxima.",
+      "price": 180,
+      "categoryId": "1",
+      "variations": [
+        {
+          "id": "v300-1",
+          "name": "Morango Kiwi",
+          "inStock": true
+        },
+        {
+          "id": "v300-2",
+          "name": "Melancia Dragon Fruit",
+          "inStock": true
+        },
+        {
+          "id": "v300-3",
+          "name": "Melancia Mix",
+          "inStock": true
+        }
+      ],
+      "tags": [
+        "popular",
+        "premium"
+      ],
+      "featured": true,
+      "createdAt": "2026-03-30",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Black Digital",
+        "accent": "#1b2430",
+        "accentSoft": "rgba(27, 36, 48, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #f2f5f8 0%, #d8dfe7 100%)",
+        "shadow": "0 28px 70px rgba(27, 36, 48, 0.17)"
+      },
+      "sourceImages": [
+        "src/assets/products/ignite-v300-box.png"
+      ]
+    },
+    {
+      "id": "7",
+      "name": "Ignite V400 - 40.000 Puffs",
+      "slug": "ignite-v400-40000-puffs",
+      "brand": "Ignite",
+      "puffs": 40000,
+      "description": "Modelo de 40.000 puffs com autonomia máxima da linha Ignite.",
+      "price": 200,
+      "categoryId": "1",
+      "variations": [
+        {
+          "id": "v400-1",
+          "name": "Manga Ice X Maracujá Goiaba",
+          "inStock": true
+        },
+        {
+          "id": "v400-2",
+          "name": "Uva Ice X Morango",
+          "inStock": true
+        },
+        {
+          "id": "v400-3",
+          "name": "Uva Pop X Pêssego Ice",
+          "inStock": true
+        },
+        {
+          "id": "v400-4",
+          "name": "Triple Mango",
+          "inStock": true
+        },
+        {
+          "id": "v400-5",
+          "name": "Morango Kiwi",
+          "inStock": true
+        }
+      ],
+      "tags": [
+        "novo",
+        "premium"
+      ],
+      "featured": true,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "High Capacity",
+        "accent": "#2d343f",
+        "accentSoft": "rgba(45, 52, 63, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #f5f7fa 0%, #d4dbe3 100%)",
+        "shadow": "0 28px 70px rgba(45, 52, 63, 0.18)"
+      },
+      "sourceImages": [
+        "src/assets/products/ignite-v400-device.webp"
+      ]
+    },
+    {
+      "id": "8",
+      "name": "Elfbar BC15K - 15.000 Puffs",
+      "slug": "elfbar-bc-15k-15000-puffs",
+      "brand": "Elfbar",
+      "puffs": 15000,
+      "description": "Modelo Elfbar BC 15K para quem busca um formato mais compacto.",
+      "price": 110,
+      "categoryId": "2",
+      "variations": [
+        {
+          "id": "bc15k-1",
+          "name": "Melancia Ice",
+          "inStock": true
+        },
+        {
+          "id": "bc15k-2",
+          "name": "Morango Kiwi",
+          "inStock": true
+        },
+        {
+          "id": "bc15k-3",
+          "name": "Menta Ice",
+          "inStock": true
+        },
+        {
+          "id": "bc15k-4",
+          "name": "Maracujá Kiwi Goiaba",
+          "inStock": true
+        }
+      ],
+      "tags": [
+        "novo"
+      ],
+      "featured": false,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "BC Edition",
+        "accent": "#1f4f3f",
+        "accentSoft": "rgba(31, 79, 63, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #f5fcf8 0%, #d8eee2 100%)",
+        "shadow": "0 28px 70px rgba(31, 79, 63, 0.14)"
+      },
+      "sourceImages": [
+        "src/assets/products/elfbar-bc-15k.png"
+      ]
+    },
+    {
+      "id": "9",
+      "name": "Elfbar GH23K - 23.000 Puffs",
+      "slug": "elfbar-gh23k-23000-puffs",
+      "brand": "Elfbar",
+      "puffs": 23000,
+      "description": "Modelo Elfbar GH23K com longa autonomia, recarga e sabores variados.",
+      "price": 145,
+      "categoryId": "2",
+      "variations": [
+        {
+          "id": "gh23k-1",
+          "name": "Melancia Ice",
+          "inStock": true
+        },
+        {
+          "id": "gh23k-2",
+          "name": "Uva Ice",
+          "inStock": true
+        },
+        {
+          "id": "gh23k-3",
+          "name": "Morango Banana",
+          "inStock": true
+        },
+        {
+          "id": "gh23k-4",
+          "name": "Pêssego Manga Melancia",
+          "inStock": true
+        },
+        {
+          "id": "gh23k-5",
+          "name": "Abacaxi Ameixa Limão Menta",
+          "inStock": true
+        }
+      ],
+      "tags": [
+        "novo"
+      ],
+      "featured": false,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "GH Series",
+        "accent": "#7d1d41",
+        "accentSoft": "rgba(125, 29, 65, 0.11)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #fff8fb 0%, #f7d8e4 100%)",
+        "shadow": "0 28px 70px rgba(125, 29, 65, 0.14)"
+      },
+      "sourceImages": [
+        "src/assets/products/elfbar-gh23k.png"
+      ]
+    },
+    {
+      "id": "10",
+      "name": "Elfbar 40K Trio - 40.000 Puffs",
+      "slug": "elfbar-40k-trio-40000-puffs",
+      "brand": "Elfbar",
+      "puffs": 40000,
+      "description": "Modelo Elfbar 40K Trio com alto rendimento para pedido.",
+      "price": 195,
+      "categoryId": "2",
+      "variations": [
+        {
+          "id": "40ktrio-1",
+          "name": "Indisponível no momento",
+          "inStock": false
+        }
+      ],
+      "tags": [
+        "novo",
+        "premium"
+      ],
+      "featured": true,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Trio Edition",
+        "accent": "#5d2f91",
+        "accentSoft": "rgba(93, 47, 145, 0.11)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #faf8ff 0%, #e2d6ff 100%)",
+        "shadow": "0 28px 70px rgba(93, 47, 145, 0.15)"
+      },
+      "sourceImages": [
+        "src/assets/products/elfbar-40k-trio.png"
+      ]
+    },
+    {
+      "id": "11",
+      "name": "Elfbar 40K Ice King - 40.000 Puffs",
+      "slug": "elfbar-40k-ice-king-40000-puffs",
+      "brand": "Elfbar",
+      "puffs": 40000,
+      "description": "Modelo Elfbar 40K Ice King com proposta gelada e alta autonomia.",
+      "price": 198,
+      "categoryId": "2",
+      "variations": [
+        {
+          "id": "40kice-1",
+          "name": "Indisponível no momento",
+          "inStock": false
+        }
+      ],
+      "tags": [
+        "novo",
+        "premium"
+      ],
+      "featured": false,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Ice King",
+        "accent": "#216b8e",
+        "accentSoft": "rgba(33, 107, 142, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #f5fcff 0%, #d6eef7 100%)",
+        "shadow": "0 28px 70px rgba(33, 107, 142, 0.14)"
+      },
+      "sourceImages": [
+        "src/assets/products/elfbar-40k-ice-king.png"
+      ]
+    },
+    {
+      "id": "12",
+      "name": "Elfbar 45K Pro - 45.000 Puffs",
+      "slug": "elfbar-45k-pro-45000-puffs",
+      "brand": "Elfbar",
+      "puffs": 45000,
+      "description": "Modelo Elfbar 45K Pro com autonomia estendida e visual premium.",
+      "price": 190,
+      "categoryId": "2",
+      "variations": [
+        {
+          "id": "45kpro-1",
+          "name": "Melancia Ice",
+          "inStock": true
+        },
+        {
+          "id": "45kpro-2",
+          "name": "Uva Ice",
+          "inStock": true
+        },
+        {
+          "id": "45kpro-3",
+          "name": "Maracujá Kiwi Goiaba",
+          "inStock": true
+        },
+        {
+          "id": "45kpro-4",
+          "name": "Morango Kiwi",
+          "inStock": true
+        }
+      ],
+      "tags": [
+        "novo",
+        "premium"
+      ],
+      "featured": false,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Pro Edition",
+        "accent": "#b65f1f",
+        "accentSoft": "rgba(182, 95, 31, 0.11)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #fffaf5 0%, #f6dfcb 100%)",
+        "shadow": "0 28px 70px rgba(182, 95, 31, 0.15)"
+      },
+      "sourceImages": [
+        "src/assets/products/elfbar-45k-pro.png"
+      ]
+    },
+    {
+      "id": "13",
+      "name": "Oxbar 35K - 35.000 Puffs",
+      "slug": "oxbar-35k-35000-puffs",
+      "brand": "Oxbar",
+      "puffs": 35000,
+      "description": "Modelo Oxbar 35K com alto rendimento e pedido via WhatsApp.",
+      "price": 185,
+      "categoryId": "3",
+      "variations": [
+        {
+          "id": "ox35k-1",
+          "name": "Indisponível no momento",
+          "inStock": false
+        }
+      ],
+      "tags": [
+        "novo"
+      ],
+      "featured": false,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Performance",
+        "accent": "#4f3b21",
+        "accentSoft": "rgba(79, 59, 33, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #fdf9f4 0%, #efe1cf 100%)",
+        "shadow": "0 28px 70px rgba(79, 59, 33, 0.15)"
+      },
+      "sourceImages": [
+        "src/assets/products/oxbar-35k.png"
+      ]
+    },
+    {
+      "id": "14",
+      "name": "Oxbar 50K - 50.000 Puffs",
+      "slug": "oxbar-50k-50000-puffs",
+      "brand": "Oxbar",
+      "puffs": 50000,
+      "description": "Modelo Oxbar 50K com a maior autonomia desta rodada do catálogo.",
+      "price": 220,
+      "categoryId": "3",
+      "variations": [
+        {
+          "id": "ox50k-1",
+          "name": "Indisponível no momento",
+          "inStock": false
+        }
+      ],
+      "tags": [
+        "novo",
+        "premium"
+      ],
+      "featured": true,
+      "createdAt": "2026-03-31",
+      "warrantyNote": "Garantia gratuita de 48 horas após a entrega.",
+      "shippingNote": "Entrega via Uber. Consulte cobertura da região e valor da logística.",
+      "visualTheme": {
+        "edition": "Max Capacity",
+        "accent": "#3f2a6b",
+        "accentSoft": "rgba(63, 42, 107, 0.12)",
+        "accentContrast": "#ffffff",
+        "background": "linear-gradient(180deg, #faf7ff 0%, #e2d9f6 100%)",
+        "shadow": "0 28px 70px rgba(63, 42, 107, 0.15)"
+      },
+      "sourceImages": [
+        "src/assets/products/oxbar-50k.webp"
+      ]
+    }
+  ]
+}

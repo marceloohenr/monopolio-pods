@@ -8,8 +8,8 @@ import { SeoRuntime } from "@/components/SeoRuntime";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ThemeProvider } from "@/components/theme-provider";
 import { CheckoutProvider } from "@/context/checkout-context";
+import { CatalogProvider } from "@/context/catalog-context";
 import Index from "./pages/Index.tsx";
-import AdminTestimonialsPage from "./pages/AdminTestimonialsPage.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
 import ProductPage from "./pages/ProductPage.tsx";
 import SearchPage from "./pages/SearchPage.tsx";
@@ -20,7 +20,8 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <CheckoutProvider>
+      <CatalogProvider>
+        <CheckoutProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
@@ -32,13 +33,13 @@ const App = () => (
               <Route path="/categoria/:slug" element={<CategoryPage />} />
               <Route path="/produto/:slug" element={<ProductPage />} />
               <Route path="/busca" element={<SearchPage />} />
-              <Route path="/admin/depoimentos" element={<AdminTestimonialsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <CheckoutSheet />
           </BrowserRouter>
         </TooltipProvider>
-      </CheckoutProvider>
+        </CheckoutProvider>
+      </CatalogProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );

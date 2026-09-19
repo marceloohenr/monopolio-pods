@@ -3,6 +3,14 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        admin: path.resolve(__dirname, "admin.html"),
+      },
+    },
+  },
   server: {
     host: "::",
     port: 8080,
